@@ -16,7 +16,7 @@ public class UserToken {
     private Long idx;
 
     @ManyToOne
-    @JoinColumn(name = "USERS_TB_IDX")
+    @JoinColumn(name = "USERS_TB_IDX", nullable = false)
     private User user;
 
     @Column(columnDefinition = "TEXT NOT NULL")

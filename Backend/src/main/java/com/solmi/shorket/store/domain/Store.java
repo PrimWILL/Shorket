@@ -1,8 +1,5 @@
 package com.solmi.shorket.store.domain;
 
-import com.solmi.shorket.user.domain.LoginType;
-import com.solmi.shorket.user.domain.RoleType;
-import com.solmi.shorket.user.domain.StatusType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
