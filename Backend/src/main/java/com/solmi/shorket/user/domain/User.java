@@ -1,6 +1,5 @@
 package com.solmi.shorket.user.domain;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -31,12 +30,6 @@ public class User {
 
     @Column(columnDefinition = "TEXT")
     private String profileUrl;
-
-    @Column(length = 10)
-    private String zipcode;
-
-    @Column(length = 600)
-    private String address;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
