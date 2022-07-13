@@ -26,6 +26,7 @@ public class BoothInterest {
 
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
-            updatable = false)
+            updatable = false,
+            nullable = false)
     private Date createdAt;
 }
