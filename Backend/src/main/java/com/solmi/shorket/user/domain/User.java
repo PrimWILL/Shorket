@@ -14,7 +14,7 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue
-    private Long idx;
+    private Integer idx;
 
     @Column(columnDefinition = "VARCHAR(200) NOT NULL")
     private String email;
