@@ -12,7 +12,7 @@ function Header() {
               <Link to="/notice">고객센터</Link>
             </li>
             <li className={styles.top_item}>
-              <Link to="/my/wish">관심마켓</Link>
+              <Link to="/my/wish">관심마켓&부스</Link>
             </li>
             <li className={styles.top_item}>
               <Link to="/my">마이페이지</Link>
@@ -26,7 +26,7 @@ function Header() {
       <div className={styles.header_main}>
         <div className={styles.main_inner}>
           <h1>
-            <Link to="/">Short Store</Link>
+            <Link to="/">SHORKET</Link>
           </h1>
           <div className={styles.gnb_area}>
             <nav className={styles.gnb}>
@@ -35,13 +35,13 @@ function Header() {
                   <Link to="/market/enroll">마켓 신청하기</Link>
                 </li>
                 <li className={styles.gnb_item}>
-                  <Link to="/market/upcomming">예정인 마켓</Link>
+                  <Link to="/markets/upcomming">예정인 마켓</Link>
                 </li>
                 <li className={styles.gnb_item}>
-                  <Link to="/market/inProgress">진행중인 마켓</Link>
+                  <Link to="/markets/inProgress">진행중인 마켓</Link>
                 </li>
                 <li className={styles.gnb_item}>
-                  <Link to="/market/manage">마켓 관리하기</Link>
+                  <Link to="my/markets/">마켓 관리하기</Link>
                 </li>
               </ul>
             </nav>
