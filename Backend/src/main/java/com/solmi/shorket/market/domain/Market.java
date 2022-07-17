@@ -1,4 +1,4 @@
-package com.solmi.shorket.store.domain;
+package com.solmi.shorket.market.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,8 +10,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "STORE_TB")
-public class Store {
+@Table(name = "MARKET_TB")
+public class Market {
     @Id
     @GeneratedValue
     private Long idx;
@@ -70,5 +70,5 @@ public class Store {
     @Enumerated(value = EnumType.STRING)
     @ColumnDefault("'Y'")
     @Column(nullable = false)
-    private StoreStatusType status;
+    private MarketStatusType status;
 }

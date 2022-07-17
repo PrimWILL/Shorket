@@ -1,9 +1,7 @@
-package com.solmi.shorket.store.domain;
+package com.solmi.shorket.market.domain;
 
-import com.solmi.shorket.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,15 +9,15 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "STORE_IMG_TB")
-public class StoreImg {
+@Table(name = "MARKET_IMG_TB")
+public class MarketImg {
     @Id
     @GeneratedValue
-    private Long storeImgIdx;
+    private Long marketImgIdx;
 
     @ManyToOne
-    @JoinColumn(name = "STORE_TB_IDX", nullable = false)
-    private Store store;
+    @JoinColumn(name = "MARKET_TB_IDX", nullable = false)
+    private Market market;
 
     private Integer ranking;
 
@@ -31,6 +29,6 @@ public class StoreImg {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private StoreImgStatusType status;
+    private MarketImgStatusType status;
 }
 

@@ -1,6 +1,6 @@
 package com.solmi.shorket.user.domain;
 
-import com.solmi.shorket.store.domain.Store;
+import com.solmi.shorket.market.domain.Market;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,15 +10,15 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "STORE_INTEREST_TB")
-public class StoreInterest {
+@Table(name = "MARKET_INTEREST_TB")
+public class MarketInterest {
     @Id
     @GeneratedValue
     private Integer idx;
 
     @ManyToOne
-    @JoinColumn(name = "STORE_TB_IDX", nullable = false)
-    private Store store;
+    @JoinColumn(name = "Market_TB_IDX", nullable = false)
+    private Market market;
 
     @ManyToOne
     @JoinColumn(name = "USERS_TB_IDX", nullable = false)

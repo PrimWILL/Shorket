@@ -1,6 +1,6 @@
 package com.solmi.shorket.booth.domain;
 
-import com.solmi.shorket.store.domain.Store;
+import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,8 +23,8 @@ public class Booth {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "STORE_TB_IDX", nullable = false)
-    private Store store;
+    @JoinColumn(name = "MARKET_TB_IDX", nullable = false)
+    private Market market;
 
     @Column(nullable = false)
     private Integer number;
