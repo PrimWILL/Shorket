@@ -49,15 +49,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(nullable = false)
     private RoleType userRole;
 
-//    @Temporal(value = TemporalType.TIMESTAMP)
-//    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL",
-//            updatable = false)
-//    private Date createdAt;
-//
-//    @Temporal(value = TemporalType.TIMESTAMP)
-//    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL")
-//    private Date updatedAt;
-
     @Enumerated(value = EnumType.STRING)
     @ColumnDefault("'Y'")
     @Column(nullable = false)
@@ -69,11 +60,6 @@ public class User extends BaseTimeEntity implements UserDetails {
         auth.add(new SimpleGrantedAuthority(this.getUserRole().toString()));
 
         return auth;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.getPassword();
     }
 
     @Override

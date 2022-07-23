@@ -31,6 +31,8 @@ public class UserService {
 
     public UserLoginResponseDto login(String email, String password) {
         User user = userRepository.findByEmail(email).orElseThrow(null);
+        System.out.println("user.getEmail() = " + user.getEmail());
+        System.out.println("user.getPassword() = " + user.getPassword());
         if (!passwordEncoder.matches(password, user.getPassword()))
             throw null;
         return new UserLoginResponseDto(user);
