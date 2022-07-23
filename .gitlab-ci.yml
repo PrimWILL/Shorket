@@ -22,7 +22,7 @@ deploy-to-server:
     - git pull origin backend
     - cd ./Backend
     - kill $(lsof -t -i:8080)
-    - sudo ./gradlew clean build
+    - sudo ./gradlew clean build -x test
     - cd ./build/libs
     - setsid nohup java -jar shorket-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
   after_script:
