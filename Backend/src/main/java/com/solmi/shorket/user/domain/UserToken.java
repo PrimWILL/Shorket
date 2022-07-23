@@ -1,14 +1,16 @@
 package com.solmi.shorket.user.domain;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Getter
-@Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "USER_TOKEN_TB")
 public class UserToken {
     @Id
@@ -26,5 +28,16 @@ public class UserToken {
     @ColumnDefault("'Y'")
     @Column(nullable = false)
     private TokenStatusType statusType;
+
+    public UserToken updateToken(String token) {
+        this.token = token;
+        return this;
+    }
+
+    @Builder
+    public UserToken(User user, String token) {
+        this.user = user;
+        this.token = token;
+    }
 }
 

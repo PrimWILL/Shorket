@@ -18,17 +18,17 @@ public class UserSignupRequestDto {
     private String password;
     private String name;
     private String nickName;
-    private String profileUrl;
     private LoginType loginType;
+    private StatusType statusType = StatusType.Y;
+    private RoleType roleType = RoleType.I;
 
     @Builder
     public UserSignupRequestDto(String email, String password, String name,
-                                String nickName, String profileUrl, LoginType loginType) {
+                                String nickName, LoginType loginType) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickName = nickName;
-        this.profileUrl = profileUrl;
         this.loginType = loginType;
     }
 
@@ -38,8 +38,9 @@ public class UserSignupRequestDto {
                 .password(password)
                 .name(name)
                 .nickName(nickName)
-                .profileUrl(profileUrl)
                 .loginType(loginType)
+                .statusType(statusType)
+                .userRole(roleType)
                 .build();
     }
 }
