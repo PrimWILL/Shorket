@@ -1,6 +1,7 @@
 package com.solmi.shorket.global;
 
 import com.solmi.shorket.global.exception.EmailLoginFailedCException;
+import com.solmi.shorket.global.exception.UserSignupFailedCException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ExceptionResponse emailLoginFailedException(HttpServletRequest request, EmailLoginFailedCException e) {
         log.info(String.valueOf(e));
-        return new ExceptionResponse(getMessage("emailLoginFailed.code"),
-                getMessage("emailLoginFailed.message"));
+        return new ExceptionResponse(
+                getMessage("emailLoginFailed.code"),
+                getMessage("emailLoginFailed.message")
+        );
+    }
+
+    @ExceptionHandler(UserSignupFailedCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse userSignupFailedException(HttpServletRequest request, UserSignupFailedCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("userSignupFailed.code"),
+                getMessage("userSignupFailed.message")
+        );
     }
 
     private String getMessage(String code) {

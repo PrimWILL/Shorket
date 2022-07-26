@@ -1,6 +1,7 @@
 package com.solmi.shorket.user.service;
 
 import com.solmi.shorket.global.exception.EmailLoginFailedCException;
+import com.solmi.shorket.global.exception.UserSignupFailedCException;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.dto.UserLoginResponseDto;
 import com.solmi.shorket.user.dto.UserSignupRequestDto;
@@ -27,7 +28,7 @@ public class UserService {
     public Integer signup(UserSignupRequestDto userSignupRequestDto) {
         if (userRepository.findByEmail(userSignupRequestDto.getEmail()).orElse(null) == null)
             return userRepository.save(userSignupRequestDto.toEntity()).getIdx();
-        else throw null;
+        else throw new UserSignupFailedCException();
     }
 
     public UserLoginResponseDto login(String email, String password) {
