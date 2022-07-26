@@ -1,5 +1,6 @@
 package com.solmi.shorket.user.service;
 
+import com.solmi.shorket.global.exception.EmailLoginFailedCException;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.dto.UserLoginResponseDto;
 import com.solmi.shorket.user.dto.UserSignupRequestDto;
@@ -30,11 +31,10 @@ public class UserService {
     }
 
     public UserLoginResponseDto login(String email, String password) {
-        User user = userRepository.findByEmail(email).orElseThrow(null);
-        System.out.println("user.getEmail() = " + user.getEmail());
-        System.out.println("user.getPassword() = " + user.getPassword());
+        User user = userRepository.findByEmail(email).orElseThrow(EmailLoginFailedCException::new);
+
         if (!passwordEncoder.matches(password, user.getPassword()))
-            throw null;
+            throw new EmailLoginFailedCException();
         return new UserLoginResponseDto(user);
     }
 }
