@@ -1,12 +1,11 @@
 package com.solmi.shorket.global;
 
-import com.solmi.shorket.user.domain.LoginType;
+import com.solmi.shorket.user.domain.RoleType;
+import com.solmi.shorket.user.dto.UserTokenDto;
 import com.solmi.shorket.user.service.CustomUserDetailsService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +18,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtProvider {
@@ -26,7 +26,8 @@ public class JwtProvider {
     @Value("spring.jwt.secret")
     private String secretKey;
 
-    private Long tokenValidMillisecond = 60 * 60 * 1000L;
+    private final Long accessTokenValidMillisecond = 60 * 60 * 1000L; // 1 hour
+    private final Long refreshTokenValidMillisecond = 3 * 24 * 60 * 60 * 1000L; // 3 Day
 
     private final CustomUserDetailsService userDetailsService;
 
@@ -35,26 +36,56 @@ public class JwtProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String userIdx, LoginType roles) {
-        Claims claims = Jwts.claims().setSubject(userIdx);
+    public UserTokenDto createToken(Integer userIdx, RoleType roles) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(userIdx));
         claims.put("roles", roles);
 
         Date now = new Date();
 
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidMillisecond))
+                .setExpiration(new Date(now.getTime() + accessTokenValidMillisecond))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+
+        String refreshToken = Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setExpiration(new Date(now.getTime() + refreshTokenValidMillisecond))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        return UserTokenDto.builder()
+                .grantType("bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpireDate(accessTokenValidMillisecond)
+                .build();
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
+
+        Claims claims = parseClaims(token);
+
+        // 권한이 없는 경우
+        if (claims.get("roles") == null) {
+            throw null;
+        }
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserIdx(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUserPk(String token) {
+    private Claims parseClaims(String token) {
+        try {
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
+
+    public String getUserIdx(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -66,7 +97,8 @@ public class JwtProvider {
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
+        } catch (JwtException | IllegalArgumentException e) {
+            log.error(e.toString());
             return false;
         }
     }

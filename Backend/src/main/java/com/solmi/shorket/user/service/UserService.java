@@ -20,7 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Optional<User> selectById(Long idx) {
+    public Optional<User> selectById(Integer idx) {
         return userRepository.findById(idx);
     }
 
