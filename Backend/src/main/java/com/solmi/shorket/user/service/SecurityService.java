@@ -3,6 +3,7 @@ package com.solmi.shorket.user.service;
 import com.solmi.shorket.global.JwtProvider;
 import com.solmi.shorket.global.exception.EmailLoginFailedCException;
 import com.solmi.shorket.global.exception.RefreshTokenExpiredCException;
+import com.solmi.shorket.global.exception.RefreshTokenNotFoundCException;
 import com.solmi.shorket.global.exception.UserNotFoundCException;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
@@ -63,21 +64,25 @@ public class SecurityService {
     @Transactional
     public UserTokenDto reissue(UserTokenRequestDto userTokenRequestDto) {
 
-        // throw error if refresh token is expired
+        // throw error if refresh token is expired or not found
         if (!jwtProvider.validationToken(userTokenRequestDto.getRefreshToken()))
             throw new RefreshTokenExpiredCException();
 
-        // get userIdx from
+        // get userIdx from AccessToken
         String accessToken = userTokenRequestDto.getAccessToken();
         Authentication authentication = jwtProvider.getAuthentication(accessToken);
 
+        // find user using userIdx
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(UserNotFoundCException::new);
-        UserToken userToken = userTokenRepository.findByUserIdx(user.getIdx())
-                .orElseThrow(null);
 
+        // if refresh token is not saved in DB
+        UserToken userToken = userTokenRepository.findByUserIdx(user.getIdx())
+                .orElseThrow(RefreshTokenNotFoundCException::new);
+
+        // if refresh token is not equal
         if (!userToken.getToken().equals(userTokenRequestDto.getRefreshToken()))
-            throw null;
+            throw new RefreshTokenNotFoundCException();
 
         UserTokenDto newToken = jwtProvider.createToken(user.getIdx(), user.getUserRole());
         UserToken updateUserToken = userToken.updateToken(newToken.getRefreshToken());

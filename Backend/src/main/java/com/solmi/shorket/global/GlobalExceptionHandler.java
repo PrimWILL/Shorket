@@ -1,9 +1,6 @@
 package com.solmi.shorket.global;
 
-import com.solmi.shorket.global.exception.EmailLoginFailedCException;
-import com.solmi.shorket.global.exception.RefreshTokenExpiredCException;
-import com.solmi.shorket.global.exception.UserNotFoundCException;
-import com.solmi.shorket.global.exception.UserSignupFailedCException;
+import com.solmi.shorket.global.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +58,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ExceptionResponse(
                 getMessage("refreshTokenExpired.code"),
                 getMessage("refreshTokenExpired.message")
+        );
+    }
+
+    @ExceptionHandler(RefreshTokenNotFoundCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse refreshTokenNotFoundException(HttpServletRequest request, RefreshTokenNotFoundCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("refreshTokenNotFound.code"),
+                getMessage("refreshTokenNotFound.message")
         );
     }
 
