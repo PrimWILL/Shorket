@@ -2,6 +2,7 @@ package com.solmi.shorket.user.service;
 
 import com.solmi.shorket.global.JwtProvider;
 import com.solmi.shorket.global.exception.EmailLoginFailedCException;
+import com.solmi.shorket.global.exception.RefreshTokenExpiredCException;
 import com.solmi.shorket.global.exception.UserNotFoundCException;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
@@ -64,7 +65,7 @@ public class SecurityService {
 
         // throw error if refresh token is expired
         if (!jwtProvider.validationToken(userTokenRequestDto.getRefreshToken()))
-            throw null;
+            throw new RefreshTokenExpiredCException();
 
         // get userIdx from
         String accessToken = userTokenRequestDto.getAccessToken();
