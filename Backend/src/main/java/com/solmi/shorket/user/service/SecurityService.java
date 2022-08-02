@@ -2,6 +2,7 @@ package com.solmi.shorket.user.service;
 
 import com.solmi.shorket.global.JwtProvider;
 import com.solmi.shorket.global.exception.EmailLoginFailedCException;
+import com.solmi.shorket.global.exception.UserNotFoundCException;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
 import com.solmi.shorket.user.dto.UserLoginRequestDto;
@@ -70,7 +71,7 @@ public class SecurityService {
         Authentication authentication = jwtProvider.getAuthentication(accessToken);
 
         User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(null);
+                .orElseThrow(UserNotFoundCException::new);
         UserToken userToken = userTokenRepository.findByUserIdx(user.getIdx())
                 .orElseThrow(null);
 

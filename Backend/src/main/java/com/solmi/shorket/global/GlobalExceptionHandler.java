@@ -1,6 +1,7 @@
 package com.solmi.shorket.global;
 
 import com.solmi.shorket.global.exception.EmailLoginFailedCException;
+import com.solmi.shorket.global.exception.UserNotFoundCException;
 import com.solmi.shorket.global.exception.UserSignupFailedCException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ExceptionResponse(
                 getMessage("userSignupFailed.code"),
                 getMessage("userSignupFailed.message")
+        );
+    }
+
+    @ExceptionHandler(UserNotFoundCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse userNotFoundException(HttpServletRequest request, UserNotFoundCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("userNotFound.code"),
+                getMessage("userNotFound.message")
         );
     }
 
