@@ -1,6 +1,12 @@
 /src/main/generated/
 generated
 
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
 ### java ###
 # Compiled class file
 *.class
@@ -54,6 +60,13 @@ HELP.md
 **/build/
 !src/**/build/
 
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -67,3 +80,4 @@ gradle-app.setting
 .gradletasknamecache
 
 application-jwt.properties
+
