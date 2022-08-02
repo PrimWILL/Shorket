@@ -1,74 +1,108 @@
 package com.solmi.shorket.market.domain;
 
+import com.solmi.shorket.global.BaseTimeEntity;
+import com.sun.istack.NotNull;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "MARKET_TB")
-public class Market {
+public class Market extends BaseTimeEntity {
+
     @Id
     @GeneratedValue
     private Long idx;
 
-    @Column(columnDefinition = "VARCHAR(200) NOT NULL")
+    @NotNull
+    @Column(columnDefinition = "VARCHAR(200)")
     private String name;
 
-    @Column(columnDefinition = "TEXT NOT NULL")
+    @NotNull
+    @Column(columnDefinition = "TEXT")
     private String description;
 
+    @NotNull
     private Integer viewCount;
 
-    @Column(columnDefinition = "VARCHAR(100) NOT NULL")
-    private String si;
+    @NotNull
+    @Column(columnDefinition = "VARCHAR(100)")
+    private String si;  // 시
 
     @Column(length = 100)
-    private String gun;
+    private String gun; // 군
 
-    @Column(columnDefinition = "VARCHAR(100) NOT NULL")
-    private String gu;
+    @NotNull
+    @Column(columnDefinition = "VARCHAR(100)")
+    private String gu;  // 구
 
     @Column(length = 1000)
-    private String address;
+    private String address; // 상세 주소
 
-    @Temporal(value = TemporalType.DATE)
-    @Column(nullable = false)
-    private Date startDate;
+    @NotNull
+    private LocalDateTime startDate;
 
-    @Temporal(value = TemporalType.DATE)
-    @Column(nullable = false)
-    private Date endDate;
-
-    @Temporal(value = TemporalType.TIME)
-    @Column(nullable = false)
-    private Date startTime;
-
-    @Temporal(value = TemporalType.TIME)
-    @Column(nullable = false)
-    private Date endTime;
+    @NotNull
+    private LocalDateTime endDate;
 
     private Float latitude;
 
     private Float longitude;
 
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
-            updatable = false,
-            nullable = false)
-    private Date createdAt;
-
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL",
-            nullable = false)
-    private Date updatedAt;
-
+    @NotNull
     @Enumerated(value = EnumType.STRING)
     @ColumnDefault("'Y'")
-    @Column(nullable = false)
-    private MarketStatusType status;
+    private MarketStatusType status;    // Y: 운영중, C: 운영완료, W: 운영예정
+
+    //== Setter ==//
+    private void setName(String name) {
+        this.name = name;
+    }
+
+    private void setDescription(String description) {
+        this.description = description;
+    }
+
+    private void setViewCount(Integer viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    private void setSi(String si) {
+        this.si = si;
+    }
+
+    private void setGun(String gun) {
+        this.gun = gun;
+    }
+
+    private void setGu(String gu) {
+        this.gu = gu;
+    }
+
+    private void setAddress(String address) {
+        this.address = address;
+    }
+
+    private void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    private void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    private void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    private void setLongitude(Float longitude) {
+        this.longitude = longitude;
+    }
+
+    private void setStatus(MarketStatusType status) {
+        this.status = status;
+    }
 }
