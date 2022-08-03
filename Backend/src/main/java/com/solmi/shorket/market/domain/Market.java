@@ -1,11 +1,11 @@
 package com.solmi.shorket.market.domain;
 
 import com.solmi.shorket.global.BaseTimeEntity;
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,7 +18,7 @@ public class Market extends BaseTimeEntity {
     private Long idx;
 
     @NotNull
-    @Column(columnDefinition = "VARCHAR(200)")
+    @Column(length = 200)
     private String name;
 
     @NotNull
@@ -29,18 +29,8 @@ public class Market extends BaseTimeEntity {
     private Integer viewCount;
 
     @NotNull
-    @Column(columnDefinition = "VARCHAR(100)")
-    private String si;  // 시
-
-    @Column(length = 100)
-    private String gun; // 군
-
-    @NotNull
-    @Column(columnDefinition = "VARCHAR(100)")
-    private String gu;  // 구
-
-    @Column(length = 1000)
-    private String address; // 상세 주소
+    @Embedded
+    private Address address;
 
     @NotNull
     private LocalDateTime startDate;
@@ -70,19 +60,7 @@ public class Market extends BaseTimeEntity {
         this.viewCount = viewCount;
     }
 
-    private void setSi(String si) {
-        this.si = si;
-    }
-
-    private void setGun(String gun) {
-        this.gun = gun;
-    }
-
-    private void setGu(String gu) {
-        this.gu = gu;
-    }
-
-    private void setAddress(String address) {
+    private void setAddress(Address address) {
         this.address = address;
     }
 
