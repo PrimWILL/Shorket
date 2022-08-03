@@ -5,12 +5,10 @@ import com.solmi.shorket.global.exception.EmailLoginFailedCException;
 import com.solmi.shorket.global.exception.RefreshTokenExpiredCException;
 import com.solmi.shorket.global.exception.RefreshTokenNotFoundCException;
 import com.solmi.shorket.global.exception.UserNotFoundCException;
+import com.solmi.shorket.user.domain.StatusType;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
-import com.solmi.shorket.user.dto.UserLoginRequestDto;
-import com.solmi.shorket.user.dto.UserSignupRequestDto;
-import com.solmi.shorket.user.dto.UserTokenDto;
-import com.solmi.shorket.user.dto.UserTokenRequestDto;
+import com.solmi.shorket.user.dto.*;
 import com.solmi.shorket.user.repository.UserRepository;
 import com.solmi.shorket.user.repository.UserTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -89,5 +86,21 @@ public class SecurityService {
         userTokenRepository.save(updateUserToken);
 
         return newToken;
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfoResponseDto findUser(String accessToken) {
+        // get userIdx from AccessToken
+        Authentication authentication = jwtProvider.getAuthentication(accessToken);
+
+        // find user by using userIdx
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(UserNotFoundCException::new);
+
+        // if the user is not an active member of service
+        if (!user.getStatusType().equals(StatusType.Y))
+            throw new UserNotFoundCException();
+
+        return new UserInfoResponseDto(user);
     }
 }
