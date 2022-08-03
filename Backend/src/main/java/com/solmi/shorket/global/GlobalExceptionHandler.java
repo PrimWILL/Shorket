@@ -71,6 +71,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(UserRoleNotFoundCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse userRoleNotFoundException(HttpServletRequest request, UserRoleNotFoundCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("userRoleNotFound.code"),
+                getMessage("userRoleNotFound.message")
+        );
+    }
+
     private String getMessage(String code) {
         return getMessage(code, null);
     }
