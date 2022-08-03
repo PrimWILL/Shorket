@@ -1,5 +1,6 @@
 package com.solmi.shorket.user.service;
 
+import com.solmi.shorket.global.exception.UserNotFoundCException;
 import com.solmi.shorket.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userIdx) throws UsernameNotFoundException {
         return userRepository.findById(Integer.parseInt(userIdx))
-                .orElseThrow(null);
+                .orElseThrow(UserNotFoundCException::new);
     }
 }
