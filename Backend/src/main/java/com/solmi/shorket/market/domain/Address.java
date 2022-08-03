@@ -14,14 +14,11 @@ import javax.persistence.Embeddable;
 public class Address {
 
     @Column(length = 100, nullable = false)
-    private String si;  // 시
-
-    @Column(length = 100)
-    private String gun; // 군
+    private String sido;  // 특별시, 광역시, 도
 
     @Column(length = 100, nullable = false)
-    private String gu;  // 구
+    private String sigungu; // 시, 군, 구
 
     @Column(length = 1000)
-    private String detail; // 상세 주소
+    private String detailAddress; // 상세 주소
 }
