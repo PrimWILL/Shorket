@@ -50,12 +50,15 @@ function Login() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 20,
             display: "flex",
             flexDirection: "column",
             alignItems: "center"
           }}
         >
+          <Typography component="h1" variant="h5">
+            로그인 페이지
+          </Typography>
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -103,7 +106,7 @@ function Login() {
             <Grid container>
               <Grid item>
                 <Link href="#" variant="body2">
-                  <RouterLink to="/register">회원가입</RouterLink>
+                  <RouterLink to="/join">회원가입</RouterLink>
                 </Link>
               </Grid>
               <Grid item xs>

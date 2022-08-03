@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
-// import styles from "./Join.module.css";
+import styles from "./Join.module.css";
 import TextField from "@mui/material/TextField";
 
 function Join(props) {
   return (
-    <>
+    <div className={styles.area}>
+      <h1>회원가입 페이지</h1>
       <TextField
         margin="normal"
         required
@@ -25,7 +26,7 @@ function Join(props) {
         id="password"
         autoComplete="current-password"
       />
-    </>
+    </div>
     // <>
     //
     //   <Grid padding="16px">
