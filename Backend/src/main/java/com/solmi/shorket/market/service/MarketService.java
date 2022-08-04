@@ -18,6 +18,14 @@ public class MarketService {
     private final MarketRepository marketRepository;
 
     /**
+     * Market 등록
+     */
+    @Transactional
+    public Market saveMarket(Market market) {
+        return marketRepository.save(market);
+    }
+
+    /**
      * Market 목록 조회 - 정렬 기준 적용
      */
     public Page<Market> findMarkets(Pageable pageable) {
@@ -27,6 +35,7 @@ public class MarketService {
     /**
      * 조회수 증가
      */
+    @Transactional
     public void addViewCount(Integer marketId) {
         validateMarket(marketId);
 
