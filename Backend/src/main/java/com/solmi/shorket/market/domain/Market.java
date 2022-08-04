@@ -2,7 +2,7 @@ package com.solmi.shorket.market.domain;
 
 import com.solmi.shorket.global.BaseTimeEntity;
 import lombok.Getter;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "MARKET_TB")
 public class Market extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
-    private Long idx;
+    @Column(name = "market_tb_idx")
+    private Integer idx;
 
     @NotNull
     @Column(length = 200)
@@ -78,9 +80,5 @@ public class Market extends BaseTimeEntity {
 
     private void setLongitude(Float longitude) {
         this.longitude = longitude;
-    }
-
-    private void setStatus(MarketStatusType status) {
-        this.status = status;
     }
 }
