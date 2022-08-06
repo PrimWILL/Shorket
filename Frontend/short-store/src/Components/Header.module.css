@@ -21,7 +21,14 @@ div {
 
 .header {
   align-items: center;
-  margin-left: auto;
+  /* margin-left: auto; */
+  position: fixed;
+  left: 0;
+  top: 0;
+  margin: 0 auto;
+  width: 100%;
+  z-index: 3;
+  background-color: #ffffff;
 }
 
 .header_top {
@@ -30,7 +37,7 @@ div {
 .header_top > a {
   color: rgba(34, 34, 34, 0.8);
 }
-.header,
+
 .header_top {
   box-shadow: 0 1px 0 0 rgb(0 0 0 / 10%);
 }
