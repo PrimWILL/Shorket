@@ -1,16 +1,19 @@
 package com.solmi.shorket.user.domain;
 
+import com.solmi.shorket.global.BaseTimeEntity;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Getter
-@Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "USER_TOKEN_TB")
-public class UserToken {
+public class UserToken extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long idx;
@@ -22,9 +25,20 @@ public class UserToken {
     @Column(columnDefinition = "TEXT NOT NULL")
     private String token;
 
-    @Enumerated(value = EnumType.STRING)
-    @ColumnDefault("'Y'")
-    @Column(nullable = false)
-    private TokenStatusType statusType;
+//    @Enumerated(value = EnumType.STRING)
+//    @ColumnDefault("'Y'")
+//    @Column(nullable = false)
+//    private TokenStatusType statusType;
+
+    public UserToken updateToken(String token) {
+        this.token = token;
+        return this;
+    }
+
+    @Builder
+    public UserToken(User user, String token) {
+        this.user = user;
+        this.token = token;
+    }
 }
 

@@ -1,19 +1,27 @@
 package com.solmi.shorket.user.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.solmi.shorket.global.BaseTimeEntity;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "USERS_TB")
-public class User {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+public class User extends BaseTimeEntity implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idx;
 
     @Column(columnDefinition = "VARCHAR(200) NOT NULL")
@@ -32,6 +40,7 @@ public class User {
     private String profileUrl;
 
     @Enumerated(value = EnumType.STRING)
+    @ColumnDefault("'E'")
     @Column(nullable = false)
     private LoginType loginType;
 
@@ -40,20 +49,42 @@ public class User {
     @Column(nullable = false)
     private RoleType userRole;
 
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
-            updatable = false,
-            nullable = false)
-    private Date createdAt;
-
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL",
-            nullable = false)
-    private Date updatedAt;
-
     @Enumerated(value = EnumType.STRING)
     @ColumnDefault("'Y'")
     @Column(nullable = false)
     private StatusType statusType;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> auth = new ArrayList<>();
+        auth.add(new SimpleGrantedAuthority(this.getUserRole().toString()));
+
+        return auth;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
 
