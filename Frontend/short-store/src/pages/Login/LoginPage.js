@@ -1,36 +1,24 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink } from "react-router-dom";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import {
+  Container,
+  Box,
+  Avatar,
+  Button,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  CssBaseline
+} from "@mui/material";
+
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import "antd/dist/antd.css";
+import { Typography, Menu, Divider } from "antd";
+const { Title } = Typography;
 
 const theme = createTheme();
 
@@ -54,23 +42,16 @@ function Login() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center"
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            로그인 페이지
-          </Typography>
+          }}>
+          <Title level={2}>로그인</Title>
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
           <Box
             component="form"
             onSubmit={handleSubmit}
             noValidate
-            sx={{ mt: 1 }}
-          >
+            sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -91,33 +72,37 @@ function Login() {
               type="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+              sx={{ mt: 3, mb: 2 }}>
               로그인
             </Button>
-            <Grid container>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  <RouterLink to="/join">회원가입</RouterLink>
-                </Link>
-              </Grid>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  <RouterLink to="/findPw">비밀번호 찾기</RouterLink>
-                </Link>
-              </Grid>
-            </Grid>
+            <div>
+              <Link href="#" variant="body2">
+                <RouterLink to="/join">이메일 가입</RouterLink>
+              </Link>
+              <Divider type="vertical" />
+              <Link href="#" variant="body2">
+                <RouterLink to="/join">이메일 찾기</RouterLink>
+              </Link>
+              <Divider type="vertical" />
+              <Link href="#" variant="body2">
+                <RouterLink to="/findPw">비밀번호 찾기</RouterLink>
+              </Link>
+            </div>
+            <Button
+              type="submit"
+              fullWidth
+              variant="outlined"
+              size="large"
+              sx={{ mt: 3, mb: 2 }}>
+              소셜 로그인
+            </Button>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );

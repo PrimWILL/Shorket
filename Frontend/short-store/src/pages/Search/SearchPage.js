@@ -13,7 +13,6 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MarketList from "../../components/MarketList.js";
 
-import DropDown from "../../components/DropDown";
 
 function Searchpage() {
   const [order, setOrder] = useState("");
