@@ -49,11 +49,11 @@ public class BoothController {
             value = "부스 정보 조회",
             notes = "boothIdx를 받아서 해당 번호를 가진 부스의 정보를 읽어온다."
     )
-    @GetMapping("/{idx}")
+    @GetMapping("/{boothIdx}")
     public GetOneBoothDto getBoothInfo(
-            @PathVariable Integer idx
+            @PathVariable Integer boothIdx
     ){
-        return boothService.getByIdx(idx);
+        return boothService.getByIdx(boothIdx);
     }
 
 
