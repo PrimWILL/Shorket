@@ -14,7 +14,8 @@ function Footer() {
       <Box
         style={{ borderTop: "solid #eeeeee" }}
         sx={{ bgcolor: "background.paper", p: 6 }}
-        component="footer">
+        component="footer"
+      >
         <Typography variant="h6" align="center" gutterBottom>
           Footer
         </Typography>
@@ -22,8 +23,9 @@ function Footer() {
           variant="subtitle1"
           align="center"
           color="text.secondary"
-          component="p">
-          SHORKET ©2022 Created by SolMiSolSolSol
+          component="p"
+        >
+          SHORKET ©2022 Created by SolMiSolx3
         </Typography>
       </Box>
       {/* End footer */}
