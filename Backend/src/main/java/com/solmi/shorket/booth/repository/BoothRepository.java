@@ -1,6 +1,7 @@
 package com.solmi.shorket.booth.repository;
 
 import com.solmi.shorket.booth.domain.Booth;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,5 +16,5 @@ public interface BoothRepository extends JpaRepository<Booth, Integer> {
     List<Booth> findAllBy();
 
     // 부스 상세 조회
-    Optional<Booth> findById(Integer idx);
+    Optional<Booth> findById(Integer idX);
 }

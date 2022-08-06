@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -24,10 +25,9 @@ public class BoothService {
         return boothRepository.findAllBy();
     }
 
-
-    public GetOneBoothDto getByIdx(int idx) {
-        Booth booth = boothRepository.findById(idx).orElseThrow(GetBoothFailedException::new);
-        //log.debug(booth.toString());
+    public GetOneBoothDto getByIdx(Integer boothIdx) {
+        Booth booth = boothRepository.findById(boothIdx)
+                .orElseThrow(GetBoothFailedException::new);
         return new GetOneBoothDto(booth);
     }
 

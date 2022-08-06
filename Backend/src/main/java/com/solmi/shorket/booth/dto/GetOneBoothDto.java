@@ -3,43 +3,38 @@ package com.solmi.shorket.booth.dto;
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.domain.BoothApprovalType;
 import com.solmi.shorket.booth.domain.BoothStatusType;
-import com.solmi.shorket.store.domain.Store;
-import com.solmi.shorket.user.domain.LoginType;
-import com.solmi.shorket.user.domain.User;
+import lombok.Getter;
 
 import java.util.Date;
 
+@Getter
 public class GetOneBoothDto {
-    private Integer idx;
-    private Integer number;
-    private String boothName;
-    private String sellerName;
-    private String item;
-    private String site;
-    private String description;
-    private String address;
-    private String phoneNumber;
-    private String email;
-    private Integer viewCount;
-    private Date startDate;
-    private Date endDate;
-    private Date startTime;
-    private Date endTime;
-    private Float latitude;
-    private Float longitude;
-    private Date createdAt;
-    private Date updatedAt;
-    private BoothApprovalType approval;
-    private BoothStatusType status;
-    private int count;
-    // private User user;
-    // private Store store;
+    private final Integer idx;
+    private final Integer number;
+    private final String boothName;
+    private final String sellerName;
+    private final String item;
+    private final String site;
+    private final String description;
+    private final String address;
+    private final String phoneNumber;
+    private final String email;
+    private final Integer viewCount;
+    private final Date startDate;
+    private final Date endDate;
+    private final Date startTime;
+    private final Date endTime;
+    private final Float latitude;
+    private final Float longitude;
+    private final Date createdAt;
+    private final Date updatedAt;
+    private final BoothApprovalType approval;
+    private final BoothStatusType status;
 
     public GetOneBoothDto(Booth booth) {
         this.idx = booth.getIdx();
         this.boothName = booth.getBoothName();
         this.number = booth.getNumber();
-        this.boothName = booth.getBoothName();
         this.sellerName = booth.getBoothName();
         this.item = booth.getItem();
         this.site = booth.getSite();

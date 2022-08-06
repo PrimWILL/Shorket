@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class GetAllBoothDto {
-    private String boothName; // 부스 이름
-    private String item; // 부스 종류 (판매품목)
+    private final String boothName; // 부스 이름
+    private final String item; // 부스 종류 (판매품목)
 
     public GetAllBoothDto(Booth booth) {
         this.boothName = booth.getBoothName();

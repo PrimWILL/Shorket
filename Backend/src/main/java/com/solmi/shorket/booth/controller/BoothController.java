@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/booths")
+@Slf4j
 public class BoothController {
 
     private final BoothService boothService;
@@ -49,7 +51,7 @@ public class BoothController {
     )
     @GetMapping("/{idx}")
     public GetOneBoothDto getBoothInfo(
-            @PathVariable int idx
+            @PathVariable Integer idx
     ){
         return boothService.getByIdx(idx);
     }
