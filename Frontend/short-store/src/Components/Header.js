@@ -81,7 +81,9 @@ function Header() {
       <div className={styles.header_main}>
         <div className={styles.main_inner}>
           <Link to="/">
-            <Title className={styles.header_title}  level={2}>SHORKET</Title>
+            <Title className={styles.header_title} level={2}>
+              SHORKET
+            </Title>
           </Link>
           <Menu
             className={styles.gnb_area}
