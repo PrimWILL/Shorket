@@ -3,7 +3,6 @@ package com.solmi.shorket.global;
 import com.solmi.shorket.global.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -78,6 +77,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ExceptionResponse(
                 getMessage("userRoleNotFound.code"),
                 getMessage("userRoleNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(GetBoothFailedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse getBoothFailedCException(HttpServletRequest request, GetBoothFailedException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("getBoothFailed.code"),
+                getMessage("getBoothFailed.message")
         );
     }
 
