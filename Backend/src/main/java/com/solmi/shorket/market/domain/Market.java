@@ -1,6 +1,7 @@
 package com.solmi.shorket.market.domain;
 
 import com.solmi.shorket.global.BaseTimeEntity;
+import com.solmi.shorket.market.dto.UpdateMarketDto;
 import com.solmi.shorket.user.domain.MarketInterest;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +21,6 @@ public class Market extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "market_tb_idx")
     private Integer idx;
 
     @NotNull
@@ -64,6 +64,14 @@ public class Market extends BaseTimeEntity {
     //== 수정 메서드==//
     public void addViewCount() {
         this.viewCount++;
+    }
+
+    public void update(UpdateMarketDto marketDto) {
+        this.setName(marketDto.getName());
+        this.setDescription(marketDto.getDescription());
+        this.setAddress(marketDto.getAddress());
+        this.setStartDate(marketDto.getStartDate());
+        this.setEndDate(marketDto.getEndDate());
     }
 
     //== Constructor ==//

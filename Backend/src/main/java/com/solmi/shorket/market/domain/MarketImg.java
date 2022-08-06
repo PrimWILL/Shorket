@@ -16,7 +16,6 @@ public class MarketImg {
 
     @Id
     @GeneratedValue
-    @Column(name = "store_img_idx")
     private Integer idx;
 
     @NotNull

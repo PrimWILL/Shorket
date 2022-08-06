@@ -1,6 +1,7 @@
 package com.solmi.shorket.market.service;
 
 import com.solmi.shorket.market.domain.Market;
+import com.solmi.shorket.market.dto.UpdateMarketDto;
 import com.solmi.shorket.market.repository.MarketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,14 +34,24 @@ public class MarketService {
     }
 
     /**
-     * 조회수 증가
+     * Market 조회
      */
-    @Transactional
-    public void addViewCount(Integer marketId) {
+    public Market findMarket(Integer marketId) {
         validateMarket(marketId);
 
         Market market = marketRepository.findById(marketId).get();
-        market.addViewCount();
+        market.addViewCount();  // 조회수 증가
+        return market;
+    }
+
+    /**
+     * Market 수정
+     */
+    @Transactional
+    public void updateMarket(Integer marketId, UpdateMarketDto marketDto) {
+        validateMarket(marketId);
+        Market market = marketRepository.findById(marketId).get();
+        market.update(marketDto);
     }
 
     // 존재하지 않는 market인지 검증
