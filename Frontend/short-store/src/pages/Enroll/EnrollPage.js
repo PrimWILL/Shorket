@@ -1,5 +1,7 @@
 import styles from "./EnrollPage.module.css";
-import BoothEnroll from "../../components/BoothEnroll";
+import BoothEnroll from "pages/BoothEnroll";
+import AddProduct from "pages/AddProduct";
+import Signup from "pages/Signup";
 
 function EnrollPage() {
   return (
