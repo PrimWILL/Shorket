@@ -1,74 +1,119 @@
 package com.solmi.shorket.market.domain;
 
+import com.solmi.shorket.global.BaseTimeEntity;
+import com.solmi.shorket.market.dto.UpdateMarketDto;
+import com.solmi.shorket.user.domain.MarketInterest;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
-@Setter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "MARKET_TB")
-public class Market {
+public class Market extends BaseTimeEntity {
+
     @Id
     @GeneratedValue
-    private Long idx;
+    private Integer idx;
 
-    @Column(columnDefinition = "VARCHAR(200) NOT NULL")
+    @NotNull
+    @Column(length = 200)
     private String name;
 
-    @Column(columnDefinition = "TEXT NOT NULL")
+    @NotNull
+    @Column(columnDefinition = "TEXT")
     private String description;
 
+    @NotNull
     private Integer viewCount;
 
-    @Column(columnDefinition = "VARCHAR(100) NOT NULL")
-    private String si;
+    @NotNull
+    @Embedded
+    private Address address;
 
-    @Column(length = 100)
-    private String gun;
+    @NotNull
+    private LocalDateTime startDate;
 
-    @Column(columnDefinition = "VARCHAR(100) NOT NULL")
-    private String gu;
-
-    @Column(length = 1000)
-    private String address;
-
-    @Temporal(value = TemporalType.DATE)
-    @Column(nullable = false)
-    private Date startDate;
-
-    @Temporal(value = TemporalType.DATE)
-    @Column(nullable = false)
-    private Date endDate;
-
-    @Temporal(value = TemporalType.TIME)
-    @Column(nullable = false)
-    private Date startTime;
-
-    @Temporal(value = TemporalType.TIME)
-    @Column(nullable = false)
-    private Date endTime;
+    @NotNull
+    private LocalDateTime endDate;
 
     private Float latitude;
 
     private Float longitude;
 
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
-            updatable = false,
-            nullable = false)
-    private Date createdAt;
+    @OneToMany(mappedBy = "market")
+    private Set<MarketInterest> interests = new HashSet<>();
 
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL",
-            nullable = false)
-    private Date updatedAt;
+//    @NotNull
+//    @Enumerated(value = EnumType.STRING)
+//    @ColumnDefault("'W'")
+//    private MarketStatusType status;    // Y: 운영중, C: 운영완료, W: 운영예정
 
-    @Enumerated(value = EnumType.STRING)
-    @ColumnDefault("'Y'")
-    @Column(nullable = false)
-    private MarketStatusType status;
+    //== 생성 메서드 ==//
+    public static Market createMarket(String name, String description, Address address, LocalDateTime startDate, LocalDateTime endDate) {
+        return new Market(name, description, 0, address, startDate, endDate);
+    }
+
+    //== 수정 메서드==//
+    public void addViewCount() {
+        this.viewCount++;
+    }
+
+    public void update(UpdateMarketDto marketDto) {
+        this.setName(marketDto.getName());
+        this.setDescription(marketDto.getDescription());
+        this.setAddress(marketDto.getAddress());
+        this.setStartDate(marketDto.getStartDate());
+        this.setEndDate(marketDto.getEndDate());
+    }
+
+    //== Constructor ==//
+    private Market(String name, String description, Integer viewCount, Address address, LocalDateTime startDate, LocalDateTime endDate) {
+        this.name = name;
+        this.description = description;
+        this.viewCount = viewCount;
+        this.address = address;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    //== Setter ==//
+    private void setName(String name) {
+        this.name = name;
+    }
+
+    private void setDescription(String description) {
+        this.description = description;
+    }
+
+    private void setViewCount(Integer viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    private void setAddress(Address address) {
+        this.address = address;
+    }
+
+    private void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    private void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    private void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    private void setLongitude(Float longitude) {
+        this.longitude = longitude;
+    }
 }
