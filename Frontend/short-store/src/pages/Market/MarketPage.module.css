@@ -1,0 +1,31 @@
+.area {
+  margin-top: 100px;
+}
+
+.content {
+  margin: 0 auto;
+  width: 90%;
+  background-color: tomato;
+}
+.column_bind {
+  position: relative;
+  display:flex;
+  width: 100%;
+}
+
+.column_is_fixed {
+  overflow: auto;
+  height: 100vh;
+  width: 50%;
+  position: "float";
+  left: 0;
+  top: 100;
+  bottom: 0;
+  background-color: "red";
+}
+.column {
+  background-color:"tomato";
+  width: 50%;
+  height: 1000vh;
+  overflow-y: scroll;
+}
