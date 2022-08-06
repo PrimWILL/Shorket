@@ -1,5 +1,6 @@
 package com.solmi.shorket.global;
 
+import com.solmi.shorket.global.exception.UserRoleNotFoundCException;
 import com.solmi.shorket.user.domain.RoleType;
 import com.solmi.shorket.user.dto.UserTokenDto;
 import com.solmi.shorket.user.service.CustomUserDetailsService;
@@ -70,7 +71,7 @@ public class JwtProvider {
 
         // 권한이 없는 경우
         if (claims.get("roles") == null) {
-            throw null;
+            throw new UserRoleNotFoundCException();
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserIdx(token));

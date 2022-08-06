@@ -1,10 +1,8 @@
 package com.solmi.shorket.global;
 
-import com.solmi.shorket.global.exception.EmailLoginFailedCException;
-import com.solmi.shorket.global.exception.UserSignupFailedCException;
+import com.solmi.shorket.global.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -39,6 +37,56 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ExceptionResponse(
                 getMessage("userSignupFailed.code"),
                 getMessage("userSignupFailed.message")
+        );
+    }
+
+    @ExceptionHandler(UserNotFoundCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse userNotFoundException(HttpServletRequest request, UserNotFoundCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("userNotFound.code"),
+                getMessage("userNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(RefreshTokenExpiredCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse refreshTokenExpiredException(HttpServletRequest request, RefreshTokenExpiredCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("refreshTokenExpired.code"),
+                getMessage("refreshTokenExpired.message")
+        );
+    }
+
+    @ExceptionHandler(RefreshTokenNotFoundCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse refreshTokenNotFoundException(HttpServletRequest request, RefreshTokenNotFoundCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("refreshTokenNotFound.code"),
+                getMessage("refreshTokenNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(UserRoleNotFoundCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse userRoleNotFoundException(HttpServletRequest request, UserRoleNotFoundCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("userRoleNotFound.code"),
+                getMessage("userRoleNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(GetBoothFailedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse getBoothFailedCException(HttpServletRequest request, GetBoothFailedException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("getBoothFailed.code"),
+                getMessage("getBoothFailed.message")
         );
     }
 

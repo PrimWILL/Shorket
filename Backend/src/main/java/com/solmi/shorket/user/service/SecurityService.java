@@ -2,12 +2,13 @@ package com.solmi.shorket.user.service;
 
 import com.solmi.shorket.global.JwtProvider;
 import com.solmi.shorket.global.exception.EmailLoginFailedCException;
+import com.solmi.shorket.global.exception.RefreshTokenExpiredCException;
+import com.solmi.shorket.global.exception.RefreshTokenNotFoundCException;
+import com.solmi.shorket.global.exception.UserNotFoundCException;
+import com.solmi.shorket.user.domain.StatusType;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
-import com.solmi.shorket.user.dto.UserLoginRequestDto;
-import com.solmi.shorket.user.dto.UserSignupRequestDto;
-import com.solmi.shorket.user.dto.UserTokenDto;
-import com.solmi.shorket.user.dto.UserTokenRequestDto;
+import com.solmi.shorket.user.dto.*;
 import com.solmi.shorket.user.repository.UserRepository;
 import com.solmi.shorket.user.repository.UserTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -61,26 +61,46 @@ public class SecurityService {
     @Transactional
     public UserTokenDto reissue(UserTokenRequestDto userTokenRequestDto) {
 
-        // throw error if refresh token is expired
+        // throw error if refresh token is expired or not found
         if (!jwtProvider.validationToken(userTokenRequestDto.getRefreshToken()))
-            throw null;
+            throw new RefreshTokenExpiredCException();
 
-        // get userIdx from
+        // get userIdx from AccessToken
         String accessToken = userTokenRequestDto.getAccessToken();
         Authentication authentication = jwtProvider.getAuthentication(accessToken);
 
+        // find user using userIdx
         User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(null);
-        UserToken userToken = userTokenRepository.findByUserIdx(user.getIdx())
-                .orElseThrow(null);
+                .orElseThrow(UserNotFoundCException::new);
 
+        // if refresh token is not saved in DB
+        UserToken userToken = userTokenRepository.findByUserIdx(user.getIdx())
+                .orElseThrow(RefreshTokenNotFoundCException::new);
+
+        // if refresh token is not equal
         if (!userToken.getToken().equals(userTokenRequestDto.getRefreshToken()))
-            throw null;
+            throw new RefreshTokenNotFoundCException();
 
         UserTokenDto newToken = jwtProvider.createToken(user.getIdx(), user.getUserRole());
         UserToken updateUserToken = userToken.updateToken(newToken.getRefreshToken());
         userTokenRepository.save(updateUserToken);
 
         return newToken;
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfoResponseDto findUser(String accessToken) {
+        // get userIdx from AccessToken
+        Authentication authentication = jwtProvider.getAuthentication(accessToken);
+
+        // find user by using userIdx
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(UserNotFoundCException::new);
+
+        // if the user is not an active member of service
+        if (!user.getStatusType().equals(StatusType.Y))
+            throw new UserNotFoundCException();
+
+        return new UserInfoResponseDto(user);
     }
 }

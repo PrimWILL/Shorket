@@ -6,9 +6,7 @@ import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.dto.*;
 import com.solmi.shorket.user.service.SecurityService;
 import com.solmi.shorket.user.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +50,36 @@ public class UserController {
             @RequestBody UserTokenRequestDto userTokenRequestDto
             ) {
         return securityService.reissue(userTokenRequestDto);
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 받은 AccessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
+    @ApiOperation(
+            value = "유저 정보 읽기",
+            notes = "userIdx를 받아서 해당 번호를 가진 유저의 정보를 읽어온다."
+    )
+    @GetMapping("/")
+    public UserInfoResponseDto getUserInfo(
+            @RequestHeader("X-AUTH-TOKEN") String accessToken
+    ) {
+        return securityService.findUser(accessToken);
+    }
+
+    @ApiOperation(
+            value = "이메일로 유저 존재 여부 확인",
+            notes = "이메일을 받아서 해당 이메일로 가입된 유저가 있는지 조회한다.\n" +
+                    "True: 존재함 / False: 존재하지 않음"
+    )
+    @PostMapping("/email")
+    public boolean isUserExist(
+            @ApiParam(value = "조회할 이메일 Dto", required = true)
+            @RequestBody UserExistRequestDto userExistRequestDto
+    ) {
+        return userService.findUserByEmail(userExistRequestDto);
     }
 }
