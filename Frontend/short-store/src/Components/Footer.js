@@ -23,7 +23,7 @@ function Footer() {
           align="center"
           color="text.secondary"
           component="p">
-          SolMiSolSolSol ©2018 Created by Ant UED
+          SHORKET ©2022 Created by SolMiSolSolSol
         </Typography>
       </Box>
       {/* End footer */}

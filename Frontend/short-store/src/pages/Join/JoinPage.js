@@ -1,20 +1,22 @@
 import React, { Fragment } from "react";
 import styles from "./Join.module.css";
 import TextField from "@mui/material/TextField";
-
+import { Typography, Menu } from "antd";
+const { Title } = Typography;
 function Join(props) {
   return (
-    <div className={styles.area}>
-      <h1>회원가입 페이지</h1>
+    <div className={styles.joun_area}>
+      <Title className={styles.header_title}  level={2}>회원가입</Title>
+
       <TextField
         margin="normal"
         required
-        fullWidth
         id="email"
         label="Email Address"
         name="email"
         autoComplete="email"
         autoFocus
+        className={styles.TextField}
       />
       <TextField
         margin="normal"
@@ -25,6 +27,7 @@ function Join(props) {
         type="password"
         id="password"
         autoComplete="current-password"
+        className={styles.TextField}
       />
     </div>
     // <>

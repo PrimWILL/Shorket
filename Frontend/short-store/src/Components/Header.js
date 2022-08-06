@@ -9,73 +9,55 @@ import {
   SettingOutlined
 } from "@ant-design/icons";
 
-import { Typography, Menu } from "antd";
-
 import styles from "./Header.module.css";
+
+import { Typography, Menu } from "antd";
 const { Title } = Typography;
 
 const items = [
   {
     label: <Link to="/search">마켓 둘러보기</Link>,
-    key: "mail",
-    icon: <MailOutlined />
+    key: "search"
   },
   {
-    label: "관심마켓&부스",
-    key: "app",
-    icon: <AppstoreOutlined />,
-    disabled: true
-  },
-  {
-    label: "마켓&부스 신청하기",
-    key: "SubMenu",
-    icon: <SettingOutlined />,
+    label: <Link to="/my/wish">관심마켓&부스</Link>,
+    key: "wish",
     children: [
       {
-        type: "group",
-        label: "Item 1",
-        children: [
-          {
-            label: "Option 1",
-            key: "setting:1"
-          },
-          {
-            label: "Option 2",
-            key: "setting:2"
-          }
-        ]
+        label: "관심마켓",
+        key: "market:1"
       },
       {
-        type: "group",
-        label: "Item 2",
-        children: [
-          {
-            label: "Option 3",
-            key: "setting:3"
-          },
-          {
-            label: "Option 4",
-            key: "setting:4"
-          }
-        ]
+        label: "관심부스",
+        key: "booth:1"
       }
     ]
   },
   {
-    label: (
-      <a href="https://ant.design" target="_blank" rel="noopener noreferrer">
-        마켓 관리하기
-      </a>
-    ),
-    key: "alipay"
+    label: <Link to="/enroll">마켓&부스 신청하기</Link>,
+    key: "enroll",
+    children: [
+      {
+        label: "마켓 신청하기",
+        key: "market:2"
+      },
+      {
+        label: "부스 신청하기",
+        key: "booth:2"
+      }
+    ]
+  },
+  {
+    label: <Link to="my/markets">마켓 관리하기</Link>,
+    key: "manage",
+    icon: <SettingOutlined />
   }
 ];
 
 function Header() {
   const [isToggled, setIsToggled] = useState(false);
   const [userToggled, setUserToggled] = useState(false);
-
-  const [current, setCurrent] = useState("mail");
+  const [current, setCurrent] = useState("");
 
   const onClick = (e) => {
     console.log("click ", e);
@@ -99,32 +81,15 @@ function Header() {
       <div className={styles.header_main}>
         <div className={styles.main_inner}>
           <Link to="/">
-            <Title level={2}>SHORKET</Title>
+            <Title className={styles.header_title}  level={2}>SHORKET</Title>
           </Link>
           <Menu
+            className={styles.gnb_area}
             onClick={onClick}
             selectedKeys={[current]}
             mode="horizontal"
             items={items}
           />
-        </div>
-        <div className={styles.gnb_area}>
-          <nav className={styles.gnb}>
-            <ul className={styles.gnb_list}>
-              <li className={styles.gnb_item}>
-                <Link to="/search">마켓 둘러보기</Link>
-              </li>
-              <li className={styles.gnb_item}>
-                <Link to="/my/wish">관심마켓&부스</Link>
-              </li>
-              <li className={styles.gnb_item}>
-                <Link to="/enroll">마켓&부스 신청하기</Link>
-              </li>
-              <li className={styles.gnb_item}>
-                <Link to="my/markets">마켓 관리하기</Link>
-              </li>
-            </ul>
-          </nav>
         </div>
       </div>
     </div>
