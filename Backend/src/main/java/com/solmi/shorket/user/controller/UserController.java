@@ -82,4 +82,25 @@ public class UserController {
     ) {
         return userService.findUserByEmail(userExistRequestDto);
     }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 발급받은 accessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
+    @ApiOperation(
+            value = "비밀번호 변경",
+            notes = "query parameter로 전달받은 유저의 기존 비밀번호가 DB와 일치하는지 확인 후 비밀번호를 변경한다.\n" +
+                    "로그인한 유저만 접근할 수 있게 accessToken 여부를 확인한다."
+    )
+    @PutMapping("/{userId}/password")
+    public void changePassword(
+            @ApiParam(value = "유저의 아이디") @PathVariable Integer userId,
+            @ApiParam(value = "비밀번호 변경 요청 DTO", required = true)
+            @RequestBody PasswordChangeRequestDto passwordChangeRequestDto
+    ) {
+        securityService.changePassword(userId, passwordChangeRequestDto);
+    }
 }

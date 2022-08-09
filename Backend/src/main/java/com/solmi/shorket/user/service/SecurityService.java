@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -96,6 +98,20 @@ public class SecurityService {
             throw new UserNotFoundCException();
 
         return new UserInfoResponseDto(user);
+    }
+
+    @Transactional
+    public Integer changePassword(Integer userIdx, PasswordChangeRequestDto passwordChangeRequestDto) {
+        // find user by using accessToken
+        User user = userRepository.findById(userIdx)
+                .orElseThrow(UserNotFoundCException::new);
+
+        // check is password equal to DB's encoding password
+        if (!passwordEncoder.matches(passwordChangeRequestDto.getBeforePassword(), user.getPassword()))
+            throw null;
+
+        User updateUser = user.updatePassword(passwordEncoder.encode(passwordChangeRequestDto.getAfterPassword()));
+        return userRepository.save(updateUser).getIdx();
     }
 
     @Transactional(readOnly = true)
