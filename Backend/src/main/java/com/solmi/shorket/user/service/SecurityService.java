@@ -1,10 +1,7 @@
 package com.solmi.shorket.user.service;
 
 import com.solmi.shorket.global.JwtProvider;
-import com.solmi.shorket.global.exception.EmailLoginFailedCException;
-import com.solmi.shorket.global.exception.RefreshTokenExpiredCException;
-import com.solmi.shorket.global.exception.RefreshTokenNotFoundCException;
-import com.solmi.shorket.global.exception.UserNotFoundCException;
+import com.solmi.shorket.global.exception.*;
 import com.solmi.shorket.user.domain.StatusType;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
@@ -17,8 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -108,7 +103,7 @@ public class SecurityService {
 
         // check is password equal to DB's encoding password
         if (!passwordEncoder.matches(passwordChangeRequestDto.getBeforePassword(), user.getPassword()))
-            throw null;
+            throw new ChangePasswordFailedCException();
 
         User updateUser = user.updatePassword(passwordEncoder.encode(passwordChangeRequestDto.getAfterPassword()));
         return userRepository.save(updateUser).getIdx();
