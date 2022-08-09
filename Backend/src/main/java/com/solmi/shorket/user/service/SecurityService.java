@@ -67,11 +67,9 @@ public class SecurityService {
 
         // get userIdx from AccessToken
         String accessToken = userTokenRequestDto.getAccessToken();
-        Authentication authentication = jwtProvider.getAuthentication(accessToken);
 
-        // find user using userIdx
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(UserNotFoundCException::new);
+        // find user by using accessToken
+        User user = findUserByAccessToken(accessToken);
 
         // if refresh token is not saved in DB
         UserToken userToken = userTokenRepository.findByUserIdx(user.getIdx())
@@ -90,6 +88,18 @@ public class SecurityService {
 
     @Transactional(readOnly = true)
     public UserInfoResponseDto findUser(String accessToken) {
+        // find user by using accessToken
+        User user = findUserByAccessToken(accessToken);
+
+        // if the user is not an active member of service
+        if (!user.getStatusType().equals(StatusType.Y))
+            throw new UserNotFoundCException();
+
+        return new UserInfoResponseDto(user);
+    }
+
+    @Transactional(readOnly = true)
+    public User findUserByAccessToken(String accessToken) {
         // get userIdx from AccessToken
         Authentication authentication = jwtProvider.getAuthentication(accessToken);
 
@@ -97,10 +107,6 @@ public class SecurityService {
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(UserNotFoundCException::new);
 
-        // if the user is not an active member of service
-        if (!user.getStatusType().equals(StatusType.Y))
-            throw new UserNotFoundCException();
-
-        return new UserInfoResponseDto(user);
+        return user;
     }
 }
