@@ -3,22 +3,15 @@ package com.solmi.shorket.market.controller;
 import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.market.dto.ListMarketResponseDto;
 import com.solmi.shorket.market.dto.MarketReponseDto;
+import com.solmi.shorket.market.dto.SortingAndFilteringInfo;
 import com.solmi.shorket.market.service.MarketService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
+import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.data.domain.Sort.Direction.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(tags = "Markets")
 @RestController
@@ -28,25 +21,22 @@ public class MarketController {
 
     private final MarketService marketService;
 
-
     @ApiOperation(
             value = "Market 목록 조회",
-            notes = "(추후 내용 다시 작성할게요) 기본 정렬 기준: 조회수(관심순으로 변경할 예정)"
+            notes = "기본 정렬 기준: 관심 많은 순]\n" +
+                    "\n" +
+                    "sort, date는 정수(0, 1, 2, ...) 또는 문자열로 넘겨주시면 됩니다." +
+                    "문자열로 작성할 경우, 반드시!! 전부 대문자로 작성해야합니다." +
+                    "sort: VIEW(조회순), INTEREST(관심순), LATEST(최신순), DICT(가나다순)" +
+                    "locals: 지역 목록이 담긴 배열 (ex. [\"서울\", \"경기도\"]" +
+                    "date: UPCOMING(진행 예정), CURRENT(진행 중), COMPLETE(종료)"
     )
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    name = "sort",
-                    value = "정렬 기준",
-                    required = true,
-                    dataType = "String",
-                    paramType = "query",
-                    defaultValue = "viewCount"
-            )
-    })
     @GetMapping("")
-    public Page<ListMarketResponseDto> getMarkets(@ApiIgnore @PageableDefault(sort = "viewCount", direction = DESC) Pageable pageable) {
-        return marketService.findMarkets(pageable)
-                .map(ListMarketResponseDto::new);
+    public List<ListMarketResponseDto> getMarkets(@RequestBody SortingAndFilteringInfo info) {
+        List<Market> markets = marketService.findMarkets(info);
+        return markets.stream()
+                .map(ListMarketResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @ApiOperation(

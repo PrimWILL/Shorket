@@ -2,15 +2,14 @@ package com.solmi.shorket.market.service;
 
 import com.solmi.shorket.global.exception.MarketNotFoundException;
 import com.solmi.shorket.market.domain.Market;
+import com.solmi.shorket.market.dto.SortingAndFilteringInfo;
 import com.solmi.shorket.market.dto.UpdateMarketDto;
 import com.solmi.shorket.market.repository.MarketRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,8 +29,8 @@ public class MarketService {
     /**
      * Market 목록 조회 - 정렬 기준 적용
      */
-    public Page<Market> findMarkets(Pageable pageable) {
-        return marketRepository.findAllByStartDateBeforeAndEndDateAfter(pageable, LocalDateTime.now(), LocalDateTime.now());
+    public List<Market> findMarkets(SortingAndFilteringInfo info) {
+        return marketRepository.findMarkets(info);
     }
 
     /**
