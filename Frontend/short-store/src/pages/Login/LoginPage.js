@@ -7,17 +7,14 @@ import {
   Avatar,
   Button,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Link,
-  Grid,
   CssBaseline
 } from "@mui/material";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import "antd/dist/antd.css";
-import { Typography, Menu, Divider } from "antd";
+import { Typography, Divider } from "antd";
 const { Title } = Typography;
 
 const theme = createTheme();
@@ -72,7 +69,6 @@ function Login() {
               type="password"
               autoComplete="current-password"
             />
-
             <Button
               type="submit"
               fullWidth
@@ -80,6 +76,7 @@ function Login() {
               sx={{ mt: 3, mb: 2 }}>
               로그인
             </Button>
+
             <div>
               <Link href="#" variant="body2">
                 <RouterLink to="/join">이메일 가입</RouterLink>
