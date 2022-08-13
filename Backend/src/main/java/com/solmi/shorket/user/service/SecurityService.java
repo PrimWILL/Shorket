@@ -51,7 +51,7 @@ public class SecurityService {
     @Transactional
     public Integer signup(UserSignupRequestDto userSignupRequestDto) {
         if (userRepository.findByEmail(userSignupRequestDto.getEmail()).isPresent())
-            throw new EmailLoginFailedCException();
+            throw new UserSignupFailedCException();
         return userRepository.save(userSignupRequestDto.toEntity(passwordEncoder)).getIdx();
     }
 
