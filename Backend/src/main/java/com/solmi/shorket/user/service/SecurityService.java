@@ -109,6 +109,20 @@ public class SecurityService {
         return userRepository.save(updateUser).getIdx();
     }
 
+    @Transactional
+    public void updateUserInfo(String accessToken, UserInfoChangeRequestDto userInfoChangeRequestDto) {
+        // find user by userIdx
+        User user = findUserByAccessToken(accessToken);
+
+        User updateUser = user.updateUserInfo(
+                userInfoChangeRequestDto.getEmail(),
+                userInfoChangeRequestDto.getName(),
+                userInfoChangeRequestDto.getNickName(),
+                userInfoChangeRequestDto.getProfileUrl()
+        );
+        userRepository.save(updateUser);
+    }
+
     @Transactional(readOnly = true)
     public User findUserByAccessToken(String accessToken) {
         // get userIdx from AccessToken

@@ -90,5 +90,13 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.password = encodedPassword;
         return this;
     }
+
+    public User updateUserInfo(String email, String name, String nickName, String profileUrl) {
+        this.email = email;
+        this.name = name;
+        this.nickName = nickName;
+        this.profileUrl = profileUrl;
+        return this;
+    }
 }
 

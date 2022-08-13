@@ -100,4 +100,24 @@ public class UserController {
     ) {
         securityService.changePassword(userId, passwordChangeRequestDto);
     }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 발급받은 accessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
+    @ApiOperation(
+            value = "유저 정보 변경",
+            notes = "accessToken으로 전달받은 유저가 실제 유저인지 확인한 후, 유저의 정보를 변경한다.\n"
+    )
+    @PutMapping("/")
+    public void changeUserInfo(
+            @RequestHeader("X-AUTH-TOKEN") String accessToken,
+            @ApiParam(value = "유저 정보 변경 요청 DTO", required = true)
+            @RequestBody UserInfoChangeRequestDto userInfoChangeRequestDto
+    ) {
+        securityService.updateUserInfo(accessToken, userInfoChangeRequestDto);
+    }
 }
