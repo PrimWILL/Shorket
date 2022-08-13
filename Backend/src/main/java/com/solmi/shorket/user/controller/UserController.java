@@ -1,15 +1,12 @@
 package com.solmi.shorket.user.controller;
 
-import com.solmi.shorket.global.JwtProvider;
-import com.solmi.shorket.user.domain.LoginType;
-import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.dto.*;
 import com.solmi.shorket.user.service.SecurityService;
 import com.solmi.shorket.user.service.UserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 
 @Api(tags = "Users")
 @RequiredArgsConstructor
@@ -23,9 +20,9 @@ public class UserController {
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public UserTokenDto login(
-            @ApiParam(value="로그인 요청 DTO", required = true)
+            @ApiParam(value = "로그인 요청 DTO", required = true)
             @RequestBody UserLoginRequestDto userLoginRequestDto
-            ) {
+    ) {
         UserTokenDto userTokenDto = securityService.login(userLoginRequestDto);
         return userTokenDto;
     }
@@ -33,9 +30,9 @@ public class UserController {
     @ApiOperation(value = "회원가입")
     @PostMapping("/signup")
     public Integer signup(
-            @ApiParam(value="회원가입 요청 DTO", required = true)
+            @ApiParam(value = "회원가입 요청 DTO", required = true)
             @RequestBody UserSignupRequestDto userSignupRequestDto
-            ) {
+    ) {
         Integer userIdx = securityService.signup(userSignupRequestDto);
         return userIdx;
     }
@@ -48,7 +45,7 @@ public class UserController {
     public UserTokenDto reissue(
             @ApiParam(value = "토큰 재발급 요청 DTO", required = true)
             @RequestBody UserTokenRequestDto userTokenRequestDto
-            ) {
+    ) {
         return securityService.reissue(userTokenRequestDto);
     }
 
@@ -61,7 +58,7 @@ public class UserController {
     })
     @ApiOperation(
             value = "유저 정보 읽기",
-            notes = "userIdx를 받아서 해당 번호를 가진 유저의 정보를 읽어온다."
+            notes = "accessToken을 받아서 해당 번호를 가진 유저의 정보를 읽어온다."
     )
     @GetMapping("/")
     public UserInfoResponseDto getUserInfo(
