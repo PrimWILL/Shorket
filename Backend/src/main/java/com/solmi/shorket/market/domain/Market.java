@@ -51,11 +51,6 @@ public class Market extends BaseTimeEntity {
     @OneToMany(mappedBy = "market")
     private Set<MarketInterest> interests = new HashSet<>();
 
-//    @NotNull
-//    @Enumerated(value = EnumType.STRING)
-//    @ColumnDefault("'W'")
-//    private MarketStatusType status;    // Y: 운영중, C: 운영완료, W: 운영예정
-
     //== 생성 메서드 ==//
     public static Market createMarket(String name, String description, Address address, LocalDateTime startDate, LocalDateTime endDate) {
         return new Market(name, description, 0, address, startDate, endDate);
@@ -93,10 +88,6 @@ public class Market extends BaseTimeEntity {
         this.description = description;
     }
 
-    private void setViewCount(Integer viewCount) {
-        this.viewCount = viewCount;
-    }
-
     private void setAddress(Address address) {
         this.address = address;
     }
@@ -107,13 +98,5 @@ public class Market extends BaseTimeEntity {
 
     private void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
-    }
-
-    private void setLatitude(Float latitude) {
-        this.latitude = latitude;
-    }
-
-    private void setLongitude(Float longitude) {
-        this.longitude = longitude;
     }
 }

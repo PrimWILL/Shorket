@@ -8,9 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Entity
@@ -52,6 +50,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     @ColumnDefault("'Y'")
     @Column(nullable = false)
     private StatusType statusType;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<MarketInterest> marketInterests = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

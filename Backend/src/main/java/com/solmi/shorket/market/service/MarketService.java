@@ -1,5 +1,6 @@
 package com.solmi.shorket.market.service;
 
+import com.solmi.shorket.global.exception.MarketNotFoundException;
 import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.market.dto.UpdateMarketDto;
 import com.solmi.shorket.market.repository.MarketRepository;
@@ -37,9 +38,8 @@ public class MarketService {
      * Market 조회
      */
     public Market findMarket(Integer marketId) {
-        validateMarket(marketId);
-
-        Market market = marketRepository.findById(marketId).get();
+        Market market = marketRepository.findById(marketId)
+                .orElseThrow(MarketNotFoundException::new);
         market.addViewCount();  // 조회수 증가
         return market;
     }
@@ -49,15 +49,8 @@ public class MarketService {
      */
     @Transactional
     public void updateMarket(Integer marketId, UpdateMarketDto marketDto) {
-        validateMarket(marketId);
-        Market market = marketRepository.findById(marketId).get();
+        Market market = marketRepository.findById(marketId)
+                .orElseThrow(MarketNotFoundException::new);
         market.update(marketDto);
-    }
-
-    // 존재하지 않는 market인지 검증
-    private void validateMarket(Integer marketId) {
-        if (!marketRepository.existsById(marketId)) {
-            throw new IllegalStateException("존재하지 않는 플리마켓입니다.");
-        }
     }
 }
