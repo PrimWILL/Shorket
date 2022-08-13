@@ -20,6 +20,25 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
 
     @Override
     public List<Market> findMarkets(SortingAndFilteringInfo info) {
+        // Sorting
+        String joinQuery = "";
+        String sortingQuery = "order by ";
+
+        // 정렬 기준이 관심 많은 순인 경우 join을 해야하기 때문에 따로 query 생성
+        if (info.getSort() == INTEREST) {
+            joinQuery += "join MarketInterest mi on mi.market=m ";
+            sortingQuery = "group by m order by count(m) desc";
+        } else if (info.getSort() == VIEW) {
+            sortingQuery += "m.viewCount desc";
+        } else if (info.getSort() == LATEST) {
+            sortingQuery += "m.createdAt desc";
+        } else if (info.getSort() == DICT) {
+            sortingQuery += "m.name";
+        } else {
+            throw new IllegalArgumentException("Bad Request");
+        }
+
+        // Filtering
         String filteringQuery = "where ";
 
         // 기간 filtering
@@ -42,27 +61,7 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
             filteringQuery += "'') ";
         }
 
-        // 정렬
-        if (info.getSort() == INTEREST) {
-            return em.createQuery("select m from Market m join MarketInterest mi on mi.market=m " + filteringQuery + "group by m order by count(m) desc")
-                    .setParameter("now", LocalDateTime.now())
-                    .setFirstResult(0)
-                    .setMaxResults(NUMBER_OF_PAGING)
-                    .getResultList();
-        }
-
-        String sortingQuery = "order by ";
-        if (info.getSort() == VIEW) {
-            sortingQuery += "m.viewCount desc";
-        } else if (info.getSort() == LATEST) {
-            sortingQuery += "m.createdAt desc";
-        } else if (info.getSort() == DICT) {
-            sortingQuery += "m.name";
-        } else {
-            throw new IllegalArgumentException("Bad Request");
-        }
-
-        return em.createQuery("select m from Market m " + filteringQuery + sortingQuery)
+        return em.createQuery("select m from Market m " + joinQuery + filteringQuery + sortingQuery)
                 .setParameter("now", LocalDateTime.now())
                 .setFirstResult(0)
                 .setMaxResults(NUMBER_OF_PAGING)
