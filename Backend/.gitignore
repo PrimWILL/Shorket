@@ -81,4 +81,6 @@ gradle-app.setting
 
 application-jwt.properties
 
+.java-version
+
 /src/main/java/com/solmi/shorket/InitDb.java

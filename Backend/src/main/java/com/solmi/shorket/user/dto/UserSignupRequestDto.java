@@ -8,11 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.persistence.*;
-import java.util.Date;
 
 @Getter
 @Builder
@@ -32,6 +28,7 @@ public class UserSignupRequestDto {
                 .password(passwordEncoder.encode(password))
                 .name(name)
                 .nickName(nickName)
+                .profileUrl("")
                 .loginType(loginType)
                 .statusType(StatusType.Y)
                 .userRole(RoleType.I)

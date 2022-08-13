@@ -1,10 +1,7 @@
 package com.solmi.shorket.user.service;
 
 import com.solmi.shorket.global.JwtProvider;
-import com.solmi.shorket.global.exception.EmailLoginFailedCException;
-import com.solmi.shorket.global.exception.RefreshTokenExpiredCException;
-import com.solmi.shorket.global.exception.RefreshTokenNotFoundCException;
-import com.solmi.shorket.global.exception.UserNotFoundCException;
+import com.solmi.shorket.global.exception.*;
 import com.solmi.shorket.user.domain.StatusType;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
@@ -54,7 +51,7 @@ public class SecurityService {
     @Transactional
     public Integer signup(UserSignupRequestDto userSignupRequestDto) {
         if (userRepository.findByEmail(userSignupRequestDto.getEmail()).isPresent())
-            throw new EmailLoginFailedCException();
+            throw new UserSignupFailedCException();
         return userRepository.save(userSignupRequestDto.toEntity(passwordEncoder)).getIdx();
     }
 
@@ -67,11 +64,9 @@ public class SecurityService {
 
         // get userIdx from AccessToken
         String accessToken = userTokenRequestDto.getAccessToken();
-        Authentication authentication = jwtProvider.getAuthentication(accessToken);
 
-        // find user using userIdx
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(UserNotFoundCException::new);
+        // find user by using accessToken
+        User user = findUserByAccessToken(accessToken);
 
         // if refresh token is not saved in DB
         UserToken userToken = userTokenRepository.findByUserIdx(user.getIdx())
@@ -90,6 +85,46 @@ public class SecurityService {
 
     @Transactional(readOnly = true)
     public UserInfoResponseDto findUser(String accessToken) {
+        // find user by using accessToken
+        User user = findUserByAccessToken(accessToken);
+
+        // if the user is not an active member of service
+        if (!user.getStatusType().equals(StatusType.Y))
+            throw new UserNotFoundCException();
+
+        return new UserInfoResponseDto(user);
+    }
+
+    @Transactional
+    public Integer changePassword(Integer userIdx, PasswordChangeRequestDto passwordChangeRequestDto) {
+        // find user by using accessToken
+        User user = userRepository.findById(userIdx)
+                .orElseThrow(UserNotFoundCException::new);
+
+        // check is password equal to DB's encoding password
+        if (!passwordEncoder.matches(passwordChangeRequestDto.getBeforePassword(), user.getPassword()))
+            throw new ChangePasswordFailedCException();
+
+        User updateUser = user.updatePassword(passwordEncoder.encode(passwordChangeRequestDto.getAfterPassword()));
+        return userRepository.save(updateUser).getIdx();
+    }
+
+    @Transactional
+    public void updateUserInfo(String accessToken, UserInfoChangeRequestDto userInfoChangeRequestDto) {
+        // find user by userIdx
+        User user = findUserByAccessToken(accessToken);
+
+        User updateUser = user.updateUserInfo(
+                userInfoChangeRequestDto.getEmail(),
+                userInfoChangeRequestDto.getName(),
+                userInfoChangeRequestDto.getNickName(),
+                userInfoChangeRequestDto.getProfileUrl()
+        );
+        userRepository.save(updateUser);
+    }
+
+    @Transactional(readOnly = true)
+    public User findUserByAccessToken(String accessToken) {
         // get userIdx from AccessToken
         Authentication authentication = jwtProvider.getAuthentication(accessToken);
 
@@ -97,10 +132,6 @@ public class SecurityService {
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(UserNotFoundCException::new);
 
-        // if the user is not an active member of service
-        if (!user.getStatusType().equals(StatusType.Y))
-            throw new UserNotFoundCException();
-
-        return new UserInfoResponseDto(user);
+        return user;
     }
 }

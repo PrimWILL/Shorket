@@ -103,6 +103,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ChangePasswordFailedCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse changePasswordFailedCException(HttpServletRequest request, ChangePasswordFailedCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("changePasswordFailed.code"),
+                getMessage("changePasswordFailed.message")
+        );
+    }
+
     private String getMessage(String code) {
         return getMessage(code, null);
     }
