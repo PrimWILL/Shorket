@@ -1,15 +1,12 @@
 package com.solmi.shorket.user.controller;
 
-import com.solmi.shorket.global.JwtProvider;
-import com.solmi.shorket.user.domain.LoginType;
-import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.dto.*;
 import com.solmi.shorket.user.service.SecurityService;
 import com.solmi.shorket.user.service.UserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 
 @Api(tags = "Users")
 @RequiredArgsConstructor
@@ -23,9 +20,9 @@ public class UserController {
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public UserTokenDto login(
-            @ApiParam(value="로그인 요청 DTO", required = true)
+            @ApiParam(value = "로그인 요청 DTO", required = true)
             @RequestBody UserLoginRequestDto userLoginRequestDto
-            ) {
+    ) {
         UserTokenDto userTokenDto = securityService.login(userLoginRequestDto);
         return userTokenDto;
     }
@@ -33,9 +30,9 @@ public class UserController {
     @ApiOperation(value = "회원가입")
     @PostMapping("/signup")
     public Integer signup(
-            @ApiParam(value="회원가입 요청 DTO", required = true)
+            @ApiParam(value = "회원가입 요청 DTO", required = true)
             @RequestBody UserSignupRequestDto userSignupRequestDto
-            ) {
+    ) {
         Integer userIdx = securityService.signup(userSignupRequestDto);
         return userIdx;
     }
@@ -48,7 +45,7 @@ public class UserController {
     public UserTokenDto reissue(
             @ApiParam(value = "토큰 재발급 요청 DTO", required = true)
             @RequestBody UserTokenRequestDto userTokenRequestDto
-            ) {
+    ) {
         return securityService.reissue(userTokenRequestDto);
     }
 
@@ -61,7 +58,7 @@ public class UserController {
     })
     @ApiOperation(
             value = "유저 정보 읽기",
-            notes = "userIdx를 받아서 해당 번호를 가진 유저의 정보를 읽어온다."
+            notes = "accessToken을 받아서 해당 번호를 가진 유저의 정보를 읽어온다."
     )
     @GetMapping("/")
     public UserInfoResponseDto getUserInfo(
@@ -81,5 +78,46 @@ public class UserController {
             @RequestBody UserExistRequestDto userExistRequestDto
     ) {
         return userService.findUserByEmail(userExistRequestDto);
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 발급받은 accessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
+    @ApiOperation(
+            value = "비밀번호 변경",
+            notes = "query parameter로 전달받은 유저의 기존 비밀번호가 DB와 일치하는지 확인 후 비밀번호를 변경한다.\n" +
+                    "로그인한 유저만 접근할 수 있게 accessToken 여부를 확인한다."
+    )
+    @PutMapping("/{userId}/password")
+    public void changePassword(
+            @ApiParam(value = "유저의 아이디") @PathVariable Integer userId,
+            @ApiParam(value = "비밀번호 변경 요청 DTO", required = true)
+            @RequestBody PasswordChangeRequestDto passwordChangeRequestDto
+    ) {
+        securityService.changePassword(userId, passwordChangeRequestDto);
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 발급받은 accessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
+    @ApiOperation(
+            value = "유저 정보 변경",
+            notes = "accessToken으로 전달받은 유저가 실제 유저인지 확인한 후, 유저의 정보를 변경한다.\n"
+    )
+    @PutMapping("/")
+    public void changeUserInfo(
+            @RequestHeader("X-AUTH-TOKEN") String accessToken,
+            @ApiParam(value = "유저 정보 변경 요청 DTO", required = true)
+            @RequestBody UserInfoChangeRequestDto userInfoChangeRequestDto
+    ) {
+        securityService.updateUserInfo(accessToken, userInfoChangeRequestDto);
     }
 }
