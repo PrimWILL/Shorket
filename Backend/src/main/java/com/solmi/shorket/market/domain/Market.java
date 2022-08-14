@@ -48,7 +48,7 @@ public class Market extends BaseTimeEntity {
 
     private Float longitude;
 
-    @OneToMany(mappedBy = "market")
+    @OneToMany(mappedBy = "market", cascade = CascadeType.ALL)
     private Set<MarketInterest> interests = new HashSet<>();
 
     //== 생성 메서드 ==//
