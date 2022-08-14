@@ -12,6 +12,11 @@ import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.*;
 
+/**
+ * How to create MarketInterest Object?
+ * - MarketInterest.createMarketInterest(User user, Market market)
+ */
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -49,8 +54,8 @@ public class MarketInterest {
         market.getInterests().add(this);
     }
 
-    //== Setter ==//
     private void setUser(User user) {
         this.user = user;
+//        user.getMarketInterests().add(this);
     }
 }
