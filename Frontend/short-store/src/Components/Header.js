@@ -24,25 +24,25 @@ const items = [
     key: "wish",
     children: [
       {
-        label: "관심마켓",
+        label: <Link to="/my/wish">관심마켓</Link>,
         key: "market:1"
       },
       {
-        label: "관심부스",
+        label: <Link to="/my/wish">관심부스</Link>,
         key: "booth:1"
       }
     ]
   },
   {
-    label: <Link to="/enroll">마켓&부스 신청하기</Link>,
+    label: "마켓&부스 신청하기",
     key: "enroll",
     children: [
       {
-        label: "마켓 신청하기",
+        label: <Link to="/enroll/market">마켓 신청하기</Link>,
         key: "market:2"
       },
       {
-        label: "부스 신청하기",
+        label: <Link to="/enroll/booth">부스 신청하기</Link>,
         key: "booth:2"
       }
     ]
@@ -55,8 +55,6 @@ const items = [
 ];
 
 function Header() {
-  const [isToggled, setIsToggled] = useState(false);
-  const [userToggled, setUserToggled] = useState(false);
   const [current, setCurrent] = useState("");
 
   const onClick = (e) => {
@@ -80,10 +78,8 @@ function Header() {
       </div>
       <div className={styles.header_main}>
         <div className={styles.main_inner}>
-          <Link to="/">
-            <Title className={styles.header_title} level={2}>
-              SHORKET
-            </Title>
+          <Link onClick={onClick} to="/">
+            <Title level={2} style={{margin: 0}}>SHORKET</Title>
           </Link>
           <Menu
             className={styles.gnb_area}

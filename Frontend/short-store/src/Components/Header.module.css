@@ -42,9 +42,7 @@ div {
 .header_top {
   box-shadow: 0 1px 0 0 rgb(0 0 0 / 10%);
 }
-.header_title {
-  margin-bottom: 0;
-}
+
 
 .top_inner {
   height: 32px;

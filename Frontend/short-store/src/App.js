@@ -8,7 +8,8 @@ import RegisterPage from "./pages/Join/RegisterPage";
 import Mypage from "./pages/My/MyPage";
 import SearchPage from "./pages/Search/SearchPage";
 import SearchListPage from "./pages/Search/SearchListPage";
-import EnrollPage from "./pages/Enroll/EnrollPage";
+import BoothEnrollPage from "./pages/Enroll/BoothEnrollPage";
+import MarketEnrollPage from "./pages/Enroll/MarketEnrollPage";
 import MarketPage from "./pages/Market/MarketPage";
 import ManagePage from "./pages/Manage/ManagePage";
 
@@ -25,7 +26,6 @@ export default function App() {
           <Route path="/" element={<HomePage />} exact={true}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/join" element={<JoinPage />}></Route>
-          <Route path="/enroll" element={<EnrollPage />}></Route>
           <Route path="/market/:id" element={<MarketPage />}></Route>
 
           <Route path="/my" element={<Mypage />}></Route>
@@ -39,10 +39,10 @@ export default function App() {
 
           <Route
             path="/enroll/market"
-            element={<div>마켓신청 페이지</div>}></Route>
+            element={<MarketEnrollPage />}></Route>
           <Route
             path="/enroll/booth"
-            element={<div>부스신청 페이지</div>}></Route>
+            element={<BoothEnrollPage />}></Route>
           <Route
             path="/market/:id/booth/:id"
             element={<div>부스상세 페이지</div>}></Route>
