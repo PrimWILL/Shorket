@@ -8,9 +8,11 @@ import { Form, AppLayout } from "antd";
 import { UserOutlined, ShopOutlined } from "@ant-design/icons";
 
 import axios from "axios";
+import styles from "./BoothEnrollPage.module.css";
+
 const { TextArea } = Input;
 
-function BoothEnroll() {
+function BoothEnrollPage() {
   const [inputBoothName, setInputBoothName] = useState("");
   const [inputDate, setInputDate] = useState("");
   const [inputDate2, setInputDate2] = useState("");
@@ -74,6 +76,7 @@ function BoothEnroll() {
   );
 
   return (
+    <div className='area'>
     <Form>
       <div>
         <h2>부스 신청</h2>
@@ -129,7 +132,8 @@ function BoothEnroll() {
         {/* <Link to="/register">회원가입</Link> */}
       </div>
     </Form>
+    </div>
   );
 }
 
-export default BoothEnroll;
+export default BoothEnrollPage;
