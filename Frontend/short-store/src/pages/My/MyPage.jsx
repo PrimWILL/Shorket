@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 
-<<<<<<< HEAD
-import { Breadcrumb, Layout, Menu, Typography } from "antd";
-import { Avatar, List, message } from 'antd';
-=======
 import { Breadcrumb, Layout, Menu } from "antd";
 
 // 테스트
-import styles from "./MyPage.module.css";
 import Interest from "../../components/Interest.js";
 
->>>>>>> 4da6f23e51d1a79ee596d4d8e086ea7695ee49bb
 import {
   LaptopOutlined,
   NotificationOutlined,
