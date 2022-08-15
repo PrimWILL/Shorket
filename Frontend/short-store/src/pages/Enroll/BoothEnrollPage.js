@@ -7,6 +7,10 @@ import { Form, AppLayout } from "antd";
 import { UserOutlined, ShopOutlined } from "@ant-design/icons";
 
 import axios from "axios";
+<<<<<<< HEAD:Frontend/short-store/src/pages/Enroll/BoothEnrollPage.js
+import styles from "./BoothEnrollPage.module.css";
+
+=======
 import {
   AutoComplete,
   Cascader,
@@ -17,6 +21,7 @@ import {
   Select
 } from "antd";
 const { Option } = Select;
+>>>>>>> 4da6f23e51d1a79ee596d4d8e086ea7695ee49bb:Frontend/short-store/src/pages/Enroll/BoothEnroll.js
 const { TextArea } = Input;
 const residences = [
   {
@@ -84,8 +89,20 @@ const tailFormItemLayout = {
 };
 const { RangePicker } = DatePicker;
 
+<<<<<<< HEAD:Frontend/short-store/src/pages/Enroll/BoothEnrollPage.js
+function BoothEnrollPage() {
+  const [inputBoothName, setInputBoothName] = useState("");
+  const [inputDate, setInputDate] = useState("");
+  const [inputDate2, setInputDate2] = useState("");
+  const [inputAbout, setInputAbout] = useState("");
+  const [inputSeller, setInputSeller] = useState("");
+  const [inputProduct, setInputProduct] = useState("");
+  const [inputOpen, setInputOpen] = useState("");
+  const [inputClose, setInputClose] = useState("");
+=======
 function BoothEnroll() {
   const [form] = Form.useForm();
+>>>>>>> 4da6f23e51d1a79ee596d4d8e086ea7695ee49bb:Frontend/short-store/src/pages/Enroll/BoothEnroll.js
 
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
@@ -133,6 +150,63 @@ function BoothEnroll() {
   }));
 
   return (
+<<<<<<< HEAD:Frontend/short-store/src/pages/Enroll/BoothEnrollPage.js
+    <div className='area'>
+    <Form>
+      <div>
+        <h2>부스 신청</h2>
+        <div>
+          <label htmlFor="input_name"></label>
+          <Input placeholder="부스 이름" prefix={<ShopOutlined />} />
+        </div>
+        <div>
+          <label htmlFor="input_date">
+            부스 기간 : <DatePicker /> ~ <DatePicker />
+          </label>
+        </div>
+        <div>
+          <label htmlFor="input_about"></label>
+          <Input
+            placeholder="판매자 정보(ex: 이름/전화번호)"
+            prefix={<UserOutlined />}
+            name="input_seller"
+            value={inputSeller}
+            onChange={handleInputSeller}
+          />
+        </div>
+        <div>
+          <label htmlFor="input_about"></label>
+          <TextArea
+            rows={3}
+            placeholder="판매상품목록"
+            maxLength={6}
+            name="input_seller"
+            value={inputProduct}
+            onChange={handleInputProduct}
+          />
+        </div>
+        <div>
+          <label htmlFor="input_date">운영 시간 : </label>
+          <TimePicker.RangePicker />
+        </div>
+        <div>
+          <label htmlFor="input_about"></label>
+          <TextArea
+            rows={4}
+            placeholder="부스 설명"
+            maxLength={6}
+            onChange={onChange}
+          />
+        </div>
+        <div>
+          <Button type="primary onClick={onClickBoothEnroll}">
+            부스 목록 보기
+          </Button>
+          <Button onClick={onClickBoothEnroll}>부스 등록하기</Button>
+        </div>
+        {/* <Link to="/register">회원가입</Link> */}
+      </div>
+=======
     <Form
       class="login-form"
       {...formItemLayout}
@@ -358,8 +432,10 @@ function BoothEnroll() {
         </Button>
         <Button>뒤로 가기</Button>
       </Form.Item>
+>>>>>>> 4da6f23e51d1a79ee596d4d8e086ea7695ee49bb:Frontend/short-store/src/pages/Enroll/BoothEnroll.js
     </Form>
+    </div>
   );
 }
 
-export default BoothEnroll;
+export default BoothEnrollPage;
