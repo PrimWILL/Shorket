@@ -17,7 +17,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -101,6 +100,19 @@ public class JwtProvider {
         } catch (JwtException | IllegalArgumentException e) {
             log.error(e.toString());
             return false;
+        }
+    }
+
+    public Long getExpirationTime(String token) {
+        try {
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Date exp = claimsJws.getBody().getExpiration();
+            Date now = new Date();
+
+            return exp.getTime() - now.getTime();
+        } catch (JwtException | IllegalArgumentException e) {
+            log.error(e.toString());
+            return accessTokenValidMillisecond;
         }
     }
 }

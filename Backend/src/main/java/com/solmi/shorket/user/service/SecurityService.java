@@ -2,10 +2,12 @@ package com.solmi.shorket.user.service;
 
 import com.solmi.shorket.global.JwtProvider;
 import com.solmi.shorket.global.exception.*;
+import com.solmi.shorket.user.domain.LogoutAccessToken;
 import com.solmi.shorket.user.domain.StatusType;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
 import com.solmi.shorket.user.dto.*;
+import com.solmi.shorket.user.repository.LogoutAccessTokenRedisRepository;
 import com.solmi.shorket.user.repository.UserRepository;
 import com.solmi.shorket.user.repository.UserTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class SecurityService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final UserTokenRepository userTokenRepository;
+    private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
 
     @Transactional
     public UserTokenDto login(UserLoginRequestDto userLoginRequestDto) {
@@ -121,6 +124,23 @@ public class SecurityService {
                 userInfoChangeRequestDto.getProfileUrl()
         );
         userRepository.save(updateUser);
+    }
+
+    @Transactional
+    public void logout(String accessToken) {
+        // find user by userIdx
+        User user = findUserByAccessToken(accessToken);
+
+        // delete refreshToken if it exists in DB
+        if (!userTokenRepository.findAllByUserIdx(user.getIdx()).isEmpty()) {
+            userTokenRepository.deleteAllByUserIdx(user.getIdx());
+        }
+
+        // make logoutAccessToken to register black list in Redis
+        LogoutAccessToken logoutAccessToken = LogoutAccessToken.createLogoutAccessToken(
+                accessToken, user.getIdx(), jwtProvider.getExpirationTime(accessToken));
+
+        logoutAccessTokenRedisRepository.save(logoutAccessToken);
     }
 
     @Transactional(readOnly = true)
