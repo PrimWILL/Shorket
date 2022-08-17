@@ -3,6 +3,7 @@ package com.solmi.shorket.global;
 import com.solmi.shorket.global.exception.UserRoleNotFoundCException;
 import com.solmi.shorket.user.domain.RoleType;
 import com.solmi.shorket.user.dto.UserTokenDto;
+import com.solmi.shorket.user.repository.LogoutAccessTokenRedisRepository;
 import com.solmi.shorket.user.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class JwtProvider {
     private final Long refreshTokenValidMillisecond = 3 * 24 * 60 * 60 * 1000L; // 3 Day
 
     private final CustomUserDetailsService userDetailsService;
+    private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
 
     @PostConstruct
     protected void init() {
@@ -94,6 +96,11 @@ public class JwtProvider {
     }
 
     public boolean validationToken(String token) {
+        // if accessToken is in blacklist, then refuse the request.
+        if (logoutAccessTokenRedisRepository.findById(token).isPresent()) {
+            return false;
+        }
+
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());

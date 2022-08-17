@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface LogoutAccessTokenRedisRepository extends CrudRepository<LogoutAccessToken, Integer> {
+public interface LogoutAccessTokenRedisRepository extends CrudRepository<LogoutAccessToken, String> {
 
     Optional<LogoutAccessToken> findByUserIdx(Integer userIdx);
 }
