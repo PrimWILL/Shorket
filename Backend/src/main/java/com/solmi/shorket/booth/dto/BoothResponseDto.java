@@ -4,11 +4,10 @@ import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.domain.BoothApprovalType;
 import com.solmi.shorket.booth.domain.BoothStatusType;
 import lombok.Getter;
-
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
-public class GetOneBoothDto {
+public class BoothResponseDto {
     private final Integer idx;
     private final Integer number;
     private final String boothName;
@@ -20,18 +19,12 @@ public class GetOneBoothDto {
     private final String phoneNumber;
     private final String email;
     private final Integer viewCount;
-    private final Date startDate;
-    private final Date endDate;
-    private final Date startTime;
-    private final Date endTime;
-    private final Float latitude;
-    private final Float longitude;
-    private final Date createdAt;
-    private final Date updatedAt;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
     private final BoothApprovalType approval;
     private final BoothStatusType status;
 
-    public GetOneBoothDto(Booth booth) {
+    public BoothResponseDto(Booth booth) {
         this.idx = booth.getIdx();
         this.boothName = booth.getBoothName();
         this.number = booth.getNumber();
@@ -45,12 +38,6 @@ public class GetOneBoothDto {
         this.viewCount = booth.getViewCount();
         this.startDate = booth.getStartDate();
         this.endDate = booth.getEndDate();
-        this.startTime = booth.getStartTime();
-        this.endTime = booth.getEndTime();
-        this.latitude = booth.getLatitude();
-        this.longitude = booth.getLongitude();
-        this.createdAt = booth.getCreatedAt();
-        this.updatedAt = booth.getUpdatedAt();
         this.approval = booth.getApproval();
         this.status = booth.getStatus();
     }
