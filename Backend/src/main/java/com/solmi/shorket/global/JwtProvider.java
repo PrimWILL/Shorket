@@ -124,6 +124,7 @@ public class JwtProvider {
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (SecurityException | MalformedJwtException e) {
             log.error("Jwt 서명이 올바르지 않습니다.");
+            request.setAttribute("exception", "incorrectJwtSign");
         } catch (ExpiredJwtException e) {
             log.error("만료된 accessToken 입니다.");
             request.setAttribute("exception", "expiredJwt");
