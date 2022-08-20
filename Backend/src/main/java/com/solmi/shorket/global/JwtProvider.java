@@ -122,7 +122,7 @@ public class JwtProvider {
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (SecurityException | MalformedJwtException e) {
+        } catch (SecurityException | MalformedJwtException | SignatureException e) {
             log.error("Jwt 서명이 올바르지 않습니다.");
             request.setAttribute("exception", "incorrectJwtSign");
         } catch (ExpiredJwtException e) {
