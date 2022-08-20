@@ -96,9 +96,26 @@ public class JwtProvider {
     }
 
     public boolean validationToken(String token) {
+        try {
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return !claimsJws.getBody().getExpiration().before(new Date());
+        } catch (SecurityException | MalformedJwtException e) {
+            log.error("Jwt 서명이 올바르지 않습니다.");
+        } catch (ExpiredJwtException e) {
+            log.error("만료된 accessToken 입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.error("지원하지 않는 accessToken 입니다.");
+        } catch (IllegalArgumentException e) {
+            log.error("잘못된 accessToken 입니다.");
+        }
+        return false;
+    }
+
+    public boolean authValidationToken(HttpServletRequest request, String token) {
         // if accessToken is in blacklist, then refuse the request.
         if (logoutAccessTokenRedisRepository.findById(token).isPresent()) {
             log.error("폐기된 accessToken 입니다.");
+            request.setAttribute("exception", "expiredJwt");
             return false;
         }
 
@@ -109,6 +126,7 @@ public class JwtProvider {
             log.error("Jwt 서명이 올바르지 않습니다.");
         } catch (ExpiredJwtException e) {
             log.error("만료된 accessToken 입니다.");
+            request.setAttribute("exception", "expiredJwt");
         } catch (UnsupportedJwtException e) {
             log.error("지원하지 않는 accessToken 입니다.");
         } catch (IllegalArgumentException e) {
