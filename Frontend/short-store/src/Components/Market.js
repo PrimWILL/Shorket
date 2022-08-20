@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-
+import PropTypes from "prop-types";
 import "./Market.css";
 import MarketItem from "./MarketItem.js";
 

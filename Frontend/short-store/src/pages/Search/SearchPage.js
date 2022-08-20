@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./SearchPage.module.css";
+
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
@@ -7,12 +8,12 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Accordion from "@mui/material/Accordion";
+import Typography from "@mui/material/Typography";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MarketList from "../../components/MarketList.js";
 
+import MarketList from "../../components/MarketList.js";
 import DropDown from "../../components/DropDown";
 
 function Searchpage() {
