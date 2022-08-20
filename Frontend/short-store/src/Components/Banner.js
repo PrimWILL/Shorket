@@ -1,5 +1,7 @@
 import React from "react";
-// import { bannerData } from "../../constants/data";
+import { bannerBgColor } from "../constants/data";
+
+// * Swiper 라이브러리 이용하기
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,43 +12,46 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 // import required modules
-import { Navigation, Pagination, Mousewheel, Keyboard } from "swiper";
+import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from "swiper";
 
 function Banner() {
-  const bgColor = [
-    "#3498db",
-    "#27ae60",
-    "#e74c3c",
-    "#f1c40f",
-    "#9834db",
-    "#ae2760",
-    "#e73c4c"
-  ];
+  const bgColor = bannerBgColor; // import from data.js
 
   const slides = bgColor.map((item, index) => (
-    <SwiperSlide key={index} style={{ backgroundColor: item }}>
-      Slide{index}
+    <SwiperSlide
+      key={index}
+      style={{
+        backgroundColor: item,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <h1>슬라이드 {index + 1}</h1>
     </SwiperSlide>
   ));
 
   return (
     <Swiper
-      style={{ marginTop: "100px", height: "480px" }}
+      style={{ height: "480px" }}
+      className="mySwiper"
       cssMode={true}
       navigation={true}
       pagination={{
-        clickable: true
+        clickable: true,
       }}
       mousewheel={true}
       keyboard={true}
-      modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-      className="mySwiper"
+      modules={[Autoplay, Navigation, Pagination, Mousewheel, Keyboard]}
       slidesPerView={1}
+      // onSlideChange={() => console.log("slide change")}
       spaceBetween={30}
       loop={true}
       autoplay={{
-        delay: 2000
-      }}>
+        delay: 5000,
+        disableOnInteraction: false,
+      }}
+    >
       {slides}
     </Swiper>
   );

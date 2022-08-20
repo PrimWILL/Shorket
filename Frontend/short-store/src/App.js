@@ -1,7 +1,11 @@
+import React from 'react';
 import { Routes, Route } from "react-router-dom";
+import "./styles.css";
+
 import MainLayout from "./components/MainLayout";
 
 import HomePage from "./pages/Home/HomePage";
+
 import LoginPage from "./pages/Login/LoginPage";
 import JoinPage from "./pages/Join/JoinPage";
 import RegisterPage from "./pages/Join/RegisterPage";
@@ -13,24 +17,19 @@ import MarketEnrollPage from "./pages/Enroll/MarketEnrollPage";
 import MarketPage from "./pages/Market/MarketPage";
 import ManagePage from "./pages/Manage/ManagePage";
 
-import "./styles.css";
-
 export default function App() {
   return (
     <div className="App">
-      <MainLayout
-        header={{ title: "사용예제", noBackBtn: true }}
-        footer
-        loading>
+      <MainLayout>
         <Routes>
           <Route path="/" element={<HomePage />} exact={true}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/join" element={<JoinPage />}></Route>
           <Route path="/market/:id" element={<MarketPage />}></Route>
 
-          <Route path="/my" element={<Mypage />}></Route>
-          <Route path="/my/wish" element={<Mypage />}></Route>
-          <Route path="/my/markets" element={<Mypage />}></Route>
+          <Route path="/my/*" element={<Mypage />}>
+
+          </Route>
 
           <Route path="/search" element={<SearchPage />}></Route>
           <Route path="/searchList" element={<SearchListPage />}></Route>

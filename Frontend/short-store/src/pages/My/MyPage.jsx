@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 import { Breadcrumb, Layout, Menu } from "antd";
 
@@ -16,8 +16,29 @@ import styles from "./MyPage.module.css";
 import 'antd/dist/antd.css';
 import VirtualList from 'rc-virtual-list';
 
+import Profile from "../../components/Profile";
+import WishMarket from "../../components/WishMarket";
+import WishBooth from "../../components/WishBooth";
+
+
 const count = 3;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+
+function Summary() {
+  return (
+    <>
+      <Profile />
+      <WishMarket />
+      <WishBooth />
+        <div>
+          <h1>마켓 관리하기</h1>
+        </div>
+        <div>
+          <h1>신청한 부스</h1>
+        </div>
+    </>
+  );
+}
 
 function MyPage() {
   const [initLoading, setInitLoading] = useState(true);
@@ -46,13 +67,13 @@ function MyPage() {
               <strong className={styles.snb_title}>기본 사용자</strong>
               <ul className={styles.snb_menu}>
                 <li className={styles.snb_item}>
-                  <Link to="/my/profile" className={styles.menu_link}>프로필 정보</Link>
+                  <Link to="profile" className={styles.menu_link}>프로필 정보</Link>
                 </li>
                 <li className={styles.snb_item}>
-                  <Link to="/my/wish/market" className={styles.menu_link}>관심 마켓</Link>
+                  <Link to="wishMarket" className={styles.menu_link}>관심 마켓</Link>
                 </li>
                 <li className={styles.snb_item}>
-                  <Link to="/my/wish/booth" className={styles.menu_link}>관심 부스</Link>
+                  <Link to="wishBooth" className={styles.menu_link}>관심 부스</Link>
                 </li>
               </ul>
             </div>
@@ -66,7 +87,7 @@ function MyPage() {
                 </li>
                 <li className={styles.snb_item}>
                   <li className={styles.snb_item}>
-                    <Link to="/my/wish/booth" className={styles.menu_link}>신청한 부스</Link>
+                    <Link to="/my/enroll/booth" className={styles.menu_link}>신청한 부스</Link>
                   </li>
                 </li>
               </ul>
@@ -76,11 +97,14 @@ function MyPage() {
       </>
       
       <div className={styles.content_area} style={{height: "200vh", width:"700px" , backgroundColor:"blueviolet"}}>
-        123
-        <div></div>
-        <div></div>
-        <div></div>
-  
+        
+        <Routes>
+          <Route path="/" element={<Summary />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/wishBooth" element={<WishBooth />}></Route>
+          <Route path="/wishMarket" element={<WishMarket />}></Route>
+        </Routes>
+        
       </div>
     </div>
   )

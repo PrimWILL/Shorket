@@ -1,10 +1,7 @@
-import * as React from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-// import CardContent from "@mui/material/CardContent";
-// import CardMedia from "@mui/material/CardMedia";
-// import Stack from "@mui/material/Stack";
-// import Box from "@mui/material/Box";
 import {
   CardContent,
   CardMedia,
@@ -13,12 +10,11 @@ import {
   CardActionArea,
   CardActions,
   Button,
-  Typography
+  Typography,
 } from "@mui/material";
 
 import styles from "./Card.module.css";
 import img1 from "../images/market_img.png";
-import PropTypes from "prop-types";
 
 function MarketCard({
   id,
@@ -29,29 +25,28 @@ function MarketCard({
   time,
   period,
   like,
-  view
+  view,
 }) {
   let temp = img;
   if (temp[0] === ".") temp = img1;
-  console.log(temp);
 
   return (
     <Card
       sx={{
         height: "100%",
         display: "flex",
-        flexDirection: "column"
-      }}>
+        flexDirection: "column",
+      }}
+    >
       <CardActionArea
         style={{ cursor: "pointer" }}
         component={Link}
-        to={`/market/${id}`}>
+        to={`/market/${id}`}
+      >
         <CardMedia
           component="img"
           sx={{
-            // 16:9
-            // pt: "56.25%"
-            height: "50%"
+            height: "50%",
           }}
           image={temp}
           alt="market image"
@@ -80,7 +75,7 @@ function MarketCard({
   );
 }
 
-MarketCard.PropTypes = {
+MarketCard.propTypes = {
   id: PropTypes.number.isRequired,
   img: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
@@ -89,7 +84,7 @@ MarketCard.PropTypes = {
   time: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
   like: PropTypes.number.isRequired,
-  view: PropTypes.number.isRequired
+  view: PropTypes.number.isRequired,
 };
 
 export default MarketCard;

@@ -1,3 +1,27 @@
-/* .area {
-  margin-top: 100px;
-} */
+
+.column_wrap {
+  display: flex;
+  justify-content: center;
+  height: 200vh;
+}
+.column_is_fixed {
+  width: 50%;
+  padding-right: 3.33%;
+  /* float: left; */
+}
+.column {
+  width: 50%;
+  background-color: turquoise;
+  padding-left: 3.33%;
+
+}
+
+.map_area {
+  height: 400px;
+  background-color: thistle;
+}
+
+.others_area {
+  height: 400px;
+  background-color: aquamarine;
+}
