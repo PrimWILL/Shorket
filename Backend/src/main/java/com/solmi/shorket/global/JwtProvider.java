@@ -130,6 +130,7 @@ public class JwtProvider {
             request.setAttribute("exception", "expiredJwt");
         } catch (UnsupportedJwtException e) {
             log.error("지원하지 않는 accessToken 입니다.");
+            request.setAttribute("exception", "unsupportedJwt");
         } catch (IllegalArgumentException e) {
             log.error("잘못된 accessToken 입니다.");
         }

@@ -36,6 +36,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             setResponse(response, exception);
         } else if (exception.equals("incorrectJwtSign")) {
             setResponse(response, exception);
+        } else if (exception.equals("unsupportedJwt")) {
+            setResponse(response, exception);
         }
     }
 
