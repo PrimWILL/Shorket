@@ -133,6 +133,7 @@ public class JwtProvider {
             request.setAttribute("exception", "unsupportedJwt");
         } catch (IllegalArgumentException e) {
             log.error("잘못된 accessToken 입니다.");
+            request.setAttribute("exception", "illegalArgumentJwt");
         }
         return false;
     }

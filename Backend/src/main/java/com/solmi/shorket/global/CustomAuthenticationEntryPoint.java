@@ -38,6 +38,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             setResponse(response, exception);
         } else if (exception.equals("unsupportedJwt")) {
             setResponse(response, exception);
+        } else if (exception.equals("illegalArgumentJwt")) {
+            setResponse(response, exception);
         }
     }
 
