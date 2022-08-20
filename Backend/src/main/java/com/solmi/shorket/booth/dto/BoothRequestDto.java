@@ -1,13 +1,23 @@
 package com.solmi.shorket.booth.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.domain.BoothApprovalType;
 import com.solmi.shorket.booth.domain.BoothStatusType;
 import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.user.domain.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter
+@Builder
+@AllArgsConstructor
 public class BoothRequestDto {
 
     private Integer idx;
