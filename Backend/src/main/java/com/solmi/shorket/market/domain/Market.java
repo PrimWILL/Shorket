@@ -1,7 +1,7 @@
 package com.solmi.shorket.market.domain;
 
 import com.solmi.shorket.global.BaseTimeEntity;
-import com.solmi.shorket.market.dto.UpdateMarketDto;
+import com.solmi.shorket.market.dto.UpdateMarketRequestDto;
 import com.solmi.shorket.user.domain.MarketInterest;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -61,7 +61,7 @@ public class Market extends BaseTimeEntity {
         this.viewCount++;
     }
 
-    public void update(UpdateMarketDto marketDto) {
+    public void update(UpdateMarketRequestDto marketDto) {
         this.setName(marketDto.getName());
         this.setDescription(marketDto.getDescription());
         this.setAddress(marketDto.getAddress());

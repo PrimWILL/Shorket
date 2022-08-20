@@ -3,7 +3,7 @@ package com.solmi.shorket.market.service;
 import com.solmi.shorket.global.exception.MarketNotFoundException;
 import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.market.dto.SortingAndFilteringInfo;
-import com.solmi.shorket.market.dto.UpdateMarketDto;
+import com.solmi.shorket.market.dto.UpdateMarketRequestDto;
 import com.solmi.shorket.market.repository.MarketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,9 +47,19 @@ public class MarketService {
      * Market 수정
      */
     @Transactional
-    public void updateMarket(Integer marketId, UpdateMarketDto marketDto) {
+    public void updateMarket(Integer marketId, UpdateMarketRequestDto updateDto) {
         Market market = marketRepository.findById(marketId)
                 .orElseThrow(MarketNotFoundException::new);
-        market.update(marketDto);
+        market.update(updateDto);
+    }
+
+    /**
+     * Market 삭제
+     */
+    @Transactional
+    public void removeMarket(Integer marketId) {
+        Market market = marketRepository.findById(marketId)
+                .orElseThrow(MarketNotFoundException::new);
+        marketRepository.delete(market);
     }
 }
