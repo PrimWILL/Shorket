@@ -1,6 +1,7 @@
 package com.solmi.shorket.booth.domain;
 
 import com.solmi.shorket.market.domain.Market;
+import com.solmi.shorket.user.domain.BoothInterest;
 import com.solmi.shorket.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -93,5 +96,7 @@ public class Booth {
     @ColumnDefault("'Y'")
     @Column(nullable = false)
     private BoothStatusType status;
-}
 
+    @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL)
+    private Set<BoothInterest> interests = new HashSet<>();
+}
