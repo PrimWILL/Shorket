@@ -17,9 +17,12 @@ function Home() {
   const [data, setData] = useState([]); // get으로 가져온 데이터
 
   const getClick = () => {
+    console.log("!!!");
     axios
-      .get("http://52.79.146.185:8080/api/users/email")
-      .then((res) => setData(res.data))
+      .get("http://52.79.146.185:8080/api/markets/5")
+      .then((res) => {setData(res.data);
+        console.log(res);
+      })
       .catch(function (error) {
         console.log(error);
       });
