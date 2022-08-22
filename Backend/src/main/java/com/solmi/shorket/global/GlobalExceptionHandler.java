@@ -85,11 +85,31 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(MarketNotFoundException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ExceptionResponse marketNotFoundException(HttpServletRequest request, MarketNotFoundException e) {
+    protected ExceptionResponse marketNotFoundException(MarketNotFoundException e) {
         log.info(String.valueOf(e));
         return new ExceptionResponse(
                 getMessage("marketNotFound.code"),
                 getMessage("marketNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(MarketInterestNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse marketInterestNotFoundException(MarketInterestNotFoundException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("marketInterestNotFound.code"),
+                getMessage("marketInterestNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(DuplicateMarketInterestException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse duplicateMarketInterestException(DuplicateMarketInterestException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("duplicateMarketInterest.code"),
+                getMessage("duplicateMarketInterest.message")
         );
     }
 

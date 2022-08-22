@@ -1,20 +1,17 @@
 package com.solmi.shorket.market.dto;
 
-import com.solmi.shorket.market.domain.Address;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
-@NotNull
-@AllArgsConstructor
-public class UpdateMarketDto {
-
+public class CreateMarketRequestDto {
+    private Long marketId;
     private String name;
     private String description;
-    private Address address;
+    private String sido;
+    private String sigungu;
+    private String detailAddress;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 }

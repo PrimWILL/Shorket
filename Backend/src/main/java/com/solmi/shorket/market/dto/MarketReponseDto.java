@@ -16,7 +16,7 @@ public class MarketReponseDto {
     private Address address;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Integer interestedCount;
+    private Integer interestCount;
 
     public MarketReponseDto(Market market) {
         this.setMarketIdx(market.getIdx());
@@ -26,6 +26,6 @@ public class MarketReponseDto {
         this.setAddress(market.getAddress());
         this.setStartDate(market.getStartDate());
         this.setEndDate(market.getEndDate());
-        this.setInterestedCount(market.getInterests().size());
+        this.setInterestCount(market.getInterests().size());
     }
 }

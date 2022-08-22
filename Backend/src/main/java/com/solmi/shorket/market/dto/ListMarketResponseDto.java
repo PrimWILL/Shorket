@@ -20,7 +20,7 @@ public class ListMarketResponseDto {
     public ListMarketResponseDto(Market market) {
         this.setMarketIdx(market.getIdx());
         this.setName(market.getName());
-        this.setInterestCount(0);
+        this.setInterestCount(market.getInterests().size());
         this.setViewCount(market.getViewCount());
         this.setAddress(market.getAddress());
         this.setStartDate(market.getStartDate());
