@@ -1,27 +1,65 @@
 import { useState, useEffect } from "react";
-import styles from "./Home.module.css";
-import { PhotoCamera } from "@material-ui/icons";
-import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
+import styles from "./Home.module.css";
+
+import Button from "@mui/material/Button";
 import MarketList from "../../components/MarketList.js";
 import Banner from "../../components/Banner.js";
+
+// - 더보기 -> 4개씩 더 로드 하는걸로 변경
 
 function Home() {
   const [loading, setLoading] = useState(true);
   const [feeds, setFeeds] = useState([]);
 
+  const [data, setData] = useState([]); // get으로 가져온 데이터
+
+  const getClick = () => {
+    axios
+      .get("http://52.79.146.185:8080/api/users/email")
+      .then((res) => setData(res.data))
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  const postClick = () => {
+    axios
+      .post("http://52.79.146.185:8080/api/users/email", {
+        email: "temp000@naver.com",
+      })
+      .then((res) => console.log(res.data))
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const navigate = useNavigate();
   useEffect(() => {
-    console.log("!");
+    // console.log("homepage loaded...");
+    // - 마켓 리스트 조회 추가 지금 진행중인 마켓 여기가 맞나?
+    // marketlist prop 개수 카운트
   }, []);
 
+  function handleClick() {
+    navigate("/search");
+  }
+
   return (
-    <div>
+    <div className="area">
       <Banner />
+      <h1>진행중인 마켓</h1>
       <MarketList />
-      <Button className={styles.button} variant="outlined">
-        <Link to="/search">더보기</Link>
+      <Button
+        className={styles.button}
+        variant="outlined"
+        onClick={handleClick}
+      >
+        더보기
       </Button>
+      <button onClick={getClick}>get</button>
+      <button onClick={postClick}>post</button>
     </div>
   );
 }

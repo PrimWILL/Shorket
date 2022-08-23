@@ -1,87 +1,90 @@
-// import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import NavToggle from "./NavToggle";
-import MenuIcon from "@mui/icons-material/Menu";
-import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined
-} from "@ant-design/icons";
 
 import styles from "./Header.module.css";
 
 import { Typography, Menu } from "antd";
-const { Title } = Typography;
+import {
+  TagOutlined,
+  SearchOutlined,
+  SettingOutlined,
+  FormOutlined,
+} from "@ant-design/icons";
 
+// antd 컴포넌트 : Title, Menu 바
+const { Title } = Typography;
 const items = [
   {
     label: <Link to="/search">마켓 둘러보기</Link>,
-    key: "search"
+    key: "search",
+    icon: <SearchOutlined />,
   },
   {
-    label: <Link to="/my/wish">관심마켓&부스</Link>,
+    label: "관심마켓&부스",
     key: "wish",
+    icon: <TagOutlined />,
     children: [
       {
-        label: "관심마켓",
-        key: "market:1"
+        label: <Link to="/my/wishMarket">관심마켓</Link>,
+        key: "market:1",
       },
       {
-        label: "관심부스",
-        key: "booth:1"
-      }
-    ]
+        label: <Link to="/my/wishBooth">관심부스</Link>,
+        key: "booth:1",
+      },
+    ],
   },
   {
-    label: <Link to="/enroll">마켓&부스 신청하기</Link>,
+    label: "마켓&부스 신청하기",
     key: "enroll",
+    icon: <FormOutlined />,
     children: [
       {
-        label: "마켓 신청하기",
-        key: "market:2"
+        label: <Link to="/enroll/market">마켓 신청하기</Link>,
+        key: "market:2",
       },
       {
-        label: "부스 신청하기",
-        key: "booth:2"
-      }
-    ]
+        label: <Link to="/enroll/booth">부스 신청하기</Link>,
+        key: "booth:2",
+      },
+    ],
   },
   {
     label: <Link to="my/markets">마켓 관리하기</Link>,
     key: "manage",
-    icon: <SettingOutlined />
-  }
+    icon: <SettingOutlined />,
+  },
 ];
 
 function Header() {
-  const [isToggled, setIsToggled] = useState(false);
-  const [userToggled, setUserToggled] = useState(false);
-  const [current, setCurrent] = useState("");
+  const [current, setCurrent] = useState(""); // 현재 선택된 메뉴 스타일 적용
 
   const onClick = (e) => {
-    console.log("click ", e);
     setCurrent(e.key);
   };
 
   return (
-    <div className={styles.header}>
+    <div className="header">
       <div className={styles.header_top}>
         <div className={styles.top_inner}>
           <ul className={styles.top_list}>
             <li className={styles.top_item}>
-              <Link to="/my">마이페이지</Link>
+              <Link to="/my" style={{ color: "rgba(34, 34, 34, 0.8)" }}>
+                마이페이지
+              </Link>
             </li>
             <li className={styles.top_item}>
-              <Link to="/login">로그인</Link>
+              <Link to="/login" style={{ color: "rgba(34, 34, 34, 0.8)" }}>
+                로그인
+              </Link>
             </li>
           </ul>
         </div>
       </div>
       <div className={styles.header_main}>
         <div className={styles.main_inner}>
-          <Link to="/">
-            <Title className={styles.header_title} level={2}>
+          <Link onClick={onClick} to="/">
+            <Title level={2} style={{ margin: 0 }}>
               SHORKET
             </Title>
           </Link>
