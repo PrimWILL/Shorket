@@ -51,8 +51,11 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(nullable = false)
     private StatusType statusType;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<MarketInterest> marketInterests = new HashSet<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private Set<MarketInterest> marketInterests = new HashSet<>();
+//
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private Set<BoothInterest> boothInterests = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

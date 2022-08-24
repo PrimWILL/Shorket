@@ -2,6 +2,7 @@ package com.solmi.shorket.booth.domain;
 
 import com.solmi.shorket.booth.dto.UpdateBoothDto;
 import com.solmi.shorket.market.domain.Market;
+import com.solmi.shorket.user.domain.BoothInterest;
 import com.solmi.shorket.user.domain.User;
 import io.swagger.models.auth.In;
 import lombok.Builder;
@@ -167,3 +168,6 @@ public class Booth {
     }
 }
 
+    @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL)
+    private Set<BoothInterest> interests = new HashSet<>();
+}

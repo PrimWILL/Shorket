@@ -120,4 +120,22 @@ public class UserController {
     ) {
         securityService.updateUserInfo(accessToken, userInfoChangeRequestDto);
     }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 발급받은 accessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
+    @ApiOperation(
+            value = "로그아웃",
+            notes = "accessToken으로 전달받은 유저가 실제 유저인지 확인한 후, 해당 유저를 서비스에서 로그아웃시킨다.\n"
+    )
+    @PostMapping("/logout")
+    public void logout(
+            @RequestHeader("X-AUTH-TOKEN") String accessToken
+    ) {
+        securityService.logout(accessToken);
+    }
 }
