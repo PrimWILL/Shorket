@@ -1,24 +1,19 @@
 package com.solmi.shorket.booth.controller;
 
 import com.solmi.shorket.booth.domain.Booth;
-import com.solmi.shorket.booth.dto.BoothRequestDto;
-import com.solmi.shorket.booth.dto.ListBoothResponseDto;
-import com.solmi.shorket.booth.dto.BoothResponseDto;
-import com.solmi.shorket.booth.dto.UpdateBoothDto;
+import com.solmi.shorket.booth.dto.*;
 import com.solmi.shorket.booth.service.BoothService;
 import com.solmi.shorket.global.exception.BoothNotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
