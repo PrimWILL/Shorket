@@ -115,7 +115,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(GetBoothFailedException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ExceptionResponse getBoothFailedCException(HttpServletRequest request, GetBoothFailedException e) {
+    protected ExceptionResponse getBoothFailedCException(HttpServletRequest request, BoothNotFoundException e) {
         log.info(String.valueOf(e));
         return new ExceptionResponse(
                 getMessage("getBoothFailed.code"),
