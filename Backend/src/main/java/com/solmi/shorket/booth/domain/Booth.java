@@ -13,6 +13,8 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -80,6 +82,9 @@ public class Booth {
     @ColumnDefault("'Waiting'")
     @Column(nullable = false)
     private BoothStatusType status;
+
+    @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL)
+    private Set<BoothInterest> interests = new HashSet<>();
 
     public Booth() {
 
@@ -166,8 +171,4 @@ public class Booth {
         this.approval = approval;
         this.status = status;
     }
-}
-
-    @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL)
-    private Set<BoothInterest> interests = new HashSet<>();
 }
