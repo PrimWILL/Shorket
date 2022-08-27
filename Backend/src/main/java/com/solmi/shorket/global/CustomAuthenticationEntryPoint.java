@@ -31,7 +31,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         log.info("exception: {}", exception);
 
         if (exception == null) {
-            setResponse(response, "unknownAuthenticaitonError");
+            setResponse(response, "unknownAuthenticationError");
         } else if (exception.equals("expiredJwt")) {
             setResponse(response, exception);
         } else if (exception.equals("incorrectJwtSign")) {
