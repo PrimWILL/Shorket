@@ -15,12 +15,6 @@ import {
   Container,
 } from "@mui/material";
 
-// import Grid from "@mui/material/Grid";
-// import Button from "@mui/material/Button";
-// import Stack from "@mui/material/Stack";
-// import Box from "@mui/material/Box";
-// import Typography from "@mui/material/Typography";
-// import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import MarketCard from "./MarketCard.js";
