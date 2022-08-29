@@ -2,9 +2,6 @@ package com.solmi.shorket.booth.service;
 
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.dto.BoothDto;
-import com.solmi.shorket.booth.dto.CreateBoothRequestDto;
-import com.solmi.shorket.booth.dto.BoothResponseDto;
-import com.solmi.shorket.booth.dto.UpdateBoothDto;
 import com.solmi.shorket.booth.repository.BoothRepository;
 import com.solmi.shorket.global.exception.BoothNotFoundException;
 import lombok.RequiredArgsConstructor;

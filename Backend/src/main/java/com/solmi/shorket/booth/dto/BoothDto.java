@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.domain.BoothApprovalType;
 import com.solmi.shorket.booth.domain.BoothStatusType;
+import com.solmi.shorket.market.domain.Market;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.Optional;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -67,4 +69,42 @@ public class BoothDto {
             .status(booth.getStatus())
             .build();
     }
+
+    // BoothRequestDto -> Booth
+    // 부스 생성
+    public Booth toEntity() {
+        return Booth.builder()
+                //.market(market)
+                .number(number)
+                .boothName(boothName)
+                .sellerName(sellerName)
+                .item(item)
+                .site(site)
+                .description(description)
+                .address(address)
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .startDate(startDate)
+                .endDate(endDate)
+                .viewCount(0)
+                .build();
+    }
+
+    public Booth updateEntity(Booth booth) {
+        Optional.ofNullable(boothName).ifPresent(booth::setBoothName);
+        Optional.ofNullable(sellerName).ifPresent(booth::setSellerName);
+        Optional.ofNullable(item).ifPresent(booth::setItem);
+        Optional.ofNullable(site).ifPresent(booth::setSite);
+        Optional.ofNullable(description).ifPresent(booth::setDescription);
+        Optional.ofNullable(address).ifPresent(booth::setAddress);
+        Optional.ofNullable(phoneNumber).ifPresent(booth::setPhoneNumber);
+        Optional.ofNullable(email).ifPresent(booth::setEmail);
+        Optional.ofNullable(startDate).ifPresent(booth::setStartDate);
+        Optional.ofNullable(endDate).ifPresent(booth::setEndDate);
+        Optional.ofNullable(startTime).ifPresent(booth::setStartTime);
+        Optional.ofNullable(endTime).ifPresent(booth::setEndTime);
+
+        return booth;
+    }
+
 }
