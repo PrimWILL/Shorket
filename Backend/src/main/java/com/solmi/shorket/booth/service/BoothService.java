@@ -1,19 +1,17 @@
 package com.solmi.shorket.booth.service;
 
 import com.solmi.shorket.booth.domain.Booth;
-import com.solmi.shorket.booth.dto.BoothRequestDto;
+import com.solmi.shorket.booth.dto.BoothDto;
+import com.solmi.shorket.booth.dto.CreateBoothRequestDto;
 import com.solmi.shorket.booth.dto.BoothResponseDto;
 import com.solmi.shorket.booth.dto.UpdateBoothDto;
 import com.solmi.shorket.booth.repository.BoothRepository;
 import com.solmi.shorket.global.exception.BoothNotFoundException;
-import com.solmi.shorket.market.domain.Market;
-import com.solmi.shorket.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -34,18 +32,21 @@ public class BoothService {
     /**
      * Booth 상세 조회
      */
-    public BoothResponseDto getByIdx(Integer boothIdx) {
-        Booth booth = boothRepository.findById(boothIdx)
+    public BoothDto getByIdx(Integer boothIdx) {
+
+        BoothDto boothDto = boothRepository.findById(boothIdx)
+                .map(booth -> BoothDto.BoothResponse(booth))
                 .orElseThrow(BoothNotFoundException::new);
-        booth.addViewCount();  // 조회수 증가
-        return new BoothResponseDto(booth);
+
+        // boothDto.addViewCount();  // 조회수 증가
+        return boothDto;
     }
 
     /**
      * Booth 등록
      */
     @Transactional
-    public Booth insertBooth(BoothRequestDto boothRequestDto) {
+    public Booth insertBooth(CreateBoothRequestDto boothRequestDto) {
         // TODO : validation
         Booth booth = boothRepository.save(boothRequestDto.toEntity());
         return boothRepository.save(booth);

@@ -14,6 +14,7 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 @Data
@@ -28,6 +29,6 @@ public class UpdateBoothDto {
     private String address;
     private String phoneNumber;
     private String email;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private Date startDate;
+    private Date endDate;
 }

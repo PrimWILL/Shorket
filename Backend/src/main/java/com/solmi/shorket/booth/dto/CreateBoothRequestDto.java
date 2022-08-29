@@ -18,10 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @AllArgsConstructor
-public class BoothRequestDto {
-
-    private Integer idx;
-    private User user;
+public class CreateBoothRequestDto {
     private Market market;
     private Integer number;
     private String boothName;
@@ -35,13 +32,10 @@ public class BoothRequestDto {
     private Integer viewCount;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private BoothApprovalType approval;
-    private BoothStatusType status;
 
     // BoothRequestDto -> Booth
     public Booth toEntity() {
         return Booth.builder()
-                .user(user)
                 .market(market)
                 .number(number)
                 .boothName(boothName)

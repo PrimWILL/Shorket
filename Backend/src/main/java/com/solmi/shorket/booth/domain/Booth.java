@@ -13,6 +13,8 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,10 +66,17 @@ public class Booth {
     private Integer viewCount;
 
     @NotNull
-    private LocalDateTime startDate;
+    private Date startDate;
 
     @NotNull
-    private LocalDateTime endDate;
+    private Date endDate;
+
+    @NotNull
+    private LocalTime startTime;
+
+    @NotNull
+    private LocalTime endTime;
+
 
     private Float latitude;
 
@@ -141,18 +150,19 @@ public class Booth {
         this.email = email;
     }
 
-    private void setStartDate(LocalDateTime startDate) {
+    private void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    private void setEndDate(LocalDateTime endDate) {
+    private void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
     //== Builder ==//
 
     @Builder
-    public Booth(Integer idx, User user, Market market, Integer number, String boothName, String sellerName, String item, String site, String description, String address, String phoneNumber, String email, Integer viewCount, LocalDateTime startDate, LocalDateTime endDate, BoothApprovalType approval, BoothStatusType status) {
+    public Booth(Integer idx, User user, Market market, Integer number, String boothName, String sellerName, String item, String site, String description, String address, String phoneNumber, String email, Integer viewCount, Date startDate, Date endDate,
+                 LocalTime startTime, LocalTime endTime, BoothApprovalType approval, BoothStatusType status) {
         this.idx = idx;
         this.user = user;
         this.market = market;
@@ -168,6 +178,8 @@ public class Booth {
         this.viewCount = viewCount;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.approval = approval;
         this.status = status;
     }
