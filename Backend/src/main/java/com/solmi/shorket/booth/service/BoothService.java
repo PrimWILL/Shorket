@@ -61,10 +61,10 @@ public class BoothService {
      * Booth 등록
      */
     @Transactional
-    public Booth insertBooth(CreateBoothRequestDto boothRequestDto) {
+    public Integer insertBooth(BoothDto boothDto) {
         // TODO : validation
-        Booth booth = boothRepository.save(boothRequestDto.toEntity());
-        return boothRepository.save(booth);
+        Booth booth = boothRepository.save(boothDto.toEntity());
+        return booth.getIdx();
     }
 
     /**

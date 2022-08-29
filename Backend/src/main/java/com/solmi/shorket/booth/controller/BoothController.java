@@ -3,6 +3,7 @@ package com.solmi.shorket.booth.controller;
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.dto.*;
 import com.solmi.shorket.booth.service.BoothService;
+import com.solmi.shorket.global.exception.BoothNotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -57,24 +58,24 @@ public class BoothController {
             notes = "판매자가 마켓 관리자에게 부스(셀러) 신청을 한다.\n"
     )
     @PostMapping(value = "/create")
-    public DataResponseDto<Object> createBooth(
-            @RequestBody @Valid CreateBoothRequestDto boothRequestDto
+    public String createBooth(
+            @RequestBody @Valid BoothDto boothDto
     ){
-
-        return DataResponseDto.of("1");
+        // TODO: 이미지도 등록할 수 있어야 한다.
         // TODO: Validation 추가 필요
         // validation: 부스 이름 입력 안했을 때
-//        if(boothRequestDto.getBoothName().isEmpty()){
-//            throw new BoothNotFoundException();
-//        }
-//        try {
-//            // TODO: 이미지도 등록할 수 있어야 한다.
-//           // return ResponseEntity.ok(boothService.insertBooth(boothRequestDto));
-//            // return DataResponseDto.of("1");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw e;
-//        }
+        if(boothDto.getBoothName().isEmpty()){
+            throw new BoothNotFoundException();
+        }
+
+        try {
+            Integer boothIdx = boothService.insertBooth(boothDto);
+
+            return boothIdx + " 부스 등록이 완료되었습니다.";
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @ApiOperation(
