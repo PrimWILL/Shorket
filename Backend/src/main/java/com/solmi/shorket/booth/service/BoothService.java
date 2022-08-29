@@ -71,9 +71,10 @@ public class BoothService {
      * Booth 정보 수정
      */
     @Transactional
-    public void updateBooth(Integer boothId, UpdateBoothDto updateBoothDto) {
+    public BoothDto updateBooth(Integer boothId, BoothDto boothDto) {
         Booth booth = boothRepository.findById(boothId)
                 .orElseThrow(BoothNotFoundException::new);
-        booth.update(updateBoothDto);
+        booth = boothRepository.save(boothDto.updateEntity(booth));
+        return BoothDto.boothResponse(booth);
     }
 }

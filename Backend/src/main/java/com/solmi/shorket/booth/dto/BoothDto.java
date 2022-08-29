@@ -53,6 +53,10 @@ public class BoothDto {
             .build();
     }
 
+    public static BoothDto boothResponse(Booth booth) {
+        return boothResponse(booth, null);
+    }
+
     public static BoothDto boothResponse(Booth booth, BoothImgRepository boothImgRepository) {
         return BoothDto.builder()
             .idx(booth.getIdx())

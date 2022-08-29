@@ -85,11 +85,11 @@ public class BoothController {
     @PutMapping("/{boothId}")
     public String updateBoothInfo(
             @PathVariable Integer boothIdx,
-            @RequestBody UpdateBoothDto updateBoothDto
+            @RequestBody BoothDto boothDto
     ){
         try {
             // TODO: 이미지도 등록할 수 있어야 한다.
-            boothService.updateBooth(boothIdx, updateBoothDto);
+            boothService.updateBooth(boothIdx, boothDto);
             return "부스 수정이 완료되었습니다.";
         } catch (Exception e) {
             e.printStackTrace();
