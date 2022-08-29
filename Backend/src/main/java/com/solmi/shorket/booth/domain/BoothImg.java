@@ -13,11 +13,17 @@ import java.util.Date;
 public class BoothImg {
     @Id
     @GeneratedValue
-    private Integer boothImgIdx;
+    private Integer idx;
 
     @ManyToOne
     @JoinColumn(name = "BOOTH_TB_IDX", nullable = false)
     private Booth booth;
+
+    private String Url;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private BoothImgStatusType status;
 
     private Integer ranking;
 
@@ -27,8 +33,5 @@ public class BoothImg {
             nullable = false)
     private Date createdAt;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private BoothImgStatusType status;
 }
 

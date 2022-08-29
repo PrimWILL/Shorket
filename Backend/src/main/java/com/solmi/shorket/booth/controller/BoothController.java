@@ -49,7 +49,6 @@ public class BoothController {
     public BoothDto getBoothInfo(
             @PathVariable Integer boothIdx
     ){
-        // TODO: 이미지도 불러와야 한다.
         return boothService.getByIdx(boothIdx);
     }
 

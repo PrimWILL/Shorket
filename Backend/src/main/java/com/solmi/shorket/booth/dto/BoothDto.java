@@ -3,7 +3,9 @@ package com.solmi.shorket.booth.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.domain.BoothApprovalType;
+import com.solmi.shorket.booth.domain.BoothImg;
 import com.solmi.shorket.booth.domain.BoothStatusType;
+import com.solmi.shorket.booth.repository.BoothImgRepository;
 import com.solmi.shorket.market.domain.Market;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +15,9 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -21,23 +25,24 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 public class BoothDto {
-    private final Integer idx;
-    private final Integer number;
-    private final String boothName;
-    private final String sellerName;
-    private final String item;
-    private final String site;
-    private final String description;
-    private final String address;
-    private final String phoneNumber;
-    private final String email;
-    private final Integer viewCount;
-    private final Date startDate;
-    private final Date endDate;
-    private final LocalTime startTime;
-    private final LocalTime endTime;
-    private final BoothApprovalType approval;
-    private final BoothStatusType status;
+    private Integer idx;
+    private Integer number;
+    private String boothName;
+    private String sellerName;
+    private String item;
+    private String site;
+    private String description;
+    private String address;
+    private String phoneNumber;
+    private String email;
+    private Integer viewCount;
+    private Date startDate;
+    private Date endDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private BoothApprovalType approval;
+    private BoothStatusType status;
+    private List<BoothImgDto> boothImgs;
 
     public static BoothDto boothListResponse(Booth booth) {
         return BoothDto.builder()
@@ -48,7 +53,7 @@ public class BoothDto {
             .build();
     }
 
-    public static BoothDto boothResponse(Booth booth) {
+    public static BoothDto boothResponse(Booth booth, BoothImgRepository boothImgRepository) {
         return BoothDto.builder()
             .idx(booth.getIdx())
             .number(booth.getNumber())
@@ -67,6 +72,8 @@ public class BoothDto {
             .endTime(booth.getEndTime())
             .approval(booth.getApproval())
             .status(booth.getStatus())
+            .boothImgs(Optional.ofNullable(boothImgRepository).map(
+                    e -> e.findByBoothId(booth.getIdx()).stream().map(BoothImgDto::boothImgResponse).collect(Collectors.toList())).orElse(null))
             .build();
     }
 

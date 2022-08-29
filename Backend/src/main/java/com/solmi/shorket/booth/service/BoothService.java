@@ -2,6 +2,7 @@ package com.solmi.shorket.booth.service;
 
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.dto.BoothDto;
+import com.solmi.shorket.booth.repository.BoothImgRepository;
 import com.solmi.shorket.booth.repository.BoothRepository;
 import com.solmi.shorket.global.exception.BoothNotFoundException;
 import com.solmi.shorket.global.exception.MarketNotFoundException;
@@ -23,6 +24,7 @@ import java.util.List;
 public class BoothService {
 
     private final BoothRepository boothRepository;
+    private final BoothImgRepository boothImgRepository;
     private final MarketRepository marketRepository;
 
     /**
@@ -49,9 +51,8 @@ public class BoothService {
     public BoothDto getByIdx(Integer boothIdx) {
 
         BoothDto boothDto = boothRepository.findById(boothIdx)
-                .map(booth -> BoothDto.boothResponse(booth))
+                .map(booth -> BoothDto.boothResponse(booth, boothImgRepository))
                 .orElseThrow(BoothNotFoundException::new);
-
         // boothDto.addViewCount();  // 조회수 증가
         return boothDto;
     }
