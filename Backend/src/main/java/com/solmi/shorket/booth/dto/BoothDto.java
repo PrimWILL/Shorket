@@ -39,7 +39,7 @@ public class BoothDto {
     private final BoothApprovalType approval;
     private final BoothStatusType status;
 
-    public static BoothDto BoothListResponse(Booth booth) {
+    public static BoothDto boothListResponse(Booth booth) {
         return BoothDto.builder()
             .number(booth.getNumber())
             .boothName(booth.getBoothName()) // 부스 이름
@@ -48,7 +48,7 @@ public class BoothDto {
             .build();
     }
 
-    public static BoothDto BoothResponse(Booth booth) {
+    public static BoothDto boothResponse(Booth booth) {
         return BoothDto.builder()
             .idx(booth.getIdx())
             .number(booth.getNumber())

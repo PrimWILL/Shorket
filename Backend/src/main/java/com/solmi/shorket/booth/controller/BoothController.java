@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,17 +34,11 @@ public class BoothController {
             notes = "전체 부스의 목록을 불러온다."
     )
     @GetMapping("")
-    public ListBoothReponseResult getBooths(){
-        List<Booth> findBooths = boothService.getAllBy();
-        List<ListBoothResponseDto> collect = findBooths.stream().map(ListBoothResponseDto::new)
-                .collect((Collectors.toList()));
-        return new ListBoothReponseResult(collect.size(),collect);
-    }
-    @Data
-    @AllArgsConstructor
-    static class ListBoothReponseResult<T> {
-        private int count;
-        private T data;
+    public Page<BoothDto> getBoothsByMarket(
+            @PageableDefault(size = 10) Pageable pageable,
+            @PathVariable Integer marketIdx
+    ){
+        return boothService.getBoothsByMarket(pageable, marketIdx);
     }
 
     @ApiOperation(
