@@ -38,11 +38,11 @@ public class MarketController {
 
     @ApiOperation(
             value = "Market 목록 조회",
-            notes = "`sort`, `date` 전부 대문자로 작성해주세요.\n\n" +
-                    "- `sort`: VIEW(조회순, 0), INTEREST(관심순, 1), LATEST(최신순, 2), DICT(가나다순, 3)\n\n" +
+            notes = "- `sort`: VIEW(조회순, 0), INTEREST(관심순, 1), LATEST(최신순, 2), DICT(가나다순, 3)\n\n" +
                     "- `locals`: 검색할 지역 목록이 담긴 배열. **빈 배열로 요청할 경우 모든 지역으로 검색** (ex. `[\"서울\", \"경기도\"]`)\n\n" +
                     "- `date`: UPCOMING(진행 예정, 0), CURRENT(진행 중, 1), COMPLETE(종료, 2)\n\n" +
-                    "- `page`: 조회할 페이지 번호"
+                    "- `page`: 조회할 페이지 번호 (0부터 시작)\n\n" +
+                    "**`sort`, `date`는 전부 대문자로 작성해주세요.**"
     )
     @GetMapping
     public MarketListResponseDto<List<ListMarketResponseDto>> getMarkets(@RequestBody @Valid SortingAndFilteringInfo info,
