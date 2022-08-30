@@ -6,6 +6,7 @@ import com.solmi.shorket.user.domain.MarketInterest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -50,6 +51,11 @@ public class Market extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "market", cascade = CascadeType.ALL)
     private Set<MarketInterest> interests = new HashSet<>();
+
+    @Formula("(select count(1) " +
+            "from market_interest_tb mi " +
+            "where mi.idx=idx)")
+    private int marketInterestCount;
 
     //== 생성 메서드 ==//
     public static Market createMarket(String name, String description, Address address, LocalDateTime startDate, LocalDateTime endDate) {

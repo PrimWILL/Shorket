@@ -38,14 +38,16 @@ public class MarketController {
 
     @ApiOperation(
             value = "Market 목록 조회",
-            notes = "`sort`, `date`는 정수 인덱스(0, 1, 2, ...) 또는 문자열로 넘겨주시면 됩니다. **문자열로 작성할 경우, 반드시!! 전부 대문자로 작성해야합니다**.\n\n" +
+            notes = "`sort`, `date` 전부 대문자로 작성해주세요.\n\n" +
                     "- `sort`: VIEW(조회순, 0), INTEREST(관심순, 1), LATEST(최신순, 2), DICT(가나다순, 3)\n\n" +
                     "- `locals`: 검색할 지역 목록이 담긴 배열. **빈 배열로 요청할 경우 모든 지역으로 검색** (ex. `[\"서울\", \"경기도\"]`)\n\n" +
-                    "- `date`: UPCOMING(진행 예정, 0), CURRENT(진행 중, 1), COMPLETE(종료, 2)"
+                    "- `date`: UPCOMING(진행 예정, 0), CURRENT(진행 중, 1), COMPLETE(종료, 2)\n\n" +
+                    "- `page`: 조회할 페이지 번호"
     )
     @GetMapping
-    public MarketListResponseDto<List<ListMarketResponseDto>> getMarkets(@RequestBody @Valid SortingAndFilteringInfo info) {
-        List<Market> markets = marketService.findMarkets(info);
+    public MarketListResponseDto<List<ListMarketResponseDto>> getMarkets(@RequestBody @Valid SortingAndFilteringInfo info,
+                                                                         @RequestParam(defaultValue = "0") Integer page) {
+        List<Market> markets = marketService.findMarkets(info, page);
         List<ListMarketResponseDto> res = markets.stream()
                 .map(ListMarketResponseDto::new)
                 .collect(Collectors.toList());
