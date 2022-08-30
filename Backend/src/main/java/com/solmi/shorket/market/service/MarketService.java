@@ -29,8 +29,8 @@ public class MarketService {
     /**
      * Market 목록 조회 - 정렬 기준 적용
      */
-    public List<Market> findMarkets(SortingAndFilteringInfo info) {
-        return marketRepository.findMarkets(info);
+    public List<Market> findMarkets(SortingAndFilteringInfo info, Integer page) {
+        return marketRepository.findMarkets(info, page);
     }
 
     /**
