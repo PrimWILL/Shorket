@@ -19,5 +19,5 @@ public interface BoothRepository extends JpaRepository<Booth, Integer> {
 
     Page<Booth> getByMarket(Pageable pageable, Market market);
 
-    Optional<Booth> findById(Integer idX);
+    Optional<Booth> findById(Integer idx);
 }

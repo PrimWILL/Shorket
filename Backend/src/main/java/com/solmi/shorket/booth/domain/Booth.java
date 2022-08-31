@@ -92,12 +92,13 @@ public class Booth {
     private Float longitude;
 
     @Enumerated(value = EnumType.STRING)
-    @ColumnDefault("'N'")
+    @ColumnDefault("'W'")
     @Column(nullable = false)
+    @Setter
     private BoothApprovalType approval;
 
     @Enumerated(value = EnumType.STRING)
-    @ColumnDefault("'Waiting'")
+    @ColumnDefault("'WAIT'")
     @Column(nullable = false)
     private BoothStatusType status;
 

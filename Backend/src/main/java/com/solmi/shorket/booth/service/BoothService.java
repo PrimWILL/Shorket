@@ -1,6 +1,7 @@
 package com.solmi.shorket.booth.service;
 
 import com.solmi.shorket.booth.domain.Booth;
+import com.solmi.shorket.booth.domain.BoothApprovalType;
 import com.solmi.shorket.booth.dto.BoothDto;
 import com.solmi.shorket.booth.repository.BoothImgRepository;
 import com.solmi.shorket.booth.repository.BoothRepository;
@@ -82,10 +83,30 @@ public class BoothService {
      * Booth 정보 수정
      */
     @Transactional
-    public BoothDto updateBooth(Integer boothId, BoothDto boothDto) {
-        Booth booth = boothRepository.findById(boothId)
+    public BoothDto updateBooth(Integer boothIdx, BoothDto boothDto) {
+        Booth booth = boothRepository.findById(boothIdx)
                 .orElseThrow(BoothNotFoundException::new);
         booth = boothRepository.save(boothDto.updateEntity(booth));
         return BoothDto.boothResponse(booth);
+    }
+
+    /**
+     * Booth 승인
+     */
+    @Transactional
+    public void approveBooth(Integer boothId) {
+        Booth booth = boothRepository.findById(boothId)
+                .orElseThrow(BoothNotFoundException::new);
+        booth.setApproval(BoothApprovalType.Y);
+    }
+
+    /**
+     * Booth 승인 거절
+     */
+    @Transactional
+    public void notApproveBooth(Integer boothId) {
+        Booth booth = boothRepository.findById(boothId)
+                .orElseThrow(BoothNotFoundException::new);
+        booth.setApproval(BoothApprovalType.N);
     }
 }

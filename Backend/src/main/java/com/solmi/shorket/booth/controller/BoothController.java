@@ -56,11 +56,10 @@ public class BoothController {
             value = "부스 등록",
             notes = "판매자가 마켓 관리자에게 부스(셀러) 신청을 한다.\n"
     )
-    @PostMapping(value = "/create")
+    @PostMapping(value = "")
     public String createBooth(
             @RequestBody @Valid BoothDto boothDto
     ){
-        // TODO: 이미지도 등록할 수 있어야 한다.
         // TODO: Validation 추가 필요
         // validation: 부스 이름 입력 안했을 때
         if(boothDto.getBoothName().isEmpty()){
@@ -68,6 +67,7 @@ public class BoothController {
         }
 
         try {
+            // TODO: 이미지도 등록할 수 있어야 한다.
             Integer boothIdx = boothService.insertBooth(boothDto);
 
             return boothIdx + " 부스 등록이 완료되었습니다.";
@@ -81,7 +81,7 @@ public class BoothController {
             value = "부스 수정",
             notes = "부스 정보 수정이 가능하다"
     )
-    @PutMapping("/{boothId}")
+    @PutMapping("/{boothIdx}")
     public String updateBoothInfo(
             @PathVariable Integer boothIdx,
             @RequestBody BoothDto boothDto
@@ -96,6 +96,30 @@ public class BoothController {
         }
     }
 
-    // TODO : 부스 삭제 API(부스 종료 API), 부스 배치도 사진 업로드 API, 부스 승인 API, 부스 승인 거절 API
+    @ApiOperation(
+            value = "부스 승인",
+            notes = "부스를 승인한다."
+    )
+    @PatchMapping("/{boothIdx}/approve")
+    public String approveBooth(
+            @PathVariable Integer boothIdx
+    ){
+        boothService.approveBooth(boothIdx);
+        return "부스 승인이 완료되었습니다.";
+    }
+
+    @ApiOperation(
+            value = "부스 승인 거절",
+            notes = "부스 승인을 거절한다."
+    )
+    @PatchMapping("/{boothIdx}/notApprove")
+    public String notApproveBooth(
+            @PathVariable Integer boothIdx
+    ){
+        boothService.notApproveBooth(boothIdx);
+        return "부스 승인 거절이 완료되었습니다.";
+    }
+
+    // TODO : 부스 삭제 API, 부스 배치도 사진 업로드 API, 부스 종료 API
 
 }
