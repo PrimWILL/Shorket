@@ -26,7 +26,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BoothController {
 
-    // TODO: 역할별 API 접근 권한 관리 필요
+    // TODO : 역할별 API 접근 권한 관리 필요
+    // TODO : 부스 삭제 API -> 관리자가 마음대로 삭제할 수 없게 할 필요가 있음.
+    // TODO : 부스 운영 시작 API, 부스 운영 종료 API -> 운영 기간을 check해서 자동으로 상태 바꾸게 만들기
+    // TODO : 부스 배치도 사진 업로드 API
 
     private final BoothService boothService;
 
@@ -109,8 +112,8 @@ public class BoothController {
     }
 
     @ApiOperation(
-            value = "부스 승인 거절",
-            notes = "부스 승인을 거절한다."
+            value = "부스 미승인",
+            notes = "부스를 미승인한다."
     )
     @PatchMapping("/{boothIdx}/notApprove")
     public String notApproveBooth(
@@ -119,7 +122,5 @@ public class BoothController {
         boothService.notApproveBooth(boothIdx);
         return "부스 승인 거절이 완료되었습니다.";
     }
-
-    // TODO : 부스 삭제 API, 부스 배치도 사진 업로드 API, 부스 종료 API
 
 }
