@@ -35,7 +35,7 @@ public class BoothController {
 
     @ApiOperation(
             value = "부스 목록 조회",
-            notes = "모든 부스를 불러온다."
+            notes = "모든 부스 정보를 불러온다."
     )
     @GetMapping("")
     public Page<BoothDto> getBoothsByMarket(
@@ -82,7 +82,7 @@ public class BoothController {
 
     @ApiOperation(
             value = "부스 수정",
-            notes = "부스 정보 수정이 가능하다"
+            notes = "마켓 관리자는 부스 정보 수정이 가능하다."
     )
     @PutMapping("/{boothIdx}")
     public String updateBoothInfo(
@@ -100,8 +100,8 @@ public class BoothController {
     }
 
     @ApiOperation(
-            value = "부스 승인",
-            notes = "부스를 승인한다."
+            value = "부스 신청 승인",
+            notes = "마켓 관리자는 부스 신청을 승인할 수 있다."
     )
     @PatchMapping("/{boothIdx}/approve")
     public String approveBooth(
@@ -112,8 +112,8 @@ public class BoothController {
     }
 
     @ApiOperation(
-            value = "부스 미승인",
-            notes = "부스를 미승인한다."
+            value = "부스 신청 거절",
+            notes = "마켓 관리자는 부스 신청을 거절할 수 있다."
     )
     @PatchMapping("/{boothIdx}/notApprove")
     public String notApproveBooth(

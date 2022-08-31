@@ -6,7 +6,7 @@ import com.solmi.shorket.booth.domain.BoothApprovalType;
 import com.solmi.shorket.booth.domain.BoothImg;
 import com.solmi.shorket.booth.domain.BoothStatusType;
 import com.solmi.shorket.booth.repository.BoothImgRepository;
-import com.solmi.shorket.market.domain.Market;
+import com.solmi.shorket.market.dto.MarketResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,7 +43,7 @@ public class BoothDto {
     private BoothApprovalType approval;
     private BoothStatusType status;
     private List<BoothImgDto> boothImgs;
-    private Market market;
+    private MarketResponseDto market;
 
     public static BoothDto boothListResponse(Booth booth) {
         return BoothDto.builder()
@@ -79,7 +79,7 @@ public class BoothDto {
             .status(booth.getStatus())
             .boothImgs(Optional.ofNullable(boothImgRepository).map(
                     e -> e.findByBoothIdx(booth.getIdx()).stream().map(BoothImgDto::boothImgResponse).collect(Collectors.toList())).orElse(null))
-            .market(booth.getMarket())
+            .market(new MarketResponseDto(booth.getMarket()))
             .build();
     }
 

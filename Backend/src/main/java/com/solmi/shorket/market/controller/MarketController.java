@@ -65,9 +65,9 @@ public class MarketController {
             notes = "`marketIdx`에 해당하는 market의 상세 정보 조회."
     )
     @GetMapping("/{marketIdx}")
-    public MarketReponseDto getMarket(@PathVariable Integer marketIdx) {
+    public MarketResponseDto getMarket(@PathVariable Integer marketIdx) {
         Market market = marketService.findMarket(marketIdx);
-        return new MarketReponseDto(market);
+        return new MarketResponseDto(market);
     }
 
     @ApiOperation(
