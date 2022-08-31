@@ -28,7 +28,7 @@ public class BoothService {
     private final MarketRepository marketRepository;
 
     /**
-     * Booth 목록 조회
+     * Booth 목록 조회 By Market
      */
     @Transactional
     public Page<BoothDto> getBoothsByMarket(Pageable pageable, Integer marketIdx) {
@@ -43,6 +43,17 @@ public class BoothService {
         }
 
         return booths.map(BoothDto::boothListResponse);
+    }
+
+    /**
+     * Booth 전체 목록 조회
+     */
+    @Transactional
+    public Page<BoothDto> getBooths(Pageable pageable) {
+
+        Page<Booth> booths = boothRepository.findAll(pageable);
+
+        return booths.map(BoothDto::boothResponse);
     }
 
     /**

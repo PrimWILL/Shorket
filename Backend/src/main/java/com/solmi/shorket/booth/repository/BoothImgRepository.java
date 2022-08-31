@@ -13,6 +13,6 @@ import java.util.Optional;
 @Repository
 public interface BoothImgRepository extends JpaRepository<BoothImg, Integer> {
 
-    List<BoothImg> findByBoothId(Integer boothIdx);
+    List<BoothImg> findByBoothIdx(Integer boothIdx);
 
 }

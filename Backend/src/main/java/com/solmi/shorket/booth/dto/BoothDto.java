@@ -43,6 +43,7 @@ public class BoothDto {
     private BoothApprovalType approval;
     private BoothStatusType status;
     private List<BoothImgDto> boothImgs;
+    private Market market;
 
     public static BoothDto boothListResponse(Booth booth) {
         return BoothDto.builder()
@@ -77,7 +78,8 @@ public class BoothDto {
             .approval(booth.getApproval())
             .status(booth.getStatus())
             .boothImgs(Optional.ofNullable(boothImgRepository).map(
-                    e -> e.findByBoothId(booth.getIdx()).stream().map(BoothImgDto::boothImgResponse).collect(Collectors.toList())).orElse(null))
+                    e -> e.findByBoothIdx(booth.getIdx()).stream().map(BoothImgDto::boothImgResponse).collect(Collectors.toList())).orElse(null))
+            .market(booth.getMarket())
             .build();
     }
 

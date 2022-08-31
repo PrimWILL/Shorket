@@ -15,6 +15,8 @@ import java.util.Optional;
 @Repository
 public interface BoothRepository extends JpaRepository<Booth, Integer> {
 
+    Page<Booth> findAll(Pageable pageable);
+
     Page<Booth> getByMarket(Pageable pageable, Market market);
 
     Optional<Booth> findById(Integer idX);

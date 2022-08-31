@@ -32,14 +32,13 @@ public class BoothController {
 
     @ApiOperation(
             value = "부스 목록 조회",
-            notes = "전체 부스의 목록을 불러온다."
+            notes = "모든 부스를 불러온다."
     )
     @GetMapping("")
     public Page<BoothDto> getBoothsByMarket(
-            @PageableDefault(size = 10) Pageable pageable,
-            @PathVariable Integer marketIdx
+            @PageableDefault(size = 10) Pageable pageable
     ){
-        return boothService.getBoothsByMarket(pageable, marketIdx);
+        return boothService.getBooths(pageable);
     }
 
     @ApiOperation(

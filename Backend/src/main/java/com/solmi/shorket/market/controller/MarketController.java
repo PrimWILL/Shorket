@@ -1,5 +1,7 @@
 package com.solmi.shorket.market.controller;
 
+import com.solmi.shorket.booth.dto.BoothDto;
+import com.solmi.shorket.booth.service.BoothService;
 import com.solmi.shorket.market.domain.Address;
 import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.market.dto.*;
@@ -10,6 +12,9 @@ import com.solmi.shorket.user.service.SecurityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,6 +30,7 @@ public class MarketController {
     private final SecurityService securityService;
     private final MarketService marketService;
     private final MarketInterestService marketInterestService;
+    private final BoothService boothService;
 
     @ApiOperation(
             value = "Market 등록",
@@ -103,5 +109,17 @@ public class MarketController {
         Market market = marketService.findMarket(marketIdx);
 
         marketInterestService.cancelInterest(user, market);
+    }
+
+    @ApiOperation(
+            value = "Market 부스 목록 조회",
+            notes = "부스 목록을 불러온다."
+    )
+    @GetMapping("/{marketIdx}/booths")
+    public Page<BoothDto> getBoothsByMarket(
+            @PageableDefault(size = 10) Pageable pageable,
+            @PathVariable Integer marketIdx
+    ){
+        return boothService.getBoothsByMarket(pageable, marketIdx);
     }
 }
