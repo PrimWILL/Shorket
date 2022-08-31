@@ -1,5 +1,5 @@
 package com.solmi.shorket.booth.domain;
 
 public enum BoothApprovalType {
-    Y, N; // Y: 승인, N: 미승인
+    W, Y, N; // W: 대기, Y: 승인, N: 미승인(거절)
 }
