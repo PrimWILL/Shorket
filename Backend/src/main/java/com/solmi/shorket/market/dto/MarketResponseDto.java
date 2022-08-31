@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class MarketReponseDto {
+public class MarketResponseDto {
 
     private Integer marketIdx;
     private String name;
@@ -18,7 +18,7 @@ public class MarketReponseDto {
     private LocalDateTime endDate;
     private Integer interestCount;
 
-    public MarketReponseDto(Market market) {
+    public MarketResponseDto(Market market) {
         this.setMarketIdx(market.getIdx());
         this.setName(market.getName());
         this.setDescription(market.getDescription());
