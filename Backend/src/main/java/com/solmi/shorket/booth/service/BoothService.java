@@ -37,7 +37,7 @@ public class BoothService {
         Market market = marketRepository.findById(marketIdx)
                 .orElseThrow(MarketNotFoundException::new);
 
-        Page<Booth> booths = boothRepository.getByMarket(pageable, market);
+        Page<Booth> booths = boothRepository.findByMarket(pageable, market);
 
         if (booths.getContent().isEmpty()) {
             throw new BoothNotFoundException();
