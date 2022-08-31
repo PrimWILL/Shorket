@@ -81,7 +81,7 @@ public class BoothController {
     }
 
     @ApiOperation(
-            value = "부스 수정",
+            value = "부스 정보 수정",
             notes = "마켓 관리자는 부스 정보 수정이 가능하다."
     )
     @PutMapping("/{boothIdx}")
