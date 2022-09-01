@@ -51,9 +51,11 @@ public class MarketController {
                     "**`sort`, `date`는 전부 대문자로 작성해주세요.**"
     )
     @GetMapping
-    public MarketListResponseDto<List<ListMarketResponseDto>> getMarkets(@RequestBody @Valid SortingAndFilteringInfo info,
+    public MarketListResponseDto<List<ListMarketResponseDto>> getMarkets(@RequestParam(defaultValue = "INTEREST") MarketSortingCriteria sort,
+                                                                         @RequestParam(defaultValue = "CURRENT") MarketFilteringCriteriaByDate date,
+                                                                         @RequestParam(defaultValue = "") List<String> locals,
                                                                          @RequestParam(defaultValue = "0") Integer page) {
-        List<Market> markets = marketService.findMarkets(info, page);
+        List<Market> markets = marketService.findMarkets(sort, date, locals, page);
         List<ListMarketResponseDto> res = markets.stream()
                 .map(ListMarketResponseDto::new)
                 .collect(Collectors.toList());
