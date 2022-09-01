@@ -1,7 +1,8 @@
 package com.solmi.shorket.market.repository;
 
 import com.solmi.shorket.market.domain.Market;
-import com.solmi.shorket.market.dto.SortingAndFilteringInfo;
+import com.solmi.shorket.market.dto.MarketFilteringCriteriaByDate;
+import com.solmi.shorket.market.dto.MarketSortingCriteria;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityManager;
@@ -16,12 +17,13 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
     private final int NUMBER_OF_PAGING = 10;
 
     @Override
-    public List<Market> findMarkets(SortingAndFilteringInfo info, Integer page) {
+    public List<Market> findMarkets(MarketSortingCriteria sort, MarketFilteringCriteriaByDate date,
+                                    List<String> locals, Integer page) {
         // Filtering
         String filteringQuery = "where ";
 
         // 기간 filtering
-        switch (info.getDate()) {
+        switch (date) {
             case UPCOMING:
                 filteringQuery += "m.startDate > :now ";
                 break;
@@ -36,9 +38,9 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
         }
 
         // 지역 filtering
-        if (!info.getLocals().isEmpty()) {
+        if (!locals.isEmpty()) {
             filteringQuery += "and m.address.sido in (";
-            for (String local : info.getLocals()) {
+            for (String local : locals) {
                 filteringQuery += "'" + local + "', ";
             }
             filteringQuery += "'') ";
@@ -47,7 +49,7 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
         // Sorting
         String sortingQuery = "order by ";
 
-        switch (info.getSort()) {
+        switch (sort) {
             case INTEREST:
                 sortingQuery += "m.marketInterestCount desc";
                 break;
