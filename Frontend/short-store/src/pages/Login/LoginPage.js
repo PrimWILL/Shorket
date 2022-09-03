@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-
+import React, { useState, useEffect, useContext } from "react";
+import AuthContext from '../../context/AuthProvider';
+import axios from "../../api/axios";
 import { Link as RouterLink } from "react-router-dom";
+import { Cookies } from 'react-cookie';
 
 import {
   Container,
@@ -11,17 +12,30 @@ import {
   TextField,
   Link,
   CssBaseline,
+  StepContext,
 } from "@mui/material";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import "antd/dist/antd.css";
 import { Typography, Divider } from "antd";
+
+const LOGIN_URL = '/users/login';
+const cookies = new Cookies();
+
 const { Title } = Typography;
 
 const theme = createTheme();
 
 function Login() {
+
+  const {auth, setAuth} = useContext(AuthContext);
+
+  const [user, setUser] = useState('');
+  const [pwd, setPwd] = useState('');
+  const [errMsg, setErrMsg] = useState('');
+  const [success, setSuccess] = useState(false);
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -44,7 +58,7 @@ function Login() {
   // 전체 유효성 검사
   const checkValidTotal = () => {
     if (state.email === "" || state.password === "") {
-      console.log("모든 칸을 작성해야함");
+      console.log("모든 칸을 작성하세요");
       setIsvalidAll(false);
       return;
     }
@@ -83,34 +97,78 @@ function Login() {
     });
   };
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get("email"),
-  //     password: data.get("password"),
-  //   });
-  // };
-
+  // 서버 요청 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!isValidAll) {
-      console.log("!!!");
+      console.log("넌 아직 준비가 안됬다!");
       return;
     }
+
     console.log("login 시도");
+
     axios
-      .post("http://52.79.146.185:8080/api/users/login", {
+      .post(LOGIN_URL, {
         email: state.email,
         password: state.password,
       })
       .then(function (res) {
         console.log(res);
+        setCookie('id', res.data.token);// 쿠키에 토큰 저장
       })
       .catch(function (error) {
         console.log(error);
       });
+    
+    // const TryLogin = async () => {
+
+    // }
+    // try {
+    //   const response = axios.post(LOGIN_URL, 
+    //     JSON.stringify(state), 
+    //     {
+    //       headers: {'Content-Type' : 'application/json'},
+    //       withCredentials: true
+    //     }
+    //   )
+    //   console.log(response);
+    //   console.log(JSON.stringify(response?.data));
+    //   const accessToken = response?.data?.accessToken;
+    //   // const roles = response?.data?.roles;
+    //   // setAuth({state, accessToken, roles});
+    //   console.log(accessToken);
+    //   setAuth({state, accessToken});
+    //   console.log(auth);
+    // }
+    // catch(err) {
+    //   // console.log(err);
+    //   if (!err?.response) {
+    //     setErrMsg('No Server Response');
+    //   } else if (err.response?.status === 400) {
+    //       setErrMsg('Missing Username or Password');
+    //   } else if (err.response?.status === 401) {
+    //       setErrMsg('Unauthorized');
+    //   } else if (err.response?.status === 500) {
+    //     setErrMsg('아이디 또는 비밀번호가 일치하지 않습니다');
+    //   } else {
+    //       setErrMsg('Login Failed');
+    //   }
+
+    // }
+
+    // axios
+    //   .post(LOGIN_URL, {
+    //     email: state.email,
+    //     password: state.password,
+    //   })
+    //   .then(function (res) {
+    //     console.log(res);
+    //     setCookie('id', res.data.token);// 쿠키에 토큰 저장
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
 
   return (
@@ -187,17 +245,11 @@ function Login() {
               로그인
             </Button>
             <div>
-              <Link href="#" variant="body2">
-                <RouterLink to="/join">이메일 가입</RouterLink>
-              </Link>
+              <RouterLink to="/join">이메일 가입</RouterLink>
               <Divider type="vertical" />
-              <Link href="#" variant="body2">
-                <RouterLink to="/join">이메일 찾기</RouterLink>
-              </Link>
+              <RouterLink to="/join">이메일 찾기</RouterLink>
               <Divider type="vertical" />
-              <Link href="#" variant="body2">
-                <RouterLink to="/findPw">비밀번호 찾기</RouterLink>
-              </Link>
+              <RouterLink to="/findPw">비밀번호 찾기</RouterLink>
             </div>
             <Button
               type="submit"

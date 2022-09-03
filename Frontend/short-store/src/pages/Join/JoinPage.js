@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -18,8 +18,43 @@ import {
 } from "@mui/material/";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-function Join(props) {
+const baseUrl = "http://52.79.146.185:8080/api";
+
+
+
+const EMAIL_REGEX = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,16}$/;
+
+const REGISTER_URL = '/register';
+
+
+const Join = (props) => {
   const theme = createTheme();
+
+  const userRef = useRef();
+  const errRef = useRef();
+
+  const [userName, setUserName] = useState('');
+  const [validName, setValidName] = useState(false);
+  // const [userFocus, setUserFocus] = useState(false);
+
+  const [userId, setUserId] = useState('');
+  const [validId, setValidId] = useState(false);
+  // const [idFocus, setIdFocus] = useState(false);
+  
+  const [userEmail, setUserEmail] = useState('');
+  // const [validEmail, setValidEmail] = useState(false);
+  // const [emailFocus, setEmailFocus] = useState(false);
+  
+  const [pwd, setPwd] = useState('');
+  // const [validPwd, setValidPwd] = useState(false);
+  // const [pwdFocus, setPwdFocus] = useState(false);
+
+  // const [errMsg, setErrMsg] = useState('');
+  // const [success, setSuccess] = useState(false);
+
+
 
   const [state, setState] = useState({
     userName: "",
@@ -37,6 +72,17 @@ function Join(props) {
   const [isValidPassword, setIsvalidPassword] = useState(false);
   const [isValidChecked, setIsvalidChecked] = useState(false);
   const [isValidAll, setIsvalidAll] = useState(false);
+
+// useEffect(() => {
+//   userRef.current.focus();
+// }, [])
+
+useEffect(()=> {
+  const result = USER_REGEX.test(userName);
+  console.log(result);
+  console.log(userName);
+  setValidName(result);
+}, userName);
 
   useEffect(() => {
     // state 바뀌고 유효성 체크하는게 순서가 맞다 (handleChange 에서 유효성체크하면 적용이 바로 안됨)
@@ -71,7 +117,7 @@ function Join(props) {
   };
 
   const checkValidChecked = () => {
-    if (checked.check1 === true && checked.check2 === true) {
+    if (checked.check1 === true ) {
       console.log("킹아");
       setIsvalidChecked(true);
     } else {
@@ -125,7 +171,7 @@ function Join(props) {
       return;
     }
     axios
-      .post("http://52.79.146.185:8080/api/users/post", {
+      .post(`${baseUrl}/users/signup`, {
         email: state.email,
         loginType: "A",
         name: state.userName,

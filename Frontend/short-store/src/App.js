@@ -22,18 +22,20 @@ export default function App() {
     <div className="App">
       <MainLayout>
         <Routes>
+          {/* public routes */}
           <Route path="/" element={<HomePage />} exact={true}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/join" element={<JoinPage />}></Route>
-          <Route path="/market/:id" element={<MarketPage />}></Route>
-
-          <Route path="/my/*" element={<Mypage />}>
-
-          </Route>
-
           <Route path="/search" element={<SearchPage />}></Route>
           <Route path="/searchList" element={<SearchListPage />}></Route>
+          <Route path="/market/:id" element={<MarketPage />}></Route>
+          <Route
+            path="/market/:id/booth/:id"
+            element={<div>부스상세 페이지</div>}></Route>
+          
 
+          {/* protected routes */}
+          <Route path="/my/*" element={<Mypage />}></Route>
           <Route path="/market/:id/manage" element={<ManagePage />}></Route>
 
           <Route
@@ -42,9 +44,7 @@ export default function App() {
           <Route
             path="/enroll/booth"
             element={<BoothEnrollPage />}></Route>
-          <Route
-            path="/market/:id/booth/:id"
-            element={<div>부스상세 페이지</div>}></Route>
+          
           <Route path="*" element={<div>없는페이지요</div>} />
         </Routes>
       </MainLayout>

@@ -9,7 +9,7 @@ import MarketList from "../../components/MarketList.js";
 import Banner from "../../components/Banner.js";
 
 import { useFetch } from "../../hooks/useFetch";
-const baseUrl = "http://52.79.146.185:8080/api/";
+const baseUrl = "http://52.79.146.185:8080/api";
 
 // - 더보기 -> 4개씩 더 로드 하는걸로 변경
 
@@ -22,7 +22,10 @@ function Home() {
   const getClick = () => {
     axios
       .get(`${baseUrl}/markets/4`)
-      .then((res) => setData(res.data))
+      .then((res) => {
+        setData(res.data);
+        console.log(res);
+      })
       .catch(function (error) {
         console.log(error);
       });

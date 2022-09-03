@@ -3,6 +3,8 @@ import { BrowserRouter } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
 
 import App from "./App";
+import {AuthProvider} from './context/AuthProvider';
+
 import "./index.css";
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -13,7 +15,9 @@ root.render(
   <CookiesProvider>
     <BrowserRouter>
       <CssBaseline />
-      <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
     </BrowserRouter>
   </CookiesProvider>
 );
