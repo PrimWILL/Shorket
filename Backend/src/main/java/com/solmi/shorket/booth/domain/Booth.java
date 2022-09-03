@@ -86,7 +86,6 @@ public class Booth {
     @Setter
     private LocalTime endTime;
 
-
     private Float latitude;
 
     private Float longitude;
@@ -97,11 +96,6 @@ public class Booth {
     @Setter
     private BoothApprovalType approval;
 
-    @Enumerated(value = EnumType.STRING)
-    @ColumnDefault("'WAIT'")
-    @Column(nullable = false)
-    private BoothStatusType status;
-
     @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL)
     private Set<BoothInterest> interests = new HashSet<>();
 
@@ -111,7 +105,7 @@ public class Booth {
 
     @Builder
     public Booth(Integer idx, User user, Market market, Integer number, String boothName, String sellerName, String item, String site, String description, String address, String phoneNumber, String email, Integer viewCount, Date startDate, Date endDate,
-                 LocalTime startTime, LocalTime endTime, BoothApprovalType approval, BoothStatusType status) {
+                 LocalTime startTime, LocalTime endTime, BoothApprovalType approval) {
         this.idx = idx;
         this.user = user;
         this.market = market;
@@ -130,7 +124,6 @@ public class Booth {
         this.startTime = startTime;
         this.endTime = endTime;
         this.approval = approval;
-        this.status = status;
     }
 
     public void addViewCount() {

@@ -3,8 +3,6 @@ package com.solmi.shorket.booth.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.domain.BoothApprovalType;
-import com.solmi.shorket.booth.domain.BoothImg;
-import com.solmi.shorket.booth.domain.BoothStatusType;
 import com.solmi.shorket.booth.repository.BoothImgRepository;
 import com.solmi.shorket.market.dto.MarketResponseDto;
 import lombok.AllArgsConstructor;
@@ -12,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +38,6 @@ public class BoothDto {
     private LocalTime startTime;
     private LocalTime endTime;
     private BoothApprovalType approval;
-    private BoothStatusType status;
     private List<BoothImgDto> boothImgs;
     private MarketResponseDto market;
 
@@ -50,7 +46,6 @@ public class BoothDto {
             .number(booth.getNumber())
             .boothName(booth.getBoothName()) // 부스 이름
             .item(booth.getItem()) // 부스 종류 (판매품목)
-            .status(booth.getStatus())
             .build();
     }
 
@@ -76,7 +71,6 @@ public class BoothDto {
             .startTime(booth.getStartTime())
             .endTime(booth.getEndTime())
             .approval(booth.getApproval())
-            .status(booth.getStatus())
             .boothImgs(Optional.ofNullable(boothImgRepository).map(
                     e -> e.findByBoothIdx(booth.getIdx()).stream().map(BoothImgDto::boothImgResponse).collect(Collectors.toList())).orElse(null))
             .market(new MarketResponseDto(booth.getMarket()))

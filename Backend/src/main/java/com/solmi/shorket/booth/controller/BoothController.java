@@ -28,7 +28,6 @@ public class BoothController {
 
     // TODO : 역할별 API 접근 권한 관리 필요
     // TODO : 부스 삭제 API -> 관리자가 마음대로 삭제할 수 없게 할 필요가 있음.
-    // TODO : 부스 운영 시작 API, 부스 운영 종료 API -> 운영 기간을 check해서 자동으로 상태 바꾸게 만들기
     // TODO : 부스 배치도 사진 업로드 API
 
     private final BoothService boothService;
@@ -81,7 +80,7 @@ public class BoothController {
     }
 
     @ApiOperation(
-            value = "부스 수정",
+            value = "부스 정보 수정",
             notes = "마켓 관리자는 부스 정보 수정이 가능하다."
     )
     @PutMapping("/{boothIdx}")
