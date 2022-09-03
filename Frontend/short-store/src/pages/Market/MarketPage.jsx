@@ -3,8 +3,8 @@ import styles from "./MarketPage.module.css";
 import Slider from "../../components/Banner.js";
 
 function MarketPage() {
-  
-  
+
+
   return (
     <div className="area-3">
       <h1>마켓상세페이지</h1>

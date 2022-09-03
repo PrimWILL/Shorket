@@ -31,12 +31,12 @@ function Summary() {
       <Profile />
       <WishMarket />
       <WishBooth />
-        <div>
-          <h1>마켓 관리하기</h1>
-        </div>
-        <div>
-          <h1>신청한 부스</h1>
-        </div>
+      <div>
+        <h1>마켓 관리하기</h1>
+      </div>
+      <div>
+        <h1>신청한 부스</h1>
+      </div>
     </>
   );
 }
@@ -55,7 +55,7 @@ function MyPage() {
         setList(res.results);
       });
   }, []);
-  
+
   return (
     <div className="area-2">
       <>
@@ -96,16 +96,16 @@ function MyPage() {
           </nav>
         </div>
       </>
-      
-      <div className={styles.content_area} style={{height: "200vh", width:"700px" , backgroundColor:"blueviolet"}}>
-        
+
+      <div className={styles.content_area} style={{ height: "200vh", width: "700px", backgroundColor: "whitesmoke" }}>
+
         <Routes>
           <Route path="/" element={<Summary />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/wishBooth" element={<WishBooth />}></Route>
           <Route path="/wishMarket" element={<WishMarket />}></Route>
         </Routes>
-        
+
       </div>
     </div>
   )
