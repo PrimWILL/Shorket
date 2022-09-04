@@ -19,12 +19,12 @@ public class UserController {
 
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
-    public UserTokenDto login(
+    public UserLoginResponseDto login(
             @ApiParam(value = "로그인 요청 DTO", required = true)
             @RequestBody UserLoginRequestDto userLoginRequestDto
     ) {
-        UserTokenDto userTokenDto = securityService.login(userLoginRequestDto);
-        return userTokenDto;
+        UserLoginResponseDto userLoginResponseDto = securityService.login(userLoginRequestDto);
+        return userLoginResponseDto;
     }
 
     @ApiOperation(value = "회원가입")

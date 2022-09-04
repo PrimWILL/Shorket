@@ -29,7 +29,7 @@ public class SecurityService {
     private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
 
     @Transactional
-    public UserTokenDto login(UserLoginRequestDto userLoginRequestDto) {
+    public UserLoginResponseDto login(UserLoginRequestDto userLoginRequestDto) {
 
         // find information of user from DB
         User user = userRepository.findByEmail(userLoginRequestDto.getEmail())
@@ -48,7 +48,7 @@ public class SecurityService {
                 .token(userTokenDto.getRefreshToken())
                 .build();
         userTokenRepository.save(userToken);
-        return userTokenDto;
+        return new UserLoginResponseDto(userTokenDto, user);
     }
 
     @Transactional
