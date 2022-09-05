@@ -143,6 +143,15 @@ public class SecurityService {
         logoutAccessTokenRedisRepository.save(logoutAccessToken);
     }
 
+    @Transactional
+    public void deleteUser(String accessToken) {
+        // find user by userIdx
+        User user = findUserByAccessToken(accessToken);
+
+        // logical delete
+        userRepository.save(user.deleteUserByStatusType());
+    }
+
     @Transactional(readOnly = true)
     public User findUserByAccessToken(String accessToken) {
         // get userIdx from AccessToken
