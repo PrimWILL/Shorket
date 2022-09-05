@@ -39,6 +39,9 @@ public class SecurityService {
         if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword()))
             throw new EmailLoginFailedCException();
 
+        if (user.getStatusType().equals(StatusType.D))
+            throw new UserAlreadyDeletedCException();
+
         // issue AccessToken and RefreshToken
         UserTokenDto userTokenDto = jwtProvider.createToken(user.getIdx(), user.getUserRole());
 

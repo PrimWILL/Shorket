@@ -133,6 +133,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(UserAlreadyDeletedCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse userAlreadyDeletedCException(HttpServletRequest request, UserAlreadyDeletedCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("userAlreadyDeleted.code"),
+                getMessage("userAlreadyDeleted.message")
+        );
+    }
+
     private String getMessage(String code) {
         return getMessage(code, null);
     }
