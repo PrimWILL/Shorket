@@ -39,6 +39,9 @@ public class SecurityService {
         if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword()))
             throw new EmailLoginFailedCException();
 
+        if (user.getStatusType().equals(StatusType.D))
+            throw new UserAlreadyDeletedCException();
+
         // issue AccessToken and RefreshToken
         UserTokenDto userTokenDto = jwtProvider.createToken(user.getIdx(), user.getUserRole());
 
@@ -141,6 +144,15 @@ public class SecurityService {
                 accessToken, user.getIdx(), jwtProvider.getExpirationTime(accessToken));
 
         logoutAccessTokenRedisRepository.save(logoutAccessToken);
+    }
+
+    @Transactional
+    public void deleteUser(String accessToken) {
+        // find user by userIdx
+        User user = findUserByAccessToken(accessToken);
+
+        // logical delete
+        userRepository.save(user.deleteUserByStatusType());
     }
 
     @Transactional(readOnly = true)
