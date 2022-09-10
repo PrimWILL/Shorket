@@ -28,6 +28,12 @@ public class BoothService {
     private final BoothImgRepository boothImgRepository;
     private final MarketRepository marketRepository;
 
+    public Booth findBoothByIdx(Integer boothIdx) {
+        Booth booth = boothRepository.findById(boothIdx)
+                .orElseThrow(BoothNotFoundException::new);
+        return booth;
+    }
+
     /**
      * Booth 목록 조회 By Market
      */
@@ -60,7 +66,7 @@ public class BoothService {
     /**
      * Booth 상세 조회
      */
-    public BoothDto getByIdx(Integer boothIdx) {
+    public BoothDto getBoothByIdx(Integer boothIdx) {
 
         BoothDto boothDto = boothRepository.findById(boothIdx)
                 .map(booth -> BoothDto.boothResponse(booth, boothImgRepository))

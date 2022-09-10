@@ -2,12 +2,13 @@ package com.solmi.shorket.booth.controller;
 
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.dto.*;
+import com.solmi.shorket.booth.service.BoothInterestService;
 import com.solmi.shorket.booth.service.BoothService;
 import com.solmi.shorket.global.exception.BoothNotFoundException;
+import com.solmi.shorket.user.domain.User;
+import com.solmi.shorket.user.service.SecurityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,8 +17,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Api(tags = "Booths")
 @RequiredArgsConstructor
@@ -29,8 +28,12 @@ public class BoothController {
     // TODO : 역할별 API 접근 권한 관리 필요
     // TODO : 부스 삭제 API -> 관리자가 마음대로 삭제할 수 없게 할 필요가 있음.
     // TODO : 부스 배치도 사진 업로드 API
+    // TODO : 부스 number 수정 API. 드래그 앤 드롭 형식. 부스 번호를 배정한다.
+    // TODO : return type 마켓과 통일 (void?)
 
     private final BoothService boothService;
+    private final BoothInterestService boothInterestService;
+    private final SecurityService securityService;
 
     @ApiOperation(
             value = "부스 목록 조회",
@@ -51,7 +54,7 @@ public class BoothController {
     public BoothDto getBoothInfo(
             @PathVariable Integer boothIdx
     ){
-        return boothService.getByIdx(boothIdx);
+        return boothService.getBoothByIdx(boothIdx);
     }
 
     @ApiOperation(
@@ -120,6 +123,30 @@ public class BoothController {
     ){
         boothService.notApproveBooth(boothIdx);
         return "부스 승인 거절이 완료되었습니다.";
+    }
+
+    @ApiOperation(
+            value = "관심 부스 추가",
+            notes = "`X-AUTH-TOKEN`에 해당하는 user가 `boothIdx`에 해당하는 booth을 관심 booth로 추가한다."
+    )
+    @GetMapping("/{boothIdx}/like")
+    public void addMarketInterest(@RequestHeader("X-AUTH-TOKEN") String token, @PathVariable Integer boothIdx) {
+        User user = securityService.findUserByAccessToken(token);
+        Booth booth = boothService.findBoothByIdx(boothIdx);
+
+        boothInterestService.addInterest(user, booth);
+    }
+
+    @ApiOperation(
+            value = "관심 부스 취소",
+            notes = "`X-AUTH-TOKEN`에 해당하는 user의 관심 booth 목록에서 `boothIdx`에 해당하는 booth을 삭제한다."
+    )
+    @DeleteMapping("/{boothIdx}/like")
+    public void cancelMarketInterest(@RequestHeader("X-AUTH-TOKEN") String token, @PathVariable Integer boothIdx) {
+        User user = securityService.findUserByAccessToken(token);
+        Booth booth = boothService.findBoothByIdx(boothIdx);
+
+        boothInterestService.cancelInterest(user, booth);
     }
 
 }
