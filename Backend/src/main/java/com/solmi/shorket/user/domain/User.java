@@ -102,5 +102,10 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.profileUrl = profileUrl;
         return this;
     }
+
+    public User deleteUserByStatusType() {
+        this.statusType = StatusType.D;
+        return this;
+    }
 }
 

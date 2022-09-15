@@ -2,7 +2,6 @@ package com.solmi.shorket.market.controller;
 
 import com.solmi.shorket.booth.dto.BoothDto;
 import com.solmi.shorket.booth.service.BoothService;
-import com.solmi.shorket.market.domain.Address;
 import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.market.dto.*;
 import com.solmi.shorket.market.service.MarketService;
@@ -37,8 +36,8 @@ public class MarketController {
             notes = "등록할 market의 정보를 받아 새로운 market을 생성합니다."
     )
     @PostMapping
-    public CreateMarketResponseDto saveMarket(@RequestBody @Valid CreateMarketRequestDto request) {
-        Market market = Market.createMarket(request.getName(), request.getDescription(), new Address(request.getSido(), request.getSigungu(), request.getDetailAddress()), request.getStartDate(), request.getEndDate());
+    public CreateMarketResponseDto saveMarket(@RequestBody @Valid CreateMarketRequestDto requestDto) {
+        Market market = requestDto.toEntity();
         return new CreateMarketResponseDto(marketService.saveMarket(market).getIdx());
     }
 
@@ -51,9 +50,11 @@ public class MarketController {
                     "**`sort`, `date`는 전부 대문자로 작성해주세요.**"
     )
     @GetMapping
-    public MarketListResponseDto<List<ListMarketResponseDto>> getMarkets(@RequestBody @Valid SortingAndFilteringInfo info,
+    public MarketListResponseDto<List<ListMarketResponseDto>> getMarkets(@RequestParam(defaultValue = "INTEREST") MarketSortingCriteria sort,
+                                                                         @RequestParam(defaultValue = "CURRENT") MarketFilteringCriteriaByDate date,
+                                                                         @RequestParam(defaultValue = "") List<String> locals,
                                                                          @RequestParam(defaultValue = "0") Integer page) {
-        List<Market> markets = marketService.findMarkets(info, page);
+        List<Market> markets = marketService.findMarkets(sort, date, locals, page);
         List<ListMarketResponseDto> res = markets.stream()
                 .map(ListMarketResponseDto::new)
                 .collect(Collectors.toList());
@@ -74,7 +75,7 @@ public class MarketController {
             value = "Market 수정",
             notes = "수정 사항을 받아서 `marketIdx`에 해당하는 market의 상세 정보 조회."
     )
-    @PatchMapping("/{marketIdx}")
+    @PutMapping("/{marketIdx}")
     public void updateMarket(@PathVariable Integer marketIdx,
                              @RequestBody @Valid UpdateMarketRequestDto request) {
         marketService.updateMarket(marketIdx, request);
@@ -85,8 +86,8 @@ public class MarketController {
             notes = "`marketIdx`에 해당하는 market을 삭제합니다."
     )
     @DeleteMapping("/{marketIdx}")
-    public void removeMarket(@PathVariable Integer marketIdx) {
-        marketService.removeMarket(marketIdx);
+    public void deleteMarket(@PathVariable Integer marketIdx) {
+        marketService.deleteMarket(marketIdx);
     }
 
     @ApiOperation(
@@ -96,9 +97,8 @@ public class MarketController {
     @GetMapping("/{marketIdx}/like")
     public void addMarketInterest(@RequestHeader("X-AUTH-TOKEN") String token, @PathVariable Integer marketIdx) {
         User user = securityService.findUserByAccessToken(token);
-        Market market = marketService.findMarket(marketIdx);
 
-        marketInterestService.addInterest(user, market);
+        marketInterestService.addInterest(user, marketIdx);
     }
 
     @ApiOperation(
@@ -108,9 +108,8 @@ public class MarketController {
     @DeleteMapping("/{marketIdx}/like")
     public void cancelMarketInterest(@RequestHeader("X-AUTH-TOKEN") String token, @PathVariable Integer marketIdx) {
         User user = securityService.findUserByAccessToken(token);
-        Market market = marketService.findMarket(marketIdx);
 
-        marketInterestService.cancelInterest(user, market);
+        marketInterestService.cancelInterest(user, marketIdx);
     }
 
     @ApiOperation(

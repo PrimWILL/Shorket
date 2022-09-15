@@ -29,7 +29,7 @@ public class SecurityService {
     private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
 
     @Transactional
-    public UserTokenDto login(UserLoginRequestDto userLoginRequestDto) {
+    public UserLoginResponseDto login(UserLoginRequestDto userLoginRequestDto) {
 
         // find information of user from DB
         User user = userRepository.findByEmail(userLoginRequestDto.getEmail())
@@ -38,6 +38,9 @@ public class SecurityService {
         // check is password equal to DB's encoding password
         if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword()))
             throw new EmailLoginFailedCException();
+
+        if (user.getStatusType().equals(StatusType.D))
+            throw new UserAlreadyDeletedCException();
 
         // issue AccessToken and RefreshToken
         UserTokenDto userTokenDto = jwtProvider.createToken(user.getIdx(), user.getUserRole());
@@ -48,7 +51,7 @@ public class SecurityService {
                 .token(userTokenDto.getRefreshToken())
                 .build();
         userTokenRepository.save(userToken);
-        return userTokenDto;
+        return new UserLoginResponseDto(userTokenDto, user);
     }
 
     @Transactional
@@ -141,6 +144,15 @@ public class SecurityService {
                 accessToken, user.getIdx(), jwtProvider.getExpirationTime(accessToken));
 
         logoutAccessTokenRedisRepository.save(logoutAccessToken);
+    }
+
+    @Transactional
+    public void deleteUser(String accessToken) {
+        // find user by userIdx
+        User user = findUserByAccessToken(accessToken);
+
+        // logical delete
+        userRepository.save(user.deleteUserByStatusType());
     }
 
     @Transactional(readOnly = true)

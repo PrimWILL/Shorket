@@ -19,12 +19,12 @@ public class UserController {
 
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
-    public UserTokenDto login(
+    public UserLoginResponseDto login(
             @ApiParam(value = "로그인 요청 DTO", required = true)
             @RequestBody UserLoginRequestDto userLoginRequestDto
     ) {
-        UserTokenDto userTokenDto = securityService.login(userLoginRequestDto);
-        return userTokenDto;
+        UserLoginResponseDto userLoginResponseDto = securityService.login(userLoginRequestDto);
+        return userLoginResponseDto;
     }
 
     @ApiOperation(value = "회원가입")
@@ -137,5 +137,23 @@ public class UserController {
             @RequestHeader("X-AUTH-TOKEN") String accessToken
     ) {
         securityService.logout(accessToken);
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 발급받은 accessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
+    @ApiOperation(
+            value = "회원탈퇴",
+            notes = "accessToken으로 전달받은 유저가 실제 유저인지 확인한 후, 해당 유저를 서비스에서 탈퇴시킨다.\n"
+    )
+    @DeleteMapping("/withdraw")
+    public void withdraw(
+            @RequestHeader("X-AUTH-TOKEN") String accessToken
+    ) {
+        securityService.deleteUser(accessToken);
     }
 }
