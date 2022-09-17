@@ -14,7 +14,7 @@ function DropDown() {
         ref={dropDownRef}
         className={classNames(styles.menu, { [styles.active]: isOpen })}>
         <li>
-          <Link href="/mypage">마이페이지</Link>
+          <Link href="/mypage">마이페이지</Link>das
         </li>
         {/* 메뉴 리스트들 */}
       </ul>

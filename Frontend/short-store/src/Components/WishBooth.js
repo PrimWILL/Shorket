@@ -34,10 +34,10 @@ function WishBooth() {
       <h1 style={btnStyle2}>관심 부스</h1>
       <Divider />
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <Table sx={{ minWidth: 650 }} size="large" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell>마켓</TableCell>
+              <TableCell align="center">마켓</TableCell>
               <TableCell align="center">부스</TableCell>
               <TableCell align="center">기간</TableCell>
               <TableCell align="center">위치</TableCell>
@@ -49,7 +49,7 @@ function WishBooth() {
                 key={row.market}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell align="center" component="th" scope="row">
                   {row.market}
                 </TableCell>
                 <TableCell align="center">{row.booth}</TableCell>
@@ -60,7 +60,7 @@ function WishBooth() {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </div >
   );
 }
 

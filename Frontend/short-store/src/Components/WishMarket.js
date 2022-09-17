@@ -82,7 +82,7 @@ function WishMarket() {
     <div>
       <h1 style={btnStyle2}>관심마켓</h1>
       <Divider />
-      <ImageList sx={{ width: 700, height: 450 }}>
+      <ImageList sx={{ width: 1000, height: 450 }}>
         {itemData.map((item) => (
           <ImageListItem key={item.img}>
             <img

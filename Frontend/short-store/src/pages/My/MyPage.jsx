@@ -96,7 +96,7 @@ function MyPage() {
         </div>
       </>
 
-      <div className={styles.content_area} style={{ height: "200vh", width: "700px", backgroundColor: "whitesmoke" }}>
+      <div className={styles.content_area} style={{ height: "200vh", width: "1500px", backgroundColor: "whitesmoke" }}>
 
         <Routes>
           <Route path="/" element={<Summary />}></Route>
