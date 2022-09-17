@@ -63,3 +63,9 @@ kubeadm join 192.168.219.193:6443 --token pey7t5.ojbrs2uhduop1w6y \
 # worker3
 kubeadm join 192.168.219.193:6443 --token pey7t5.ojbrs2uhduop1w6y \
         --discovery-token-ca-cert-hash sha256:2a83ff12fb87bb65282194ec4a88311b117e3274848381b40200d03b839f63ca --node-name worker3
+
+# CNI로 Flannel 설치
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+# helm 설치
+sudo snap install helm --classic

@@ -151,7 +151,7 @@ public class SecurityService {
         // find user by userIdx
         User user = findUserByAccessToken(accessToken);
 
-        // logout before delete user 
+        // logout before delete user
         // in order to prevent using accessToken and refreshToken
         logout(accessToken);
 
