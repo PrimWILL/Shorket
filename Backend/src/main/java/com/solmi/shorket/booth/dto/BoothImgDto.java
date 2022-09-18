@@ -22,7 +22,6 @@ public class BoothImgDto {
     private Integer idx;
     private Booth booth;
     private String url;
-    private Integer ranking;
     private Date createdAt;
     private BoothImgStatusType status;
 
@@ -30,7 +29,16 @@ public class BoothImgDto {
         return BoothImgDto.builder()
                 .url(boothImg.getUrl())
                 .status(boothImg.getStatus())
-                .ranking(boothImg.getRanking())
                 .build();
     }
+
+    // 부스 생성
+    public BoothImg toEntity(Booth booth, String url, BoothImgStatusType status) {
+        return BoothImg.builder()
+                .booth(booth)
+                .url(url)
+                .status(status)
+                .build();
+    }
+
 }
