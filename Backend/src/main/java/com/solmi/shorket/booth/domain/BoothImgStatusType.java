@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BoothImgStatusType {
 
-    THUMBNAIL("thumbnail"), PAMPHLET("pamphlet"), ITEM("item"), ETC("etc");
+    THUMBNAIL("thumbnail"), ITEM("item"), ETC("etc");
 
     private final String key;
 
