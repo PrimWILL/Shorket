@@ -69,7 +69,7 @@ public class BoothController {
             notes = "판매자가 마켓 관리자에게 부스(셀러) 신청을 한다.\n"
     )
     @PostMapping(value = "")
-    public String createBooth(
+    public BoothDto createBooth(
             @RequestBody @Valid BoothDto boothDto
     ){
         // TODO: Validation 추가 필요
@@ -79,9 +79,7 @@ public class BoothController {
         }
 
         try {
-            Integer boothIdx = boothService.insertBooth(boothDto);
-
-            return boothIdx + " 부스 등록이 완료되었습니다.";
+            return boothService.createBooth(boothDto);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -118,13 +116,12 @@ public class BoothController {
             notes = "마켓 관리자는 부스 정보 수정이 가능하다."
     )
     @PutMapping("/{boothIdx}")
-    public String updateBoothInfo(
+    public BoothDto updateBoothInfo(
             @PathVariable Integer boothIdx,
             @RequestBody BoothDto boothDto
     ){
         try {
-            boothService.updateBooth(boothIdx, boothDto);
-            return "부스 수정이 완료되었습니다.";
+            return boothService.updateBooth(boothIdx, boothDto);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
