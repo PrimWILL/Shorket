@@ -101,7 +101,9 @@ public class BoothDto {
                 .build();
     }
 
-    public Booth updateEntity(Booth booth) {
+    public Booth updateEntity(Booth booth, Integer number, String boothName, String sellerName, String item, String site, String description, String address,
+                              String phoneNumber, String email, Date startDate, Date endDate, LocalTime startTime, LocalTime endTime) {
+        Optional.ofNullable(number).ifPresent(booth::setNumber);
         Optional.ofNullable(boothName).ifPresent(booth::setBoothName);
         Optional.ofNullable(sellerName).ifPresent(booth::setSellerName);
         Optional.ofNullable(item).ifPresent(booth::setItem);

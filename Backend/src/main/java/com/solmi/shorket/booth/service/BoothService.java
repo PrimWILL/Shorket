@@ -97,9 +97,13 @@ public class BoothService {
      */
     @Transactional
     public BoothDto updateBooth(Integer boothIdx, BoothDto boothDto) {
+
         Booth booth = boothRepository.findById(boothIdx)
                 .orElseThrow(BoothNotFoundException::new);
-        booth = boothRepository.save(boothDto.updateEntity(booth));
+
+        booth = boothRepository.save(boothDto.updateEntity(booth, boothDto.getNumber(), boothDto.getBoothName(),boothDto.getSellerName(),boothDto.getItem(),boothDto.getSite(),boothDto.getDescription(),boothDto.getAddress(),
+                boothDto.getPhoneNumber(),boothDto.getEmail(),boothDto.getStartDate(),boothDto.getEndDate(),boothDto.getStartTime(),boothDto.getEndTime()));
+
         return BoothDto.boothResponse(booth);
     }
 

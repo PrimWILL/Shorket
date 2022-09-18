@@ -31,6 +31,7 @@ public class Booth {
     private Market market;
 
     @Column(nullable = false)
+    @Setter
     private Integer number;
 
     @Column(columnDefinition = "VARCHAR(200) NOT NULL")
