@@ -151,6 +151,10 @@ public class SecurityService {
         // find user by userIdx
         User user = findUserByAccessToken(accessToken);
 
+        // logout before delete user
+        // in order to prevent using accessToken and refreshToken
+        logout(accessToken);
+
         // logical delete
         userRepository.save(user.deleteUserByStatusType());
     }

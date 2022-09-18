@@ -80,6 +80,7 @@ gradle-app.setting
 .gradletasknamecache
 
 application-jwt.properties
+application-aws.properties
 
 .java-version
 
