@@ -2,13 +2,14 @@ package com.solmi.shorket.market.dto;
 
 import com.solmi.shorket.market.domain.Address;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Data
-@NotNull
+@Getter
+@Setter
 @AllArgsConstructor
 public class UpdateMarketRequestDto {
 
@@ -17,4 +18,6 @@ public class UpdateMarketRequestDto {
     private Address address;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private List<String> imageUrls;
+    private String mapImageUrl;
 }

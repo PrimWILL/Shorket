@@ -2,11 +2,15 @@ package com.solmi.shorket.market.dto;
 
 import com.solmi.shorket.market.domain.Address;
 import com.solmi.shorket.market.domain.Market;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class MarketResponseDto {
 
     private Integer marketIdx;
@@ -17,6 +21,8 @@ public class MarketResponseDto {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer interestCount;
+    private List<String> images = new ArrayList<>();
+    private String mapImage;
 
     public MarketResponseDto(Market market) {
         this.setMarketIdx(market.getIdx());
@@ -26,6 +32,8 @@ public class MarketResponseDto {
         this.setAddress(market.getAddress());
         this.setStartDate(market.getStartDate());
         this.setEndDate(market.getEndDate());
-        this.setInterestCount(market.getInterests().size());
+        this.setInterestCount(market.getMarketInterestCount());
+        market.getImages().forEach(img -> this.getImages().add(img.getUrl()));
+        this.setMapImage(market.getMapImage().getUrl());
     }
 }

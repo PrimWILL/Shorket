@@ -1,6 +1,8 @@
 package com.solmi.shorket.market.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -8,42 +10,36 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Getter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "MARKET_IMG_TB")
-public class MarketImg {
+@Table(name = "MARKET_IMAGE_TB")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class MarketImage {
 
     @Id
     @GeneratedValue
     private Integer idx;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "MARKET_TB_IDX")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "market_tb_idx")
     private Market market;
 
-    private Integer priority;
-
     @NotNull
-    @Enumerated(value = EnumType.STRING)
-    private MarketImgStatusType status;
+    private String url;
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    //== Setter ==//
-    private void setMarket(Market market) {
+    //== Constructor ==//
+    public MarketImage(String url) {
+        this(null, url);
+    }
+
+    public MarketImage(Market market, String url) {
         this.market = market;
-    }
-
-    private void setPriority(Integer priority) {
-        this.priority = priority;
-    }
-
-    private void setStatus(MarketImgStatusType status) {
-        this.status = status;
+        this.url = url;
     }
 }
 
