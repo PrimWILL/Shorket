@@ -14,7 +14,7 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
 
     private final EntityManager em;
 
-    private final int NUMBER_OF_PAGING = 10;
+    private final static int NUMBER_OF_PAGING = 10;
 
     @Override
     public List<Market> findMarkets(MarketSortingCriteria sort, MarketFilteringCriteriaByDate date,
@@ -34,17 +34,11 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
                 filteringQuery += "m.endDate < :now ";
                 break;
             default:
-                throw new IllegalArgumentException("Bad Request");
+                throw new IllegalArgumentException("잘못된 형식의 기간입니다.");
         }
 
         // 지역 filtering
-        if (!locals.isEmpty()) {
-            filteringQuery += "and m.address.sido in (";
-            for (String local : locals) {
-                filteringQuery += "'" + local + "', ";
-            }
-            filteringQuery += "'') ";
-        }
+        filteringQuery += "and m.address.sido in :locals ";
 
         // Sorting
         String sortingQuery = "order by ";
@@ -63,11 +57,12 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
                 sortingQuery += "m.name";
                 break;
             default:
-                throw new IllegalArgumentException("Bad Request");
+                throw new IllegalArgumentException("잘못된 형식의 정렬 기준입니다.");
         }
 
-        return em.createQuery("select m from Market m " + filteringQuery + sortingQuery)
+        return em.createQuery("select m from Market m " + filteringQuery + sortingQuery, Market.class)
                 .setParameter("now", LocalDateTime.now())
+                .setParameter("locals", locals)
                 .setFirstResult(page * NUMBER_OF_PAGING)
                 .setMaxResults(NUMBER_OF_PAGING)
                 .getResultList();
