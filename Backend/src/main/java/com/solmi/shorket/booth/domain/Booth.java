@@ -1,7 +1,6 @@
 package com.solmi.shorket.booth.domain;
 
 import com.solmi.shorket.market.domain.Market;
-import com.solmi.shorket.user.domain.BoothInterest;
 import com.solmi.shorket.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -96,8 +95,8 @@ public class Booth {
     @Setter
     private BoothApprovalType approval;
 
-    @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL)
-    private Set<BoothInterest> interests = new HashSet<>();
+//    @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL)
+//    private Set<BoothInterest> interests = new HashSet<>();
 
     public Booth() {
 

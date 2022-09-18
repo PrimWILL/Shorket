@@ -113,13 +113,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler(GetBoothFailedException.class)
+    /**
+     * Booth
+     */
+    @ExceptionHandler(BoothNotFoundException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ExceptionResponse getBoothFailedCException(HttpServletRequest request, BoothNotFoundException e) {
+    protected ExceptionResponse marketNotFoundException(BoothNotFoundException e) {
         log.info(String.valueOf(e));
         return new ExceptionResponse(
-                getMessage("getBoothFailed.code"),
-                getMessage("getBoothFailed.message")
+                getMessage("boothNotFound.code"),
+                getMessage("boothNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(BoothInterestNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse boothInterestNotFoundException(BoothInterestNotFoundException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("boothInterestNotFound.code"),
+                getMessage("boothInterestNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(DuplicateBoothInterestException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse duplicateBoothInterestException(DuplicateBoothInterestException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("duplicateBoothInterest.code"),
+                getMessage("duplicateBoothInterest.message")
         );
     }
 
