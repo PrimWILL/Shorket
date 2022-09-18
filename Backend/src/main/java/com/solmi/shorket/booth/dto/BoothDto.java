@@ -44,6 +44,7 @@ public class BoothDto {
 
     public static BoothDto boothListResponse(Booth booth) {
         return BoothDto.builder()
+            .idx(booth.getIdx())
             .number(booth.getNumber())
             .boothName(booth.getBoothName()) // 부스 이름
             .item(booth.getItem()) // 부스 종류 (판매품목)
