@@ -8,6 +8,7 @@ import com.solmi.shorket.booth.repository.BoothRepository;
 import com.solmi.shorket.global.exception.BoothNotFoundException;
 import com.solmi.shorket.global.exception.MarketNotFoundException;
 import com.solmi.shorket.market.domain.Market;
+import com.solmi.shorket.market.dto.MarketResponseDto;
 import com.solmi.shorket.market.repository.MarketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,10 +80,16 @@ public class BoothService {
      * Booth 등록
      */
     @Transactional
-    public Integer insertBooth(BoothDto boothDto) {
-        // TODO : validation
-        Booth booth = boothRepository.save(boothDto.toEntity());
-        return booth.getIdx();
+    public BoothDto createBooth(BoothDto boothDto) {
+
+        Market market = marketRepository.findById(boothDto.getMarket().getMarketIdx())
+                .orElseThrow(MarketNotFoundException::new);
+
+        Booth booth = boothRepository.save(boothDto.toEntity(
+                market, boothDto.getNumber(), boothDto.getBoothName(),boothDto.getSellerName(),boothDto.getItem(),boothDto.getSite(),boothDto.getDescription(),boothDto.getAddress(),
+                boothDto.getPhoneNumber(),boothDto.getEmail(),boothDto.getStartDate(),boothDto.getEndDate(),boothDto.getStartTime(),boothDto.getEndTime()));
+
+        return BoothDto.boothResponse(booth);
     }
 
     /**
@@ -90,9 +97,13 @@ public class BoothService {
      */
     @Transactional
     public BoothDto updateBooth(Integer boothIdx, BoothDto boothDto) {
+
         Booth booth = boothRepository.findById(boothIdx)
                 .orElseThrow(BoothNotFoundException::new);
-        booth = boothRepository.save(boothDto.updateEntity(booth));
+
+        booth = boothRepository.save(boothDto.updateEntity(booth, boothDto.getNumber(), boothDto.getBoothName(),boothDto.getSellerName(),boothDto.getItem(),boothDto.getSite(),boothDto.getDescription(),boothDto.getAddress(),
+                boothDto.getPhoneNumber(),boothDto.getEmail(),boothDto.getStartDate(),boothDto.getEndDate(),boothDto.getStartTime(),boothDto.getEndTime()));
+
         return BoothDto.boothResponse(booth);
     }
 

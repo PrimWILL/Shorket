@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.domain.BoothApprovalType;
 import com.solmi.shorket.booth.repository.BoothImgRepository;
+import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.market.dto.MarketResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -79,9 +80,10 @@ public class BoothDto {
 
     // BoothRequestDto -> Booth
     // 부스 생성
-    public Booth toEntity() {
+    public Booth toEntity(Market market, Integer number, String boothName, String sellerName, String item, String site, String description, String address,
+                          String phoneNumber, String email, Date startDate, Date endDate, LocalTime startTime, LocalTime endTime) {
         return Booth.builder()
-                //.market(market)
+                .market(market)
                 .number(number)
                 .boothName(boothName)
                 .sellerName(sellerName)
@@ -93,11 +95,15 @@ public class BoothDto {
                 .email(email)
                 .startDate(startDate)
                 .endDate(endDate)
+                .startTime(startTime)
+                .endTime(endTime)
                 .viewCount(0)
                 .build();
     }
 
-    public Booth updateEntity(Booth booth) {
+    public Booth updateEntity(Booth booth, Integer number, String boothName, String sellerName, String item, String site, String description, String address,
+                              String phoneNumber, String email, Date startDate, Date endDate, LocalTime startTime, LocalTime endTime) {
+        Optional.ofNullable(number).ifPresent(booth::setNumber);
         Optional.ofNullable(boothName).ifPresent(booth::setBoothName);
         Optional.ofNullable(sellerName).ifPresent(booth::setSellerName);
         Optional.ofNullable(item).ifPresent(booth::setItem);

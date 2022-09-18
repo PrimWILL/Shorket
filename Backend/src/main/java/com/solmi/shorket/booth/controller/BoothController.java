@@ -2,19 +2,25 @@ package com.solmi.shorket.booth.controller;
 
 import com.solmi.shorket.booth.domain.Booth;
 import com.solmi.shorket.booth.dto.*;
+import com.solmi.shorket.booth.service.BoothImgService;
 import com.solmi.shorket.booth.service.BoothInterestService;
 import com.solmi.shorket.booth.service.BoothService;
+import com.solmi.shorket.global.exception.BoothImgNotFoundException;
 import com.solmi.shorket.global.exception.BoothNotFoundException;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.service.SecurityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -33,6 +39,7 @@ public class BoothController {
 
     private final BoothService boothService;
     private final BoothInterestService boothInterestService;
+    private final BoothImgService boothImgService;
     private final SecurityService securityService;
 
     @ApiOperation(
@@ -62,7 +69,7 @@ public class BoothController {
             notes = "판매자가 마켓 관리자에게 부스(셀러) 신청을 한다.\n"
     )
     @PostMapping(value = "")
-    public String createBooth(
+    public BoothDto createBooth(
             @RequestBody @Valid BoothDto boothDto
     ){
         // TODO: Validation 추가 필요
@@ -72,10 +79,32 @@ public class BoothController {
         }
 
         try {
-            // TODO: 이미지도 등록할 수 있어야 한다.
-            Integer boothIdx = boothService.insertBooth(boothDto);
+            return boothService.createBooth(boothDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
-            return boothIdx + " 부스 등록이 완료되었습니다.";
+    @ApiOperation(
+            value = "부스 이미지 등록",
+            notes = "부스 이미지를 등록한다.\n"
+    )
+    @PostMapping(value = "/{boothIdx}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String createBoothImg(
+            @PathVariable Integer boothIdx,
+            @RequestPart(value = "image") MultipartFile image,
+            @RequestPart(value = "dto") @Parameter(schema =@Schema(type = "string", format = "binary")) BoothImgDto boothImgDto
+    ) {
+        // validation: 파일이 비어 있을 경우
+        if (image.isEmpty()) {
+            throw new BoothImgNotFoundException();
+        }
+
+        try {
+            String imageUrl = boothImgService.addBoothImg(boothIdx, image, boothImgDto);
+
+            return imageUrl;
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -87,14 +116,12 @@ public class BoothController {
             notes = "마켓 관리자는 부스 정보 수정이 가능하다."
     )
     @PutMapping("/{boothIdx}")
-    public String updateBoothInfo(
+    public BoothDto updateBoothInfo(
             @PathVariable Integer boothIdx,
             @RequestBody BoothDto boothDto
     ){
         try {
-            // TODO: 이미지도 등록할 수 있어야 한다.
-            boothService.updateBooth(boothIdx, boothDto);
-            return "부스 수정이 완료되었습니다.";
+            return boothService.updateBooth(boothIdx, boothDto);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
