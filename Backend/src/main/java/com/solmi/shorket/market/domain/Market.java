@@ -2,6 +2,7 @@ package com.solmi.shorket.market.domain;
 
 import com.solmi.shorket.global.BaseTimeEntity;
 import com.solmi.shorket.user.domain.MarketInterest;
+import com.solmi.shorket.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,10 @@ public class Market extends BaseTimeEntity {
     @GeneratedValue
     private Integer idx;
 
-    // private User manager;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_tb_idx")
+    private User manager;
 
     @NotNull
     @Column(length = 200)
@@ -48,9 +52,9 @@ public class Market extends BaseTimeEntity {
     @NotNull
     private LocalDateTime endDate;
 
-    private Float latitude;
-
-    private Float longitude;
+//    private Float latitude;
+//
+//    private Float longitude;
 
     @OneToMany(mappedBy = "market", cascade = CascadeType.ALL)
     private List<MarketImage> images = new ArrayList<>();
@@ -69,8 +73,9 @@ public class Market extends BaseTimeEntity {
     private int marketInterestCount;
 
     //== Constructor ==//
-    private Market(String name, String description, Integer viewCount, Address address,
+    private Market(User manager, String name, String description, Integer viewCount, Address address,
                    LocalDateTime startDate, LocalDateTime endDate) {
+        this.manager = manager;
         this.name = name;
         this.description = description;
         this.viewCount = viewCount;
@@ -80,10 +85,10 @@ public class Market extends BaseTimeEntity {
     }
 
     //== Create Method ==//
-    public static Market createMarket(String name, String description, Address address,
+    public static Market createMarket(User manager, String name, String description, Address address,
                                       LocalDateTime startDate, LocalDateTime endDate,
                                       List<String> imageUrls, String mapImageUrl) {
-        Market market = new Market(name, description, 0, address, startDate, endDate);
+        Market market = new Market(manager, name, description, 0, address, startDate, endDate);
         imageUrls.forEach(imageUrl -> market.getImages().add(new MarketImage(market, Market.parseImageUrl(imageUrl))));
         market.setMapImage(new MarketImage(Market.parseImageUrl(mapImageUrl)));
 

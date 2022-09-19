@@ -1,6 +1,7 @@
 package com.solmi.shorket.market.service;
 
 import com.solmi.shorket.global.exception.MarketNotFoundException;
+import com.solmi.shorket.global.exception.MarketUnauthorizedException;
 import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.market.domain.MarketImage;
 import com.solmi.shorket.market.dto.MarketFilteringCriteriaByDate;
@@ -8,6 +9,7 @@ import com.solmi.shorket.market.dto.MarketSortingCriteria;
 import com.solmi.shorket.market.dto.UpdateMarketRequestDto;
 import com.solmi.shorket.market.repository.MarketImageRepository;
 import com.solmi.shorket.market.repository.MarketRepository;
+import com.solmi.shorket.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +51,10 @@ public class MarketService {
         return marketRepository.findMarkets(sort, date, locals, page);
     }
 
+    public List<Market> findManagedMarkets(User user, MarketSortingCriteria sort, Integer page) {
+        return marketRepository.findManagedMarkets(user, sort, page);
+    }
+
     /**
      * Market 조회
      * 조회 시 조회수가 증가하므로 사용 시 주의해야 함.
@@ -70,11 +76,14 @@ public class MarketService {
      * @param marketIdx 수정할 Market의 idx
      * @param updateDto 수정할 내용
      * @throws MarketNotFoundException 수정할 Market이 없는 경우
+     * @throws MarketUnauthorizedException Market 수정 권한이 없는 경우
      */
     @Transactional
-    public void updateMarket(Integer marketIdx, UpdateMarketRequestDto updateDto) {
+    public void updateMarket(User user, Integer marketIdx, UpdateMarketRequestDto updateDto) {
         Market market = marketRepository.findById(marketIdx)
                 .orElseThrow(MarketNotFoundException::new);
+
+        validateMarketAuthority(user, market);
 
         List<MarketImage> removeImages = new ArrayList<>(market.getImages());
         market.getImages().clear();
@@ -92,11 +101,28 @@ public class MarketService {
      *
      * @param marketIdx 삭제할 Market의 idx
      * @throws MarketNotFoundException 삭제할 Market이 없는 경우
+     * @throws MarketUnauthorizedException Market 삭제 권한이 없는 경우
      */
     @Transactional
-    public void deleteMarket(Integer marketIdx) {
+    public void deleteMarket(User user, Integer marketIdx) {
         Market market = marketRepository.findById(marketIdx)
                 .orElseThrow(MarketNotFoundException::new);
+
+        validateMarketAuthority(user, market);
+
         marketRepository.delete(market);
+    }
+
+    /**
+     * Market 수정/삭제 권한 검증. Market 관리자에게만 권한이 부여된다.
+     *
+     * @param user 수정/삭제를 하려는 User
+     * @param market 수정/삭제를 하려는 Market
+     * @throws MarketUnauthorizedException Market 수정/삭제 권한이 없는 경우
+     */
+    private void validateMarketAuthority(User user, Market market) {
+        if (!user.getIdx().equals(market.getManager().getIdx())) {
+            throw new MarketUnauthorizedException();
+        }
     }
 }

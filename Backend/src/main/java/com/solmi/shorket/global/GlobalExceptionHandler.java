@@ -84,7 +84,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Market
      */
     @ExceptionHandler(MarketNotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ExceptionResponse marketNotFoundException(MarketNotFoundException e) {
         log.info(String.valueOf(e));
         return new ExceptionResponse(
@@ -93,8 +93,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(MarketUnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    protected ExceptionResponse marketUnauthorizedException(MarketUnauthorizedException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("marketUnauthorized.code"),
+                getMessage("marketUnauthorized.message")
+        );
+    }
+
     @ExceptionHandler(MarketInterestNotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ExceptionResponse marketInterestNotFoundException(MarketInterestNotFoundException e) {
         log.info(String.valueOf(e));
         return new ExceptionResponse(
@@ -104,7 +114,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateMarketInterestException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.CONFLICT)
     protected ExceptionResponse duplicateMarketInterestException(DuplicateMarketInterestException e) {
         log.info(String.valueOf(e));
         return new ExceptionResponse(

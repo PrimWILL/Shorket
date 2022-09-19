@@ -8,6 +8,7 @@ import com.solmi.shorket.market.service.MarketService;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.service.MarketInterestService;
 import com.solmi.shorket.user.service.SecurityService;
+import com.solmi.shorket.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/markets")
 public class MarketController {
 
+    private final UserService userService;
     private final SecurityService securityService;
     private final MarketService marketService;
     private final MarketInterestService marketInterestService;
@@ -37,25 +39,42 @@ public class MarketController {
     )
     @PostMapping
     public CreateMarketResponseDto saveMarket(@RequestBody @Valid CreateMarketRequestDto requestDto) {
-        Market market = requestDto.toEntity();
+        User manager = userService.findByEmail(requestDto.getUserEmail());
+        Market market = requestDto.toEntity(manager);
         return new CreateMarketResponseDto(marketService.saveMarket(market).getIdx());
     }
 
     @ApiOperation(
             value = "Market 목록 조회",
             notes = "- `sort`: VIEW(조회순, 0), INTEREST(관심순, 1), LATEST(최신순, 2), DICT(가나다순, 3)\n\n" +
-                    "- `locals`: 검색할 지역 목록이 담긴 배열. **빈 배열로 요청할 경우 모든 지역으로 검색** (ex. `[\"서울\", \"경기도\"]`)\n\n" +
+                    "- `locals`: 검색할 지역 목록이 담긴 배열. `locals`를 보내지 않거나 비워서 보내면 지역 필터링 없이 조회합니다.\n\n" +
                     "- `date`: UPCOMING(진행 예정, 0), CURRENT(진행 중, 1), COMPLETE(종료, 2)\n\n" +
                     "- `page`: 조회할 페이지 번호 (0부터 시작)\n\n" +
                     "**`sort`, `date`는 전부 대문자로 작성해주세요.**"
     )
     @GetMapping
-    public MarketListResponseDto<List<ListMarketResponseDto>> getMarkets(@RequestParam(defaultValue = "INTEREST") MarketSortingCriteria sort,
-                                                                         @RequestParam(defaultValue = "CURRENT") MarketFilteringCriteriaByDate date,
+    public MarketListResponseDto<List<ListMarketResponseDto>> getMarkets(@RequestParam MarketSortingCriteria sort,
+                                                                         @RequestParam MarketFilteringCriteriaByDate date,
                                                                          @RequestParam(defaultValue = "") List<String> locals,
                                                                          @RequestParam(defaultValue = "0") Integer page) {
-        List<Market> markets = marketService.findMarkets(sort, date, locals, page);
-        List<ListMarketResponseDto> res = markets.stream()
+        List<ListMarketResponseDto> res = marketService.findMarkets(sort, date, locals, page).stream()
+                .map(ListMarketResponseDto::new)
+                .collect(Collectors.toList());
+        return new MarketListResponseDto<>(res);
+    }
+
+    @ApiOperation(
+            value = "로그인 사용자가 관리하는 Market 목록 조회",
+            notes = "- `sort`: VIEW(조회순, 0), INTEREST(관심순, 1), LATEST(최신순, 2), DICT(가나다순, 3)\n\n" +
+                    "- `page`: 조회할 페이지 번호 (0부터 시작)\n\n" +
+                    "**`sort`는 전부 대문자로 작성해주세요.**"
+    )
+    @GetMapping("/management")
+    public MarketListResponseDto<List<ListMarketResponseDto>> getManagedMarkets(@RequestHeader("X-AUTH-TOKEN") String token,
+                                                                                @RequestParam MarketSortingCriteria sort,
+                                                                                @RequestParam Integer page) {
+        User user = securityService.findUserByAccessToken(token);
+        List<ListMarketResponseDto> res = marketService.findManagedMarkets(user, sort, page).stream()
                 .map(ListMarketResponseDto::new)
                 .collect(Collectors.toList());
         return new MarketListResponseDto<>(res);
@@ -76,9 +95,11 @@ public class MarketController {
             notes = "수정 사항을 받아서 `marketIdx`에 해당하는 market의 상세 정보 조회."
     )
     @PutMapping("/{marketIdx}")
-    public void updateMarket(@PathVariable Integer marketIdx,
-                             @RequestBody @Valid UpdateMarketRequestDto request) {
-        marketService.updateMarket(marketIdx, request);
+    public void updateMarket(@RequestHeader("X-AUTH-TOKEN") String token,
+                             @PathVariable Integer marketIdx,
+                             @RequestBody @Valid UpdateMarketRequestDto requestDto) {
+        User user = securityService.findUserByAccessToken(token);
+        marketService.updateMarket(user, marketIdx, requestDto);
     }
 
     @ApiOperation(
@@ -86,15 +107,17 @@ public class MarketController {
             notes = "`marketIdx`에 해당하는 market을 삭제합니다."
     )
     @DeleteMapping("/{marketIdx}")
-    public void deleteMarket(@PathVariable Integer marketIdx) {
-        marketService.deleteMarket(marketIdx);
+    public void deleteMarket(@RequestHeader("X-AUTH-TOKEN") String token,
+                             @PathVariable Integer marketIdx) {
+        User user = securityService.findUserByAccessToken(token);
+        marketService.deleteMarket(user, marketIdx);
     }
 
     @ApiOperation(
             value = "관심 Market 추가",
             notes = "`X-AUTH-TOKEN`에 해당하는 user가 `marketIdx`에 해당하는 market을 관심 market으로 추가한다."
     )
-    @GetMapping("/{marketIdx}/like")
+    @PostMapping("/{marketIdx}/like")
     public void addMarketInterest(@RequestHeader("X-AUTH-TOKEN") String token, @PathVariable Integer marketIdx) {
         User user = securityService.findUserByAccessToken(token);
 
@@ -120,7 +143,7 @@ public class MarketController {
     public Page<BoothDto> getBoothsByMarket(
             @PageableDefault(size = 10) Pageable pageable,
             @PathVariable Integer marketIdx
-    ){
+    ) {
         return boothService.getBoothsByMarket(pageable, marketIdx);
     }
 }

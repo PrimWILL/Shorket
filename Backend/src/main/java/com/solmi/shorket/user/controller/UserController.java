@@ -7,7 +7,6 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-
 @Api(tags = "Users")
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/users")
@@ -77,7 +76,7 @@ public class UserController {
             @ApiParam(value = "조회할 이메일 Dto", required = true)
             @RequestBody UserExistRequestDto userExistRequestDto
     ) {
-        return userService.findUserByEmail(userExistRequestDto);
+        return userService.existsUserByEmail(userExistRequestDto);
     }
 
     @ApiImplicitParams({
