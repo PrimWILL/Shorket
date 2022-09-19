@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class MarketResponseDto {
     private String description;
     private Integer viewCount;
     private Address address;
+    private LocalTime openTime;
+    private LocalTime closeTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer interestCount;
@@ -30,6 +33,8 @@ public class MarketResponseDto {
         this.setDescription(market.getDescription());
         this.setViewCount(market.getViewCount());
         this.setAddress(market.getAddress());
+        this.setOpenTime(market.getOpenTime());
+        this.setCloseTime(market.getCloseTime());
         this.setStartDate(market.getStartDate());
         this.setEndDate(market.getEndDate());
         this.setInterestCount(market.getMarketInterestCount());

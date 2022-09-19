@@ -3,11 +3,10 @@ package com.solmi.shorket.market.dto;
 import com.solmi.shorket.market.domain.Address;
 import com.solmi.shorket.market.domain.Market;
 import com.solmi.shorket.user.domain.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -16,18 +15,20 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateMarketRequestDto {
     private String userEmail;
     private String name;
     private String description;
     private Address address;
+    private LocalTime openTime;
+    private LocalTime closeTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private List<String> imageUrls;
     private String mapImageUrl;
 
     public Market toEntity(User user) {
-        return Market.createMarket(user, name, description, address, startDate, endDate, imageUrls, mapImageUrl);
+        return Market.createMarket(user, name, description, address, openTime, closeTime, startDate, endDate, imageUrls, mapImageUrl);
     }
 }
