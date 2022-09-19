@@ -1,6 +1,7 @@
 package com.solmi.shorket.user.domain;
 
 import com.solmi.shorket.global.BaseTimeEntity;
+import com.solmi.shorket.market.domain.Market;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,6 +51,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     @ColumnDefault("'Y'")
     @Column(nullable = false)
     private StatusType statusType;
+
+    @OneToMany(mappedBy = "manager")
+    private List<Market> markets = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private Set<MarketInterest> marketInterests = new HashSet<>();
