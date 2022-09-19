@@ -2,12 +2,12 @@ package com.solmi.shorket.user.service;
 
 import com.solmi.shorket.global.JwtProvider;
 import com.solmi.shorket.global.exception.*;
-import com.solmi.shorket.user.domain.LogoutAccessToken;
+import com.solmi.shorket.user.domain.ExpiredAccessToken;
 import com.solmi.shorket.user.domain.StatusType;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
 import com.solmi.shorket.user.dto.*;
-import com.solmi.shorket.user.repository.LogoutAccessTokenRedisRepository;
+import com.solmi.shorket.user.repository.ExpiredAccessTokenRedisRepository;
 import com.solmi.shorket.user.repository.UserRepository;
 import com.solmi.shorket.user.repository.UserTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class SecurityService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final UserTokenRepository userTokenRepository;
-    private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
+    private final ExpiredAccessTokenRedisRepository expiredAccessTokenRedisRepository;
 
     @Transactional
     public UserLoginResponseDto login(UserLoginRequestDto userLoginRequestDto) {
@@ -62,17 +62,20 @@ public class SecurityService {
     }
 
     @Transactional
-    public UserTokenDto reissue(UserTokenRequestDto userTokenRequestDto) {
+    public UserTokenDto reissue(String accessToken, UserTokenRequestDto userTokenRequestDto) {
 
         // throw error if refresh token is expired or not found
         if (!jwtProvider.validationToken(userTokenRequestDto.getRefreshToken()))
             throw new RefreshTokenExpiredCException();
 
-        // get userIdx from AccessToken
-        String accessToken = userTokenRequestDto.getAccessToken();
-
         // find user by using accessToken
         User user = findUserByAccessToken(accessToken);
+
+        // make beforeAccessToken to register black list in Redis
+        ExpiredAccessToken expiredAccessToken = ExpiredAccessToken.createLogoutAccessToken(
+                accessToken, user.getIdx(), jwtProvider.getExpirationTime(accessToken));
+
+        expiredAccessTokenRedisRepository.save(expiredAccessToken);
 
         // if refresh token is not saved in DB
         UserToken userToken = userTokenRepository.findByUserIdx(user.getIdx())
@@ -140,10 +143,10 @@ public class SecurityService {
         }
 
         // make logoutAccessToken to register black list in Redis
-        LogoutAccessToken logoutAccessToken = LogoutAccessToken.createLogoutAccessToken(
+        ExpiredAccessToken expiredAccessToken = ExpiredAccessToken.createLogoutAccessToken(
                 accessToken, user.getIdx(), jwtProvider.getExpirationTime(accessToken));
 
-        logoutAccessTokenRedisRepository.save(logoutAccessToken);
+        expiredAccessTokenRedisRepository.save(expiredAccessToken);
     }
 
     @Transactional

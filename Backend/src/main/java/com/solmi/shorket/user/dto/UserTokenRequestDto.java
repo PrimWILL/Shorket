@@ -10,12 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserTokenRequestDto {
 
-    String accessToken;
     String refreshToken;
 
     @Builder
-    public UserTokenRequestDto(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
+    public UserTokenRequestDto(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 }

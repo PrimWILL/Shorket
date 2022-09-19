@@ -37,16 +37,24 @@ public class UserController {
         return userIdx;
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 받은 AccessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
     @ApiOperation(
             value = "액세스, 리프레시 토큰 재발급",
             notes = "accessToken 만료 시 회원 검증 후 refreshToken을 검증해서 accessToken과 refreshToken을 재발급한다."
     )
     @PostMapping("/reissue")
     public UserTokenDto reissue(
+            @RequestHeader("X-AUTH-TOKEN") String accessToken,
             @ApiParam(value = "토큰 재발급 요청 DTO", required = true)
             @RequestBody UserTokenRequestDto userTokenRequestDto
     ) {
-        return securityService.reissue(userTokenRequestDto);
+        return securityService.reissue(accessToken, userTokenRequestDto);
     }
 
     @ApiImplicitParams({

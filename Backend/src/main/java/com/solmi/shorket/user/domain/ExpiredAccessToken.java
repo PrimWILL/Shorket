@@ -9,10 +9,10 @@ import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
-@RedisHash("logoutAccessToken")
+@RedisHash("expiredAccessToken")
 @AllArgsConstructor
 @Builder
-public class LogoutAccessToken {
+public class ExpiredAccessToken {
 
     @Id
     private String id;
@@ -23,8 +23,8 @@ public class LogoutAccessToken {
     @TimeToLive
     private Long expiration;
 
-    public static LogoutAccessToken createLogoutAccessToken(String accessToken, Integer userIdx, Long remainingMilliSeconds) {
-        return LogoutAccessToken.builder()
+    public static ExpiredAccessToken createLogoutAccessToken(String accessToken, Integer userIdx, Long remainingMilliSeconds) {
+        return ExpiredAccessToken.builder()
                 .id(accessToken)
                 .userIdx(userIdx)
                 .expiration(remainingMilliSeconds/1000)
