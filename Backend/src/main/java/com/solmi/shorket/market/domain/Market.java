@@ -11,6 +11,7 @@ import org.hibernate.annotations.Formula;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +48,12 @@ public class Market extends BaseTimeEntity {
     private Address address;
 
     @NotNull
+    private LocalTime openTime;
+
+    @NotNull
+    private LocalTime closeTime;
+
+    @NotNull
     private LocalDateTime startDate;
 
     @NotNull
@@ -74,36 +81,39 @@ public class Market extends BaseTimeEntity {
 
     //== Constructor ==//
     private Market(User manager, String name, String description, Integer viewCount, Address address,
-                   LocalDateTime startDate, LocalDateTime endDate) {
+                   LocalTime openTime, LocalTime closeTime, LocalDateTime startDate, LocalDateTime endDate) {
         this.manager = manager;
         this.name = name;
         this.description = description;
         this.viewCount = viewCount;
         this.address = address;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
     //== Create Method ==//
     public static Market createMarket(User manager, String name, String description, Address address,
+                                      LocalTime openTime, LocalTime closeTime,
                                       LocalDateTime startDate, LocalDateTime endDate,
                                       List<String> imageUrls, String mapImageUrl) {
-        Market market = new Market(manager, name, description, 0, address, startDate, endDate);
+        Market market = new Market(manager, name, description, 0, address, openTime, closeTime, startDate, endDate);
         imageUrls.forEach(imageUrl -> market.getImages().add(new MarketImage(market, Market.parseImageUrl(imageUrl))));
         market.setMapImage(new MarketImage(Market.parseImageUrl(mapImageUrl)));
 
         return market;
     }
 
-    //== Business Logic ==//
-    public void addViewCount() {
-        this.viewCount++;
-    }
-
     //== Util Method ==//
     private static String parseImageUrl(String url) {
         int pos = url.lastIndexOf("id=");
         return "https://drive.google.com/uc?export=view&id=" + url.substring(pos + 3);
+    }
+
+    //== Business Logic ==//
+    public void addViewCount() {
+        this.viewCount++;
     }
 
     public void update(String name, String description, Address address,
