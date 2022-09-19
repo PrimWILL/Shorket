@@ -71,7 +71,7 @@ HELP.md
 gradle-app.setting
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
+!gradle-wrapper.jaro
 
 # Avoid ignore Gradle wrappper properties
 !gradle-wrapper.properties
@@ -81,6 +81,7 @@ gradle-app.setting
 
 application-jwt.properties
 application-aws.properties
+s3.yml
 
 .java-version
 
