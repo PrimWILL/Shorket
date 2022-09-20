@@ -1,0 +1,150 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+li,
+ol,
+ul {
+  list-style: none;
+  margin-bottom: 0;
+}
+a,
+a:active,
+a:focus,
+a:hover {
+  text-decoration: none;
+  color: #222222;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+.App {
+  /* font-family: sans-serif; */
+  font-family: 'Noto Sans CJK KR';
+  text-align: center;
+}
+
+.area {
+    margin-top: 100px;
+}
+  
+.area-2 {
+  margin: 0 auto;
+  margin-top: 100px;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.area-3 {
+  margin: 0 auto;
+  margin-top: 100px;
+  padding: 40px;
+}
+
+/* Components */
+
+.header {
+  background-color: #ffffff;
+  width: 100%;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 3;
+}
+.title {
+  margin-top: 60px;
+}
+
+
+.Card {
+  height: 100%;
+}
+.info_box {
+  /* background-color: tomato; */
+  height: 180px; 
+}
+
+
+/* HOME */
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.s1 {
+  background-color: tomato;
+}
+
+.button {
+  margin-bottom: 40px;
+}
+
+
+/* My */
+.content_area{
+  height: 200vh;
+  width: 700px;
+  background-color: #f6f6f6;
+}
+
+/* Sidebar */
+.snb_area {
+  text-align: left; 
+  width: 180px;
+  float: left;
+}
+.snb_main_title {
+  margin: 0;
+  padding-bottom: 30px;
+  font-size:24px;
+  font-weight: bold;
+}
+.snb_list {
+  margin-bottom: 40px;
+}
+
+.snb_title {
+  display: inline-block;
+  font-size: 18px;
+  margin-bottom: 12px;
+
+}
+.snb_item {
+  font-size: 15px;
+  line-height: 30px;
+}
+.menu_link {
+  color: rgba(34,34,34,.8);
+}

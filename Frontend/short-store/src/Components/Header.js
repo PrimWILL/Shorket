@@ -40,7 +40,12 @@ const items = [
     icon: <FormOutlined />,
     children: [
       {
-        label: <Link to="/enroll/market">마켓 신청하기</Link>,
+        // label: <Link to="/enroll/market">마켓 신청하기</Link>,
+        label: (
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSca4Vayhsr9s7FTZZi8vm_1MKwCDVZVrnXGyVHJXGxxDxmoug/viewform">
+            마켓 신청하기
+          </a>
+        ),
         key: "market:2",
       },
       {
