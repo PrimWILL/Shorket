@@ -117,11 +117,14 @@ public class Market extends BaseTimeEntity {
     }
 
     public void update(String name, String description, Address address,
+                       LocalTime openTime, LocalTime closeTime,
                        LocalDateTime startDate, LocalDateTime endDate,
                        List<String> imageUrls, String mapImageUrl) {
         this.setName(name);
         this.setDescription(description);
         this.setAddress(address);
+        this.setOpenTime(openTime);
+        this.setCloseTime(closeTime);
         this.setStartDate(startDate);
         this.setEndDate(endDate);
         imageUrls.forEach(imageUrl -> this.getImages().add(new MarketImage(this, Market.parseImageUrl(imageUrl))));
@@ -139,6 +142,14 @@ public class Market extends BaseTimeEntity {
 
     private void setAddress(Address address) {
         this.address = address;
+    }
+
+    private void setOpenTime(LocalTime openTime) {
+        this.openTime = openTime;
+    }
+
+    private void setCloseTime(LocalTime closeTime) {
+        this.closeTime = closeTime;
     }
 
     private void setStartDate(LocalDateTime startDate) {
