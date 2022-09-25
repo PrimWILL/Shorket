@@ -176,6 +176,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(EmailAlreadyExistCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse emailAlreadyExistCException(HttpServletRequest request, EmailAlreadyExistCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("emailAlreadyExist.code"),
+                getMessage("emailAlreadyExist.message")
+        );
+    }
+
     private String getMessage(String code) {
         return getMessage(code, null);
     }
