@@ -128,6 +128,9 @@ public class SecurityService {
         // find user by userIdx
         User user = findUserByAccessToken(accessToken);
 
+        if (userRepository.existsByEmail(userInfoChangeRequestDto.getEmail()))
+            throw new EmailAlreadyExistCException();
+
         User updateUser = user.updateUserInfo(
                 userInfoChangeRequestDto.getEmail(),
                 userInfoChangeRequestDto.getName(),
