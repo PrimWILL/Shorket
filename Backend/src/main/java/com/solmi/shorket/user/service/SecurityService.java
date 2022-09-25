@@ -42,6 +42,11 @@ public class SecurityService {
         if (user.getStatusType().equals(StatusType.D))
             throw new UserAlreadyDeletedCException();
 
+        // delete refreshToken if it exists in DB
+        if (!userTokenRepository.findAllByUserIdx(user.getIdx()).isEmpty()) {
+            userTokenRepository.deleteAllByUserIdx(user.getIdx());
+        }
+
         // issue AccessToken and RefreshToken
         UserTokenDto userTokenDto = jwtProvider.createToken(user.getIdx(), user.getUserRole());
 
