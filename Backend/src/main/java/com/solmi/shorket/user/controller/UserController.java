@@ -67,7 +67,7 @@ public class UserController {
             value = "유저 정보 읽기",
             notes = "accessToken을 받아서 해당 번호를 가진 유저의 정보를 읽어온다."
     )
-    @GetMapping("/")
+    @GetMapping
     public UserInfoResponseDto getUserInfo(
             @RequestHeader("X-AUTH-TOKEN") String accessToken
     ) {
@@ -119,7 +119,7 @@ public class UserController {
             value = "유저 정보 변경",
             notes = "accessToken으로 전달받은 유저가 실제 유저인지 확인한 후, 유저의 정보를 변경한다.\n"
     )
-    @PutMapping("/")
+    @PutMapping
     public void changeUserInfo(
             @RequestHeader("X-AUTH-TOKEN") String accessToken,
             @ApiParam(value = "유저 정보 변경 요청 DTO", required = true)
