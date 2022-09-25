@@ -76,7 +76,7 @@ public class Market extends BaseTimeEntity {
 
     @Formula("(select count(1) " +
             "from market_interest_tb mi " +
-            "where mi.idx=idx)")
+            "where mi.market_tb_idx=idx)")
     private int marketInterestCount;
 
     //== Constructor ==//

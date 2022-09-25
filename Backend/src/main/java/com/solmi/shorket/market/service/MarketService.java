@@ -11,6 +11,7 @@ import com.solmi.shorket.market.repository.MarketImageRepository;
 import com.solmi.shorket.market.repository.MarketRepository;
 import com.solmi.shorket.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,21 @@ public class MarketService {
     }
 
     /**
+     * Market 조회
+     * 조회 시 조회수가 증가하므로 사용에 주의해야 함.
+     *
+     * @param marketIdx 조회할 Market의 idx
+     * @return 조회된 Market 객체
+     * @throws MarketNotFoundException 조회할 Market이 없는 경우
+     */
+    public Market findMarket(Integer marketIdx) {
+        Market market = marketRepository.findById(marketIdx)
+                .orElseThrow(MarketNotFoundException::new);
+        market.addViewCount();  // 조회수 증가
+        return market;
+    }
+
+    /**
      * 정렬 기준과 필터링 기준, 페이지 번호를 전달받아 Market List 조회
      *
      * @param sort   정렬 기준 - VIEW(조회순), INTEREST(관심순), LATEST(최신순), DICT(사전순)
@@ -51,23 +67,26 @@ public class MarketService {
         return marketRepository.findMarkets(sort, date, locals, page);
     }
 
+    /**
+     * user가 관리하는 Market 목록 조회
+     *
+     * @param user manager
+     * @param sort 정렬 기준
+     * @param page page number
+     * @return 조회된 Market List
+     */
     public List<Market> findManagedMarkets(User user, MarketSortingCriteria sort, Integer page) {
         return marketRepository.findManagedMarkets(user, sort, page);
     }
 
     /**
-     * Market 조회
-     * 조회 시 조회수가 증가하므로 사용 시 주의해야 함.
+     * 관심 마켓 목록 조회
      *
-     * @param marketIdx 조회할 Market의 idx
-     * @return 조회된 Market 객체
-     * @throws MarketNotFoundException 조회할 Market이 없는 경우
+     * @param user User
+     * @return 조회된 관심 마켓 목록
      */
-    public Market findMarket(Integer marketIdx) {
-        Market market = marketRepository.findById(marketIdx)
-                .orElseThrow(MarketNotFoundException::new);
-        market.addViewCount();  // 조회수 증가
-        return market;
+    public List<Market> getInterestMarkets(Pageable pageable, User user) {
+        return marketRepository.findMarketsByInterestsIn(pageable, user.getMarketInterests());
     }
 
     /**
@@ -75,7 +94,7 @@ public class MarketService {
      *
      * @param marketIdx 수정할 Market의 idx
      * @param updateDto 수정할 내용
-     * @throws MarketNotFoundException 수정할 Market이 없는 경우
+     * @throws MarketNotFoundException     수정할 Market이 없는 경우
      * @throws MarketUnauthorizedException Market 수정 권한이 없는 경우
      */
     @Transactional
@@ -91,6 +110,7 @@ public class MarketService {
 
         market.update(
                 updateDto.getName(), updateDto.getDescription(), updateDto.getAddress(),
+                updateDto.getOpenTime(), updateDto.getCloseTime(),
                 updateDto.getStartDate(), updateDto.getEndDate(),
                 updateDto.getImageUrls(), updateDto.getMapImageUrl()
         );
@@ -100,7 +120,7 @@ public class MarketService {
      * Market 삭제
      *
      * @param marketIdx 삭제할 Market의 idx
-     * @throws MarketNotFoundException 삭제할 Market이 없는 경우
+     * @throws MarketNotFoundException     삭제할 Market이 없는 경우
      * @throws MarketUnauthorizedException Market 삭제 권한이 없는 경우
      */
     @Transactional
@@ -116,7 +136,7 @@ public class MarketService {
     /**
      * Market 수정/삭제 권한 검증. Market 관리자에게만 권한이 부여된다.
      *
-     * @param user 수정/삭제를 하려는 User
+     * @param user   수정/삭제를 하려는 User
      * @param market 수정/삭제를 하려는 Market
      * @throws MarketUnauthorizedException Market 수정/삭제 권한이 없는 경우
      */

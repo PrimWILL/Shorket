@@ -5,6 +5,7 @@ import com.solmi.shorket.market.dto.MarketFilteringCriteriaByDate;
 import com.solmi.shorket.market.dto.MarketSortingCriteria;
 import com.solmi.shorket.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -14,7 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
 
-    private final static int NUMBER_OF_PAGING = 8;
+    @Value("${number-of-market-paging}")
+    private int numberOfPaging;
     private final EntityManager em;
 
     private static String createDateFilteringQuery(MarketFilteringCriteriaByDate date) {
@@ -59,8 +61,8 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
         if (!locals.isEmpty()) {
             query.setParameter("locals", locals);
         }
-        return query.setFirstResult(page * NUMBER_OF_PAGING)
-                .setMaxResults(NUMBER_OF_PAGING)
+        return query.setFirstResult(page * numberOfPaging)
+                .setMaxResults(numberOfPaging)
                 .getResultList();
     }
 
@@ -74,8 +76,8 @@ public class MarketRepositoryCustomImpl implements MarketRepositoryCustom {
 
         return em.createQuery("select m from Market m" + filteringQuery + sortingQuery, Market.class)
                 .setParameter("manager", manager)
-                .setFirstResult(page * NUMBER_OF_PAGING)
-                .setMaxResults(NUMBER_OF_PAGING)
+                .setFirstResult(page * numberOfPaging)
+                .setMaxResults(numberOfPaging)
                 .getResultList();
     }
 
