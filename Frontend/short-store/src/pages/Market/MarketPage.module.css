@@ -1,17 +1,18 @@
-
 .column_wrap {
   display: flex;
   justify-content: center;
   height: 200vh;
 }
+
 .column_is_fixed {
   width: 50%;
   padding-right: 3.33%;
   /* float: left; */
 }
+
 .column {
   width: 50%;
-  background-color: turquoise;
+  background-color: rgb(219, 240, 238);
   padding-left: 3.33%;
 
 }
