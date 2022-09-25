@@ -72,7 +72,7 @@ public class SecurityService {
         User user = findUserByAccessToken(accessToken);
 
         // make beforeAccessToken to register black list in Redis
-        ExpiredAccessToken expiredAccessToken = ExpiredAccessToken.createLogoutAccessToken(
+        ExpiredAccessToken expiredAccessToken = ExpiredAccessToken.createExpiredAccessToken(
                 accessToken, user.getIdx(), jwtProvider.getExpirationTime(accessToken));
 
         expiredAccessTokenRedisRepository.save(expiredAccessToken);
@@ -143,7 +143,7 @@ public class SecurityService {
         }
 
         // make logoutAccessToken to register black list in Redis
-        ExpiredAccessToken expiredAccessToken = ExpiredAccessToken.createLogoutAccessToken(
+        ExpiredAccessToken expiredAccessToken = ExpiredAccessToken.createExpiredAccessToken(
                 accessToken, user.getIdx(), jwtProvider.getExpirationTime(accessToken));
 
         expiredAccessTokenRedisRepository.save(expiredAccessToken);
