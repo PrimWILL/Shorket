@@ -11,12 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.*;
 
-@Getter
 @Entity
+@Getter
 @Table(name = "USERS_TB")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class User extends BaseTimeEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,11 +53,24 @@ public class User extends BaseTimeEntity implements UserDetails {
     @OneToMany(mappedBy = "manager")
     private List<Market> markets = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private Set<MarketInterest> marketInterests = new HashSet<>();
-//
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<MarketInterest> marketInterests = new HashSet<>();
+
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private Set<BoothInterest> boothInterests = new HashSet<>();
+
+    @Builder
+    public User(Integer idx, String email, String password, String name, String nickName, String profileUrl, LoginType loginType, RoleType userRole, StatusType statusType) {
+        this.idx = idx;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickName = nickName;
+        this.profileUrl = profileUrl;
+        this.loginType = loginType;
+        this.userRole = userRole;
+        this.statusType = statusType;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

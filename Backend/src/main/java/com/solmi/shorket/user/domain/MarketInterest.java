@@ -56,6 +56,6 @@ public class MarketInterest {
 
     private void setUser(User user) {
         this.user = user;
-//        user.getMarketInterests().add(this);
+        user.getMarketInterests().add(this);
     }
 }

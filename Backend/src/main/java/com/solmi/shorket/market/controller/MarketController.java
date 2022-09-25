@@ -12,7 +12,10 @@ import com.solmi.shorket.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +24,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Api(tags = "Markets")
+@Slf4j
+@Api(tags = "Markets", value = "Market API. Size of page: 12")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/markets")
@@ -32,6 +36,9 @@ public class MarketController {
     private final MarketService marketService;
     private final MarketInterestService marketInterestService;
     private final BoothService boothService;
+
+    @Value("${number-of-market-paging}")
+    private int numberOfPaging;
 
     @ApiOperation(
             value = "Market 등록",
@@ -71,13 +78,31 @@ public class MarketController {
     )
     @GetMapping("/management")
     public MarketListResponseDto<List<ListMarketResponseDto>> getManagedMarkets(@RequestHeader("X-AUTH-TOKEN") String token,
-                                                                                @RequestParam MarketSortingCriteria sort,
-                                                                                @RequestParam Integer page) {
+                                                                                @RequestParam(defaultValue = "LATEST") MarketSortingCriteria sort,
+                                                                                @RequestParam(defaultValue = "0") Integer page) {
         User user = securityService.findUserByAccessToken(token);
         List<ListMarketResponseDto> res = marketService.findManagedMarkets(user, sort, page).stream()
                 .map(ListMarketResponseDto::new)
                 .collect(Collectors.toList());
         return new MarketListResponseDto<>(res);
+    }
+
+    @ApiOperation(
+            value = "관심 Market 목록 조회",
+            notes = "로그인 user의 관심 Market 목록을 조회한다."
+    )
+    @GetMapping("/interest")
+    public MarketListResponseDto getInterestMarkets(@RequestHeader("X-AUTH-TOKEN") String token,
+                                                    @RequestParam(defaultValue = "LATEST") MarketSortingCriteria sort,
+                                                    @RequestParam(defaultValue = "0") Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, numberOfPaging, sort.toSort());
+        User user = securityService.findUserByAccessToken(token);
+        List<Market> interestMarkets = marketService.getInterestMarkets(pageRequest, user);
+        return new MarketListResponseDto(
+                interestMarkets.stream()
+                        .map(ListMarketResponseDto::new)
+                        .collect(Collectors.toList())
+        );
     }
 
     @ApiOperation(
