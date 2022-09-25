@@ -68,6 +68,29 @@ div {
   height: 180px; 
 }
 
+/* Profile */
+.profile {
+  
+}
+
+.profile_card {
+  height: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+}
+.detail_box {
+  text-align: left;
+  width: 300px;
+}
+
+
+
+
+
+
 
 /* HOME */
 

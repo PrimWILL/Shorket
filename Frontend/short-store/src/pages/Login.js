@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
 
 import axios from "../api/axios";
-
-import { Link as RouterLink } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 // import { Cookies } from "react-cookie";
-import AuthContext from "../context/AuthProvider";
 
 import {
     Container,
@@ -30,9 +28,11 @@ const { Title } = Typography;
 const theme = createTheme();
 
 function Login() {
-    const navigate = useNavigate();
+    const { setAuth } = useAuth();
 
-    const { auth, setAuth } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.passname || "/";
 
     const [userEmail, setUserEmail] = useState("");
     const [isValidEmail, setIsvalidEmail] = useState(false);
@@ -40,6 +40,7 @@ function Login() {
     const [isValidPassword, setIsvalidPassword] = useState(false);
 
     const [isValidAll, setIsvalidAll] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // 유효성 검사하기
     useEffect(() => {
@@ -98,7 +99,7 @@ function Login() {
     };
 
     // 서버 로그인 요청
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!isValidAll) {
@@ -107,54 +108,48 @@ function Login() {
         }
 
         console.log("login 요청중");
-        axios
-            .post(LOGIN_URL, {
-                email: userEmail,
-                password: userPassword,
-            })
-            .then(function (res) {
-                console.log(res);
-                console.log("로그인을 완료했습니다.");
-                alert("로그인을 완료했습니다.");
-                // setCookie("id", res.data.token); // 쿠키에 토큰 저장
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        // navigate("/", { replace: true });
 
-        // const requestPost = async () => {
-        //     try {
-        //         const response = await axios.post(
-        //             LOGIN_URL,
-        //             JSON.stringify(state),
-        //             {
-        //                 headers: { "Content-Type": "application/json" },
-        //                 withCredentials: true,
-        //             }
-        //         );
-        //         console.log(response);
-        //         console.log(JSON.stringify(response?.data));
-        //         const accessToken = response?.data?.accessToken;
-        //         // const roles = response?.data?.roles;
-        //         // setAuth({state, accessToken, roles});
-        //         console.log(accessToken);
-        //         setAuth({ state, accessToken });
-        //     } catch (err) {
-        //         // console.log(err);
-        //         if (!err?.response) {
-        //             setErrMsg("No Server Response");
-        //         } else if (err.response?.status === 400) {
-        //             setErrMsg("Missing Username or Password");
-        //         } else if (err.response?.status === 401) {
-        //             setErrMsg("Unauthorized");
-        //         } else if (err.response?.status === 500) {
-        //             setErrMsg("아이디 또는 비밀번호가 일치하지 않습니다");
-        //         } else {
-        //             setErrMsg("Login Failed");
-        //         }
-        //     }
-        // };
+        try {
+            const response = await axios.post(
+                LOGIN_URL,
+                {
+                    email: userEmail,
+                    password: userPassword,
+                },
+                {
+                    headers: { "Content-Type": "application/json" },
+                    withCredentials: true,
+                }
+            );
+            console.log(response?.data);
+            // console.log(response);
+            const accessToken = response?.data?.userToken.accessToken;
+            const refreshToken = response?.data?.userToken.refreshToken;
+            const role = response?.data?.roleType;
+            setAuth({
+                userEmail,
+                userPassword,
+                accessToken,
+                refreshToken,
+                role,
+            });
+            setUserEmail("");
+            setUserPassword("");
+            navigate(from, { replace: true });
+        } catch (err) {
+            console.log(err?.response);
+            if (!err?.response) {
+                alert("No Server Response");
+            } else if (err.response?.status === 400) {
+                alert("Missing Username or Password");
+            } else if (err.response?.status === 401) {
+                alert("Unauthorized");
+            } else if (err.response?.status === 500) {
+                alert(err.response?.data?.message);
+            } else {
+                alert("Login Failed");
+            }
+        }
 
         // requestPost();
         // console.log(auth);
@@ -240,7 +235,7 @@ function Login() {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                             size="large"
-                            disabled={!isValidAll}
+                            disabled={!isValidAll || loading}
                             onClick={handleSubmit}
                         >
                             로그인

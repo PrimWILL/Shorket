@@ -7,6 +7,7 @@ import { CookiesProvider } from "react-cookie";
 import { AuthProvider } from "./context/AuthProvider";
 
 import MainLayout from "./components/MainLayout";
+import RequireAuth from "./components/RequireAuth";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -18,6 +19,7 @@ import Manage from "./pages/Manage";
 
 import EnrollBooth from "./pages/EnrollBooth";
 import { marketsDummyData } from "./constants/data";
+import requireAuth from "./components/RequireAuth";
 
 const reducer = (state, action) => {
     let newState = [];
@@ -129,19 +131,22 @@ export default function App() {
                                         element={<div>부스상세 페이지</div>}
                                     ></Route>
                                     {/* protected routes */}
-                                    <Route
-                                        path="/my/*"
-                                        element={<My />}
-                                    ></Route>
+                                    <Route element={<RequireAuth />}>
+                                        <Route
+                                            path="/my/*"
+                                            element={<My />}
+                                        ></Route>
 
-                                    <Route
-                                        path="/enrollBooth"
-                                        element={<EnrollBooth />}
-                                    ></Route>
-                                    <Route
-                                        path="/market/:id/manage"
-                                        element={<Manage />}
-                                    ></Route>
+                                        <Route
+                                            path="/enrollBooth"
+                                            element={<EnrollBooth />}
+                                        ></Route>
+                                        <Route
+                                            path="/market/:id/manage"
+                                            element={<Manage />}
+                                        ></Route>
+                                    </Route>
+
                                     <Route
                                         path="*"
                                         element={
