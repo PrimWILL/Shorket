@@ -23,7 +23,7 @@ public class ExpiredAccessToken {
     @TimeToLive
     private Long expiration;
 
-    public static ExpiredAccessToken createLogoutAccessToken(String accessToken, Integer userIdx, Long remainingMilliSeconds) {
+    public static ExpiredAccessToken createExpiredAccessToken(String accessToken, Integer userIdx, Long remainingMilliSeconds) {
         return ExpiredAccessToken.builder()
                 .id(accessToken)
                 .userIdx(userIdx)
