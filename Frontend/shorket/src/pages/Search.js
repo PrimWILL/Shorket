@@ -28,24 +28,39 @@ const sortOptionList = [
     { value: "VIEW", name: "조회순" },
 ];
 
-const dateFilterOptionList = [
+const dateList = [
     { value: "UPCOMING", name: "진행 예정" },
     { value: "CURRENT", name: "진행중" },
     { value: "COMPLETE", name: "종료" },
 ];
 
-const localeFilterOptionList = [
-    { value: "UPCOMING", name: "전부다" },
-    { value: "CURRENT", name: "좋은 감정만" },
-    { value: "COMPLETE", name: "안좋은 감정만" },
+const localeList = [
+    "서울",
+    "부산",
+    "대구",
+    "인천",
+    "광주",
+    "대전",
+    "울산",
+    "경기도",
+    "강원도",
+    "충청북도",
+    "충청남도",
+    "전라북도",
+    "전라남도",
+    "경상북도",
+    "경상남도",
+    "제주특별자치도",
+    "세종특별자치시",
 ];
 
 function Searchpage() {
     const [data, setData] = useState([]); // get으로 가져온 데이터
 
     const [marketList, setMarketList] = useState([]);
-    const [sortType, setSortType] = useState("like");
-    const [filter, setFilter] = useState("all");
+    const [sortType, setSortType] = useState(sortOptionList[0]);
+    const [localFilter, setLocalFilter] = useState("all");
+    const [dateFilter, setDateFilter] = useState("all");
 
     const [order, setOrder] = useState("");
     const [open, setOpen] = useState(false);
@@ -144,9 +159,29 @@ function Searchpage() {
                         </AccordionSummary>
                         <AccordionDetails className={styles.filter_menu}>
                             <ul>
-                                <li>1</li>
-                                <li>1</li>
-                                <li>1</li>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="color"
+                                        value="blue"
+                                    />{" "}
+                                    전체
+                                </li>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="color"
+                                        value="blue"
+                                    />{" "}
+                                </li>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="color"
+                                        value="blue"
+                                    />{" "}
+                                    Blue
+                                </li>
                             </ul>
                         </AccordionDetails>
                     </Accordion>
