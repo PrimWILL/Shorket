@@ -2,11 +2,30 @@ plugins {
 	id 'org.springframework.boot' version '2.7.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'com.google.cloud.tools.jib' version '3.2.0'
 }
 
 group = 'com.solmi'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+
+jib {
+	from {
+		platforms {
+			platform {
+				architecture = "arm64"
+				os = "linux"
+			}
+		}
+	}
+	to {
+		image = "primwill/shorket-backend"
+		tags = ["v2"]
+	}
+	container {
+		jvmFlags = ["-Xms128m", "-Xmx128m"]
+	}
+}
 
 configurations {
 	compileOnly {
@@ -37,6 +56,8 @@ dependencies {
 
 	// gson
 	implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {

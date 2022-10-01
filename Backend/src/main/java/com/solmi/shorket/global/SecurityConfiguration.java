@@ -40,7 +40,8 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers("/api/booths/**",
                         "/api/markets/**",
-                        "/api/users/login", "/api/users/email", "/api/users/signup").permitAll()
+                        "/api/users/login", "/api/users/email", "/api/users/signup",
+                        "/actuator/health/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint)
