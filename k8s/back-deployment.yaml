@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shorket-backend-deployment
+  labels:
+    app: shorket-backend
+spec:
+  selector:
+    matchLabels:
+      app: shorket-backend
+  template:
+    metadata:
+      labels:
+        app: shorket-backend
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - shorket-backend
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - name: shorket-backend
+        image: primwill/shorket-backend:v1
+        imagePullPolicy: Always
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: develop
+          - name: JAVA_TOOL_OPTIONS
+            value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:5005 -Duser.timezone=Asia/Seoul"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: 1
+            memory: 1.5Gi
+          limits:
+            memory: 1.5Gi
