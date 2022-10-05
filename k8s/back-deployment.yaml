@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shorket-backend-deployment
+  name: shorket-backend
   labels:
     app: shorket-backend
 spec:
@@ -50,7 +50,8 @@ spec:
           periodSeconds: 20
         resources:
           requests:
-            cpu: 1
+            cpu: "1"
             memory: 1.5Gi
           limits:
+            cpu: "1.8"
             memory: 1.5Gi
