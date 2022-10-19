@@ -1,0 +1,49 @@
+.logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.ant-row-rtl .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+.site-layout-background {
+  background: #fff;
+}
+
+.snb_area {
+  text-align: left;
+  width: 180px;
+  float: left;
+}
+
+.snb_main_title {
+  margin: 0;
+  padding-bottom: 30px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.snb_list {
+  margin-bottom: 40px;
+}
+
+.snb_title {
+  display: inline-block;
+  font-size: 18px;
+  margin-bottom: 12px;
+
+}
+
+.snb_item {
+  font-size: 15px;
+  line-height: 30px;
+}
+
+.menu_link {
+  color: rgba(34, 34, 34, .8);
+}
