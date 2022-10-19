@@ -1,19 +1,25 @@
 package com.solmi.shorket.market.repository;
 
 import com.solmi.shorket.market.domain.Market;
-import org.springframework.data.domain.Page;
+import com.solmi.shorket.user.domain.MarketInterest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
-public interface MarketRepository extends JpaRepository<Market, Integer> {
+public interface MarketRepository extends JpaRepository<Market, Integer>, MarketRepositoryCustom {
 
     /**
-     * 진행중인 Markets 조회
-     * @param pageable - Paging 정보, 정렬 기준
-     * @param now1,2 - 현재 시각
-     * Parameter 중복이 있으니 추후에 변경할 예정
+     * @param idx must not be {@literal null}.
+     * @return 조회된 Optional Market Object
      */
-    Page<Market> findAllByStartDateBeforeAndEndDateAfter(Pageable pageable, LocalDateTime now1, LocalDateTime now2);
+    @Override
+    @EntityGraph(attributePaths = {"images", "mapImage"})
+    Optional<Market> findById(Integer idx);
+
+    @EntityGraph(attributePaths = {"images", "mapImage"})
+    List<Market> findMarketsByInterestsIn(Pageable pageable, Collection<MarketInterest> interests);
 }

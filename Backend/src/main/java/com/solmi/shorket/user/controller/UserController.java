@@ -7,7 +7,6 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-
 @Api(tags = "Users")
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/users")
@@ -19,12 +18,12 @@ public class UserController {
 
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
-    public UserTokenDto login(
+    public UserLoginResponseDto login(
             @ApiParam(value = "로그인 요청 DTO", required = true)
             @RequestBody UserLoginRequestDto userLoginRequestDto
     ) {
-        UserTokenDto userTokenDto = securityService.login(userLoginRequestDto);
-        return userTokenDto;
+        UserLoginResponseDto userLoginResponseDto = securityService.login(userLoginRequestDto);
+        return userLoginResponseDto;
     }
 
     @ApiOperation(value = "회원가입")
@@ -37,16 +36,24 @@ public class UserController {
         return userIdx;
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 받은 AccessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
     @ApiOperation(
             value = "액세스, 리프레시 토큰 재발급",
             notes = "accessToken 만료 시 회원 검증 후 refreshToken을 검증해서 accessToken과 refreshToken을 재발급한다."
     )
     @PostMapping("/reissue")
     public UserTokenDto reissue(
+            @RequestHeader("X-AUTH-TOKEN") String accessToken,
             @ApiParam(value = "토큰 재발급 요청 DTO", required = true)
             @RequestBody UserTokenRequestDto userTokenRequestDto
     ) {
-        return securityService.reissue(userTokenRequestDto);
+        return securityService.reissue(accessToken, userTokenRequestDto);
     }
 
     @ApiImplicitParams({
@@ -60,7 +67,7 @@ public class UserController {
             value = "유저 정보 읽기",
             notes = "accessToken을 받아서 해당 번호를 가진 유저의 정보를 읽어온다."
     )
-    @GetMapping("/")
+    @GetMapping
     public UserInfoResponseDto getUserInfo(
             @RequestHeader("X-AUTH-TOKEN") String accessToken
     ) {
@@ -77,7 +84,7 @@ public class UserController {
             @ApiParam(value = "조회할 이메일 Dto", required = true)
             @RequestBody UserExistRequestDto userExistRequestDto
     ) {
-        return userService.findUserByEmail(userExistRequestDto);
+        return userService.existsUserByEmail(userExistRequestDto);
     }
 
     @ApiImplicitParams({
@@ -92,13 +99,13 @@ public class UserController {
             notes = "query parameter로 전달받은 유저의 기존 비밀번호가 DB와 일치하는지 확인 후 비밀번호를 변경한다.\n" +
                     "로그인한 유저만 접근할 수 있게 accessToken 여부를 확인한다."
     )
-    @PutMapping("/{userId}/password")
+    @PutMapping("/{userIdx}/password")
     public void changePassword(
-            @ApiParam(value = "유저의 아이디") @PathVariable Integer userId,
+            @ApiParam(value = "유저의 인덱스") @PathVariable Integer userIdx,
             @ApiParam(value = "비밀번호 변경 요청 DTO", required = true)
             @RequestBody PasswordChangeRequestDto passwordChangeRequestDto
     ) {
-        securityService.changePassword(userId, passwordChangeRequestDto);
+        securityService.changePassword(userIdx, passwordChangeRequestDto);
     }
 
     @ApiImplicitParams({
@@ -112,12 +119,48 @@ public class UserController {
             value = "유저 정보 변경",
             notes = "accessToken으로 전달받은 유저가 실제 유저인지 확인한 후, 유저의 정보를 변경한다.\n"
     )
-    @PutMapping("/")
+    @PutMapping
     public void changeUserInfo(
             @RequestHeader("X-AUTH-TOKEN") String accessToken,
             @ApiParam(value = "유저 정보 변경 요청 DTO", required = true)
             @RequestBody UserInfoChangeRequestDto userInfoChangeRequestDto
     ) {
         securityService.updateUserInfo(accessToken, userInfoChangeRequestDto);
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 발급받은 accessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
+    @ApiOperation(
+            value = "로그아웃",
+            notes = "accessToken으로 전달받은 유저가 실제 유저인지 확인한 후, 해당 유저를 서비스에서 로그아웃시킨다.\n"
+    )
+    @PostMapping("/logout")
+    public void logout(
+            @RequestHeader("X-AUTH-TOKEN") String accessToken
+    ) {
+        securityService.logout(accessToken);
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "로그인 성공 후 발급받은 accessToken",
+                    required = true, dataType = "String", paramType = "header"
+            )
+    })
+    @ApiOperation(
+            value = "회원탈퇴",
+            notes = "accessToken으로 전달받은 유저가 실제 유저인지 확인한 후, 해당 유저를 서비스에서 탈퇴시킨다.\n"
+    )
+    @DeleteMapping("/withdraw")
+    public void withdraw(
+            @RequestHeader("X-AUTH-TOKEN") String accessToken
+    ) {
+        securityService.deleteUser(accessToken);
     }
 }

@@ -4,8 +4,6 @@ import com.solmi.shorket.global.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -24,11 +22,6 @@ public class UserToken extends BaseTimeEntity {
 
     @Column(columnDefinition = "TEXT NOT NULL")
     private String token;
-
-//    @Enumerated(value = EnumType.STRING)
-//    @ColumnDefault("'Y'")
-//    @Column(nullable = false)
-//    private TokenStatusType statusType;
 
     public UserToken updateToken(String token) {
         this.token = token;

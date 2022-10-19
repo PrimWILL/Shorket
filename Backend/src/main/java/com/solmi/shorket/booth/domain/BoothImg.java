@@ -1,9 +1,13 @@
 package com.solmi.shorket.booth.domain;
 
+import com.solmi.shorket.market.domain.Market;
+import com.solmi.shorket.user.domain.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Getter
@@ -13,13 +17,17 @@ import java.util.Date;
 public class BoothImg {
     @Id
     @GeneratedValue
-    private Integer boothImgIdx;
+    private Integer idx;
 
     @ManyToOne
     @JoinColumn(name = "BOOTH_TB_IDX", nullable = false)
     private Booth booth;
 
-    private Integer ranking;
+    private String url;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private BoothImgStatusType status;
 
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
@@ -27,8 +35,12 @@ public class BoothImg {
             nullable = false)
     private Date createdAt;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private BoothImgStatusType status;
+    @Builder
+    public BoothImg(Booth booth, String url, BoothImgStatusType status) {
+        this.booth = booth;
+        this.url = url;
+        this.status = status;
+    }
+
 }
 

@@ -2,10 +2,12 @@ package com.solmi.shorket.user.service;
 
 import com.solmi.shorket.global.JwtProvider;
 import com.solmi.shorket.global.exception.*;
+import com.solmi.shorket.user.domain.ExpiredAccessToken;
 import com.solmi.shorket.user.domain.StatusType;
 import com.solmi.shorket.user.domain.User;
 import com.solmi.shorket.user.domain.UserToken;
 import com.solmi.shorket.user.dto.*;
+import com.solmi.shorket.user.repository.ExpiredAccessTokenRedisRepository;
 import com.solmi.shorket.user.repository.UserRepository;
 import com.solmi.shorket.user.repository.UserTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,10 @@ public class SecurityService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final UserTokenRepository userTokenRepository;
+    private final ExpiredAccessTokenRedisRepository expiredAccessTokenRedisRepository;
 
     @Transactional
-    public UserTokenDto login(UserLoginRequestDto userLoginRequestDto) {
+    public UserLoginResponseDto login(UserLoginRequestDto userLoginRequestDto) {
 
         // find information of user from DB
         User user = userRepository.findByEmail(userLoginRequestDto.getEmail())
@@ -35,6 +38,14 @@ public class SecurityService {
         // check is password equal to DB's encoding password
         if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword()))
             throw new EmailLoginFailedCException();
+
+        if (user.getStatusType().equals(StatusType.D))
+            throw new UserAlreadyDeletedCException();
+
+        // delete refreshToken if it exists in DB
+        if (!userTokenRepository.findAllByUserIdx(user.getIdx()).isEmpty()) {
+            userTokenRepository.deleteAllByUserIdx(user.getIdx());
+        }
 
         // issue AccessToken and RefreshToken
         UserTokenDto userTokenDto = jwtProvider.createToken(user.getIdx(), user.getUserRole());
@@ -45,28 +56,31 @@ public class SecurityService {
                 .token(userTokenDto.getRefreshToken())
                 .build();
         userTokenRepository.save(userToken);
-        return userTokenDto;
+        return new UserLoginResponseDto(userTokenDto, user);
     }
 
     @Transactional
     public Integer signup(UserSignupRequestDto userSignupRequestDto) {
-        if (userRepository.findByEmail(userSignupRequestDto.getEmail()).isPresent())
+        if (userRepository.existsByEmail(userSignupRequestDto.getEmail()))
             throw new UserSignupFailedCException();
         return userRepository.save(userSignupRequestDto.toEntity(passwordEncoder)).getIdx();
     }
 
     @Transactional
-    public UserTokenDto reissue(UserTokenRequestDto userTokenRequestDto) {
+    public UserTokenDto reissue(String accessToken, UserTokenRequestDto userTokenRequestDto) {
 
         // throw error if refresh token is expired or not found
         if (!jwtProvider.validationToken(userTokenRequestDto.getRefreshToken()))
             throw new RefreshTokenExpiredCException();
 
-        // get userIdx from AccessToken
-        String accessToken = userTokenRequestDto.getAccessToken();
-
         // find user by using accessToken
         User user = findUserByAccessToken(accessToken);
+
+        // make beforeAccessToken to register black list in Redis
+        ExpiredAccessToken expiredAccessToken = ExpiredAccessToken.createExpiredAccessToken(
+                accessToken, user.getIdx(), jwtProvider.getExpirationTime(accessToken));
+
+        expiredAccessTokenRedisRepository.save(expiredAccessToken);
 
         // if refresh token is not saved in DB
         UserToken userToken = userTokenRepository.findByUserIdx(user.getIdx())
@@ -114,6 +128,9 @@ public class SecurityService {
         // find user by userIdx
         User user = findUserByAccessToken(accessToken);
 
+        if (userRepository.existsByEmail(userInfoChangeRequestDto.getEmail()))
+            throw new EmailAlreadyExistCException();
+
         User updateUser = user.updateUserInfo(
                 userInfoChangeRequestDto.getEmail(),
                 userInfoChangeRequestDto.getName(),
@@ -121,6 +138,36 @@ public class SecurityService {
                 userInfoChangeRequestDto.getProfileUrl()
         );
         userRepository.save(updateUser);
+    }
+
+    @Transactional
+    public void logout(String accessToken) {
+        // find user by userIdx
+        User user = findUserByAccessToken(accessToken);
+
+        // delete refreshToken if it exists in DB
+        if (!userTokenRepository.findAllByUserIdx(user.getIdx()).isEmpty()) {
+            userTokenRepository.deleteAllByUserIdx(user.getIdx());
+        }
+
+        // make logoutAccessToken to register black list in Redis
+        ExpiredAccessToken expiredAccessToken = ExpiredAccessToken.createExpiredAccessToken(
+                accessToken, user.getIdx(), jwtProvider.getExpirationTime(accessToken));
+
+        expiredAccessTokenRedisRepository.save(expiredAccessToken);
+    }
+
+    @Transactional
+    public void deleteUser(String accessToken) {
+        // find user by userIdx
+        User user = findUserByAccessToken(accessToken);
+
+        // logout before delete user
+        // in order to prevent using accessToken and refreshToken
+        logout(accessToken);
+
+        // logical delete
+        userRepository.save(user.deleteUserByStatusType());
     }
 
     @Transactional(readOnly = true)

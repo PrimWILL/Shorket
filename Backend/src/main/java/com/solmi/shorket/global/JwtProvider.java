@@ -3,6 +3,7 @@ package com.solmi.shorket.global;
 import com.solmi.shorket.global.exception.UserRoleNotFoundCException;
 import com.solmi.shorket.user.domain.RoleType;
 import com.solmi.shorket.user.dto.UserTokenDto;
+import com.solmi.shorket.user.repository.ExpiredAccessTokenRedisRepository;
 import com.solmi.shorket.user.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +31,7 @@ public class JwtProvider {
     private final Long refreshTokenValidMillisecond = 3 * 24 * 60 * 60 * 1000L; // 3 Day
 
     private final CustomUserDetailsService userDetailsService;
+    private final ExpiredAccessTokenRedisRepository logoutAccessTokenRedisRepository;
 
     @PostConstruct
     protected void init() {
@@ -98,9 +99,55 @@ public class JwtProvider {
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
+        } catch (SecurityException | MalformedJwtException e) {
+            log.error("Jwt 서명이 올바르지 않습니다.");
+        } catch (ExpiredJwtException e) {
+            log.error("만료된 accessToken 입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.error("지원하지 않는 accessToken 입니다.");
+        } catch (IllegalArgumentException e) {
+            log.error("잘못된 accessToken 입니다.");
+        }
+        return false;
+    }
+
+    public boolean authValidationToken(HttpServletRequest request, String token) {
+        // if accessToken is in blacklist, then refuse the request.
+        if (logoutAccessTokenRedisRepository.findById(token).isPresent()) {
+            log.error("폐기된 accessToken 입니다.");
+            request.setAttribute("exception", "expiredJwt");
+            return false;
+        }
+
+        try {
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return !claimsJws.getBody().getExpiration().before(new Date());
+        } catch (SecurityException | MalformedJwtException | SignatureException e) {
+            log.error("Jwt 서명이 올바르지 않습니다.");
+            request.setAttribute("exception", "incorrectJwtSign");
+        } catch (ExpiredJwtException e) {
+            log.error("만료된 accessToken 입니다.");
+            request.setAttribute("exception", "expiredJwt");
+        } catch (UnsupportedJwtException e) {
+            log.error("지원하지 않는 accessToken 입니다.");
+            request.setAttribute("exception", "unsupportedJwt");
+        } catch (IllegalArgumentException e) {
+            log.error("잘못된 accessToken 입니다.");
+            request.setAttribute("exception", "illegalArgumentJwt");
+        }
+        return false;
+    }
+
+    public Long getExpirationTime(String token) {
+        try {
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Date exp = claimsJws.getBody().getExpiration();
+            Date now = new Date();
+
+            return exp.getTime() - now.getTime();
         } catch (JwtException | IllegalArgumentException e) {
             log.error(e.toString());
-            return false;
+            return accessTokenValidMillisecond;
         }
     }
 }

@@ -84,8 +84,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Market
      */
     @ExceptionHandler(MarketNotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ExceptionResponse marketNotFoundException(HttpServletRequest request, MarketNotFoundException e) {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ExceptionResponse marketNotFoundException(MarketNotFoundException e) {
         log.info(String.valueOf(e));
         return new ExceptionResponse(
                 getMessage("marketNotFound.code"),
@@ -93,13 +93,66 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler(GetBoothFailedException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ExceptionResponse getBoothFailedCException(HttpServletRequest request, GetBoothFailedException e) {
+    @ExceptionHandler(MarketUnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    protected ExceptionResponse marketUnauthorizedException(MarketUnauthorizedException e) {
         log.info(String.valueOf(e));
         return new ExceptionResponse(
-                getMessage("getBoothFailed.code"),
-                getMessage("getBoothFailed.message")
+                getMessage("marketUnauthorized.code"),
+                getMessage("marketUnauthorized.message")
+        );
+    }
+
+    @ExceptionHandler(MarketInterestNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ExceptionResponse marketInterestNotFoundException(MarketInterestNotFoundException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("marketInterestNotFound.code"),
+                getMessage("marketInterestNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(DuplicateMarketInterestException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    protected ExceptionResponse duplicateMarketInterestException(DuplicateMarketInterestException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("duplicateMarketInterest.code"),
+                getMessage("duplicateMarketInterest.message")
+        );
+    }
+
+    /**
+     * Booth
+     */
+    @ExceptionHandler(BoothNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse marketNotFoundException(BoothNotFoundException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("boothNotFound.code"),
+                getMessage("boothNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(BoothInterestNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse boothInterestNotFoundException(BoothInterestNotFoundException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("boothInterestNotFound.code"),
+                getMessage("boothInterestNotFound.message")
+        );
+    }
+
+    @ExceptionHandler(DuplicateBoothInterestException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse duplicateBoothInterestException(DuplicateBoothInterestException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("duplicateBoothInterest.code"),
+                getMessage("duplicateBoothInterest.message")
         );
     }
 
@@ -110,6 +163,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ExceptionResponse(
                 getMessage("changePasswordFailed.code"),
                 getMessage("changePasswordFailed.message")
+        );
+    }
+
+    @ExceptionHandler(UserAlreadyDeletedCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse userAlreadyDeletedCException(HttpServletRequest request, UserAlreadyDeletedCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("userAlreadyDeleted.code"),
+                getMessage("userAlreadyDeleted.message")
+        );
+    }
+
+    @ExceptionHandler(EmailAlreadyExistCException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ExceptionResponse emailAlreadyExistCException(HttpServletRequest request, EmailAlreadyExistCException e) {
+        log.info(String.valueOf(e));
+        return new ExceptionResponse(
+                getMessage("emailAlreadyExist.code"),
+                getMessage("emailAlreadyExist.message")
         );
     }
 

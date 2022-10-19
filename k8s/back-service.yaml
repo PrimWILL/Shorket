@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: shorket-backend-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 9999
+      targetPort: 8080
+      protocol: 'TCP'
+      nodePort: 30580
+  selector:
+    app: shorket-backend

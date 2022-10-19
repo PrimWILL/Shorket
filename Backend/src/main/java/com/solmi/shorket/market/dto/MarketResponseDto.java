@@ -2,30 +2,43 @@ package com.solmi.shorket.market.dto;
 
 import com.solmi.shorket.market.domain.Address;
 import com.solmi.shorket.market.domain.Market;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
-public class MarketReponseDto {
+@Getter
+@Setter
+public class MarketResponseDto {
 
     private Integer marketIdx;
     private String name;
     private String description;
     private Integer viewCount;
     private Address address;
+    private LocalTime openTime;
+    private LocalTime closeTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Integer interestedCount;
+    private Integer interestCount;
+    private List<String> images = new ArrayList<>();
+    private String mapImage;
 
-    public MarketReponseDto(Market market) {
+    public MarketResponseDto(Market market) {
         this.setMarketIdx(market.getIdx());
         this.setName(market.getName());
         this.setDescription(market.getDescription());
         this.setViewCount(market.getViewCount());
         this.setAddress(market.getAddress());
+        this.setOpenTime(market.getOpenTime());
+        this.setCloseTime(market.getCloseTime());
         this.setStartDate(market.getStartDate());
         this.setEndDate(market.getEndDate());
-        this.setInterestedCount(market.getInterests().size());
+        this.setInterestCount(market.getMarketInterestCount());
+        market.getImages().forEach(img -> this.getImages().add(img.getUrl()));
+        this.setMapImage(market.getMapImage().getUrl());
     }
 }

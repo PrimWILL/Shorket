@@ -50,16 +50,22 @@ sudo kubeadm config images pull
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 
 
 # master node 쿠버네티스 설정 완료
-kubeadm join 192.168.219.190:6443 --token pf72kx.k4l75eu3z36p5bk3 \
-        --discovery-token-ca-cert-hash sha256:ab291f6776ab169966060586b4d272db28611515f98f2f14be2b10609cc6d7d8
+kubeadm join 192.168.219.193:6443 --token ku8cv6.tb734uer3p2153hp \
+        --discovery-token-ca-cert-hash sha256:2a83ff12fb87bb65282194ec4a88311b117e3274848381b40200d03b839f63ca
 
 # 각 worker node에 master 와 통신하도록 설정
 # worker1 
-kubeadm join 192.168.219.190:6443 --token pf72kx.k4l75eu3z36p5bk3 \
-        --discovery-token-ca-cert-hash sha256:ab291f6776ab169966060586b4d272db28611515f98f2f14be2b10609cc6d7d8 --node-name worker1
+kubeadm join 192.168.219.193:6443 --token ku8cv6.tb734uer3p2153hp \
+        --discovery-token-ca-cert-hash sha256:2a83ff12fb87bb65282194ec4a88311b117e3274848381b40200d03b839f63ca --node-name worker1
 # worker2
-kubeadm join 192.168.219.190:6443 --token pf72kx.k4l75eu3z36p5bk3 \
-        --discovery-token-ca-cert-hash sha256:ab291f6776ab169966060586b4d272db28611515f98f2f14be2b10609cc6d7d8 --node-name worker2
+kubeadm join 192.168.219.193:6443 --token ku8cv6.tb734uer3p2153hp \
+        --discovery-token-ca-cert-hash sha256:2a83ff12fb87bb65282194ec4a88311b117e3274848381b40200d03b839f63ca --node-name worker2
 # worker3
-kubeadm join 192.168.219.190:6443 --token pf72kx.k4l75eu3z36p5bk3 \
-        --discovery-token-ca-cert-hash sha256:ab291f6776ab169966060586b4d272db28611515f98f2f14be2b10609cc6d7d8 --node-name worker3
+kubeadm join 192.168.219.193:6443 --token ku8cv6.tb734uer3p2153hp \
+        --discovery-token-ca-cert-hash sha256:2a83ff12fb87bb65282194ec4a88311b117e3274848381b40200d03b839f63ca --node-name worker3
+
+# CNI로 Flannel 설치
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+# helm 설치
+sudo snap install helm --classic
