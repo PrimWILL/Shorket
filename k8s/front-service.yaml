@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: shorket-frontend-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5001
+      targetPort: 80
+      protocol: 'TCP'
+      nodePort: 30501
+  selector:
+    app: shorket-frontend

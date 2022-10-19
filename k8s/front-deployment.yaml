@@ -1,0 +1,19 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: shorket-frontend-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: shorket-frontend
+  template:
+    metadata:
+      labels:
+        app: shorket-frontend
+    spec:
+      containers:
+        - name: shorket-frontend
+          image: primwill/shorket-front:v1
+          ports:
+            - containerPort: 80
