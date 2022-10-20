@@ -2,7 +2,7 @@
 
 <div align="center">
 <p align="center">
-    <img src="assets/shorket.png" alt="logo" width="300"/>
+    <img src="assets/shorket.png" alt="logo" width="600"/>
 </p>
 <h4 align="center">클러스터링을 이용한 쿠버네티스 기반 전국 플리마켓 운영지원 서비스</h4>
 <p align="center">
@@ -10,7 +10,7 @@
   <a href="#features">Features</a></a> * 
   <a href="#contributors">Contributors</a> * 
   <a href="#architecture">Architecture</a> * 
-  <a href="#license">License</a> * 
+  <a href="#license">License</a>
 </p>
 <p align="center">
     Shorket은 2022 한이음 "22_HI038 클러스터링을 이용한 쿠버네티스 기반 서비스 구현" 프로젝트로 진행된 결과물입니다.
@@ -54,7 +54,7 @@
 ## Architecture
 
 <p align="center">
-    <img src="assets/architecture.png" alt="architecture" width="300"/>
+    <img src="assets/architecture.png" alt="architecture" width="500"/>
 </p>
 
 ## License
